@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "com.sanhiruzu.amphibia.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "amphibia.refmap.json",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [],
+  "client": [
+    "FrogportRendererMixin"
+  ],
+  "server": []
+}

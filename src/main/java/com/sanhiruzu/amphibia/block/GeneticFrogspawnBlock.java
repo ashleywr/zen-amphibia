@@ -1,0 +1,54 @@
+package com.sanhiruzu.amphibia.block;
+
+import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
+import com.sanhiruzu.amphibia.genetics.FrogDNA;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.frog.Tadpole;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.FrogspawnBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+public class GeneticFrogspawnBlock extends FrogspawnBlock implements EntityBlock {
+    public GeneticFrogspawnBlock(Properties properties) {
+        super(properties);
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+        return new GeneticFrogspawnBlockEntity(pos, state);
+    }
+
+    @Override
+    protected void tick(@NotNull BlockState state, ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource random) {
+        // We replicate vanilla hatching logic but inject our DNA
+        // Vanilla: destroy block and spawn 2-5 tadpoles
+        
+        FrogDNA dna = FrogDNA.createDefault();
+        BlockEntity be = level.getBlockEntity(pos);
+        if (be instanceof GeneticFrogspawnBlockEntity gbe) {
+            dna = gbe.getDna();
+        }
+
+        level.removeBlock(pos, false);
+        int i = random.nextInt(2, 6);
+
+        for (int j = 1; j <= i; ++j) {
+            Tadpole tadpole = EntityType.TADPOLE.create(level);
+            if (tadpole != null) {
+                tadpole.setData(AmphibiaAttachments.FROG_DNA, dna);
+                tadpole.setPersistenceRequired();
+                double d0 = (double)pos.getX() + random.nextDouble();
+                double d1 = (double)pos.getZ() + random.nextDouble();
+                tadpole.moveTo(d0, (double)pos.getY(), d1, random.nextFloat() * 360.0F, 0.0F);
+                level.addFreshEntity(tadpole);
+            }
+        }
+    }
+}
