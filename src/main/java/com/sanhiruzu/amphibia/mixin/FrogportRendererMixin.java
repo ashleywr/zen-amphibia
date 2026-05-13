@@ -38,22 +38,14 @@ public abstract class FrogportRendererMixin {
         at = @At(value = "INVOKE", target = "Lnet/createmod/catnip/render/SuperByteBuffer;renderInto(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;)V")
     )
     private void amphibia$colorFrogParts(SuperByteBuffer instance, PoseStack ms, VertexConsumer buffer) {
-        int r = 128, g = 255, b = 200; // Default color
+        int color = 0xFF80FFC8; // Default color
 
         FrogDNA dna = CURRENT_DNA.get();
         if (dna != null) {
-            // Generate a deterministic color based on genetics
-            int hashRed = Math.abs(dna.heatTolerance().hashCode());
-            int hashGreen = Math.abs(dna.slimeViscosity().hashCode());
-            int hashBlue = Math.abs(dna.growthRate().hashCode());
-
-            // Ensure the colors are relatively bright/visible
-            r = 100 + (hashRed % 155);
-            g = 100 + (hashGreen % 155);
-            b = 100 + (hashBlue % 155);
+            color = com.sanhiruzu.amphibia.infrastructure.FrogDNADisplayHelper.getDNAColor(dna);
         }
 
-        instance.color(r, g, b, 255);
+        instance.color(color);
         instance.renderInto(ms, buffer);
     }
 }

@@ -1,6 +1,7 @@
 package com.sanhiruzu.amphibia.mixin;
 
 import com.sanhiruzu.amphibia.genetics.FrogDNA;
+import com.sanhiruzu.amphibia.genetics.FrogGeneRegistry;
 import com.sanhiruzu.amphibia.genetics.FrogGradeCalculator;
 import com.sanhiruzu.amphibia.genetics.FrogMutation;
 import com.sanhiruzu.amphibia.infrastructure.FrogDNADisplayHelper;
@@ -56,8 +57,8 @@ public abstract class FrogMixin {
         }
 
         // Apply health and damage bonuses based on DNA (every tick for responsiveness)
-        FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(dna.health());
-        FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(dna.damage());
+        FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(dna.getGene(FrogGeneRegistry.HEALTH));
+        FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(dna.getGene(FrogGeneRegistry.DAMAGE));
 
         double healthBonus = FrogGradeCalculator.getHealthBonus(healthGrade);
         double damageBonus = FrogGradeCalculator.getDamageBonus(damageGrade);

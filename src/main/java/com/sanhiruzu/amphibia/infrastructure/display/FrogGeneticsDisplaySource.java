@@ -6,6 +6,7 @@ import com.simibubi.create.content.redstone.displayLink.source.SingleLineDisplay
 import com.simibubi.create.content.redstone.displayLink.target.DisplayTargetStats;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.sanhiruzu.amphibia.genetics.FrogDNA;
+import com.sanhiruzu.amphibia.genetics.FrogGeneRegistry;
 import com.sanhiruzu.amphibia.register.AmphibiaDataComponents;
 import com.sanhiruzu.amphibia.register.AmphibiaItems;
 import net.minecraft.network.chat.Component;
@@ -42,10 +43,14 @@ public class FrogGeneticsDisplaySource extends SingleLineDisplaySource {
         FrogDNA dna = stack.get(AmphibiaDataComponents.FROG_DNA);
         if (dna == null) return Component.literal("No DNA Data");
 
+        var heatTrait = dna.getGene(FrogGeneRegistry.HEAT_TOLERANCE);
+        var viscosityTrait = dna.getGene(FrogGeneRegistry.SLIME_VISCOSITY);
+        var growthTrait = dna.getGene(FrogGeneRegistry.GROWTH_RATE);
+
         return Component.literal(String.format("HT:%s%s SV:%s%s GR:%s%s",
-                dna.heatTolerance().geneA(), dna.heatTolerance().geneB(),
-                dna.slimeViscosity().geneA(), dna.slimeViscosity().geneB(),
-                dna.growthRate().geneA(), dna.growthRate().geneB()
+                heatTrait.geneA(), heatTrait.geneB(),
+                viscosityTrait.geneA(), viscosityTrait.geneB(),
+                growthTrait.geneA(), growthTrait.geneB()
         ));
     }
 

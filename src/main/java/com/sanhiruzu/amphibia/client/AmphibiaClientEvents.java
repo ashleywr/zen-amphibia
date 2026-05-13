@@ -31,9 +31,25 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
 
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import com.sanhiruzu.amphibia.register.AmphibiaItems;
+
 @SuppressWarnings("removal")
 @EventBusSubscriber(modid = "amphibia", value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class AmphibiaClientEvents {
+
+    @SubscribeEvent
+    public static void onRegisterItemColors(RegisterColorHandlersEvent.Item event) {
+        event.register((stack, tintIndex) -> {
+            if (tintIndex == 1) { // Assume layer 1 is the tintable frog part
+                FrogDNA dna = stack.get(AmphibiaDataComponents.FROG_DNA.get());
+                if (dna != null) {
+                    return FrogDNADisplayHelper.getDNAColor(dna);
+                }
+            }
+            return -1;
+        }, AmphibiaItems.FROG_BUCKET.get());
+    }
 
     @SubscribeEvent
     public static void onRegisterGuiLayers(RegisterGuiLayersEvent event) {
