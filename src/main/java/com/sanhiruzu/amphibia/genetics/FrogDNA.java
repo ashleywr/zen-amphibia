@@ -7,29 +7,44 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.RandomSource;
 
-public record FrogDNA(Trait heatTolerance, Trait slimeViscosity, Trait growthRate) {
+public record FrogDNA(Trait heatTolerance, Trait slimeViscosity, Trait growthRate, Trait health, Trait damage) {
     public static final Codec<FrogDNA> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Trait.CODEC.fieldOf("heat_tolerance").forGetter(FrogDNA::heatTolerance),
             Trait.CODEC.fieldOf("slime_viscosity").forGetter(FrogDNA::slimeViscosity),
-            Trait.CODEC.fieldOf("growth_rate").forGetter(FrogDNA::growthRate)
+            Trait.CODEC.fieldOf("growth_rate").forGetter(FrogDNA::growthRate),
+            Trait.CODEC.fieldOf("health").forGetter(FrogDNA::health),
+            Trait.CODEC.fieldOf("damage").forGetter(FrogDNA::damage)
     ).apply(instance, FrogDNA::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, FrogDNA> STREAM_CODEC = StreamCodec.composite(
             Trait.STREAM_CODEC, FrogDNA::heatTolerance,
             Trait.STREAM_CODEC, FrogDNA::slimeViscosity,
             Trait.STREAM_CODEC, FrogDNA::growthRate,
+            Trait.STREAM_CODEC, FrogDNA::health,
+            Trait.STREAM_CODEC, FrogDNA::damage,
             FrogDNA::new
     );
 
     public static FrogDNA createDefault() {
-        return new FrogDNA(Trait.defaultTrait(), Trait.defaultTrait(), Trait.defaultTrait());
+        java.util.Random rand = new java.util.Random();
+        String[] possibleGenes = {"w", "A", "B", "C", "D", "E", "F", "G"};
+
+        return new FrogDNA(
+            new Trait(possibleGenes[rand.nextInt(possibleGenes.length)], possibleGenes[rand.nextInt(possibleGenes.length)]),
+            new Trait(possibleGenes[rand.nextInt(possibleGenes.length)], possibleGenes[rand.nextInt(possibleGenes.length)]),
+            new Trait(possibleGenes[rand.nextInt(possibleGenes.length)], possibleGenes[rand.nextInt(possibleGenes.length)]),
+            new Trait(possibleGenes[rand.nextInt(possibleGenes.length)], possibleGenes[rand.nextInt(possibleGenes.length)]),
+            new Trait(possibleGenes[rand.nextInt(possibleGenes.length)], possibleGenes[rand.nextInt(possibleGenes.length)])
+        );
     }
 
     public static FrogDNA mix(FrogDNA parentA, FrogDNA parentB, RandomSource random) {
         return new FrogDNA(
                 Trait.mix(parentA.heatTolerance(), parentB.heatTolerance(), random),
                 Trait.mix(parentA.slimeViscosity(), parentB.slimeViscosity(), random),
-                Trait.mix(parentA.growthRate(), parentB.growthRate(), random)
+                Trait.mix(parentA.growthRate(), parentB.growthRate(), random),
+                Trait.mix(parentA.health(), parentB.health(), random),
+                Trait.mix(parentA.damage(), parentB.damage(), random)
         );
     }
 
