@@ -104,6 +104,18 @@ public record FrogDNA(Trait heatTolerance, Trait slimeViscosity, Trait growthRat
         );
     }
 
+    public int getColor() {
+        int hashRed = Math.abs(this.heatTolerance().hashCode());
+        int hashGreen = Math.abs(this.slimeViscosity().hashCode());
+        int hashBlue = Math.abs(this.growthRate().hashCode());
+
+        int r = 100 + (hashRed % 155);
+        int g = 100 + (hashGreen % 155);
+        int b = 100 + (hashBlue % 155);
+
+        return (255 << 24) | (r << 16) | (g << 8) | b;
+    }
+
     public record Trait(String geneA, String geneB) {
         public static final Codec<Trait> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.STRING.fieldOf("gene_a").forGetter(Trait::geneA),

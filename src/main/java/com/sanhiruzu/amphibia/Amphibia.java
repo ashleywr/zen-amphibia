@@ -1,5 +1,6 @@
 package com.sanhiruzu.amphibia;
 
+import com.sanhiruzu.amphibia.infrastructure.FrogClipboardHandler;
 import com.sanhiruzu.amphibia.item.FrogBucketItem;
 import com.sanhiruzu.zonectrl.api.AtmosphereRegistry;
 import net.neoforged.fml.common.Mod;
@@ -12,9 +13,11 @@ import org.slf4j.LoggerFactory;
 public class Amphibia {
     private static final Logger LOGGER = LoggerFactory.getLogger(Amphibia.class);
 
-    public Amphibia(IEventBus modEventBus) {
+    public Amphibia(IEventBus modEventBus, net.neoforged.fml.ModContainer modContainer) {
+        modContainer.registerConfig(net.neoforged.fml.config.ModConfig.Type.COMMON, AmphibiaConfig.SPEC);
         registerDefaults();
         modEventBus.addListener(this::setup);
+        com.sanhiruzu.amphibia.register.AmphibiaFluids.register(modEventBus);
         com.sanhiruzu.amphibia.register.AmphibiaBlocks.register(modEventBus);
         com.sanhiruzu.amphibia.register.AmphibiaItems.register(modEventBus);
         com.sanhiruzu.amphibia.register.AmphibiaBlockEntities.register(modEventBus);
@@ -24,8 +27,36 @@ public class Amphibia {
         modEventBus.addListener(FMLCommonSetupEvent.class, event -> com.sanhiruzu.amphibia.infrastructure.display.AmphibiaDisplaySources.registerAll());
         modEventBus.addListener(this::addCreative);
 
-        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(this::onBucketUse);
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(this::onRightClickBlock);
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(this::onEntityInteract);
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(this::onItemCrafted);
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(this::onBlockPlaced);
+    }
+
+    private void onItemCrafted(net.neoforged.neoforge.event.entity.player.PlayerEvent.ItemCraftedEvent event) {
+        net.minecraft.world.item.ItemStack crafted = event.getCrafting();
+        if (crafted.is(com.simibubi.create.AllBlocks.PACKAGE_FROGPORT.get().asItem())) {
+            net.minecraft.world.Container inv = event.getInventory();
+            for (int i = 0; i < inv.getContainerSize(); i++) {
+                net.minecraft.world.item.ItemStack slotStack = inv.getItem(i);
+                if (slotStack.is(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_BUCKET.get())) {
+                    com.sanhiruzu.amphibia.genetics.FrogDNA dna = slotStack.get(com.sanhiruzu.amphibia.register.AmphibiaDataComponents.FROG_DNA.get());
+                    if (dna != null) {
+                        // Store DNA on item stack for tooltips
+                        crafted.set(com.sanhiruzu.amphibia.register.AmphibiaDataComponents.FROG_DNA.get(), dna);
+                        // Also store in block entity data for when placed
+                        net.minecraft.world.item.component.CustomData.update(net.minecraft.core.component.DataComponents.BLOCK_ENTITY_DATA, crafted, tag -> {
+                            try {
+                                tag.put("AmphibiaDNA", com.sanhiruzu.amphibia.genetics.FrogDNA.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, dna).getOrThrow());
+                            } catch (Exception e) {}
+                        });
+                        // Make non-stackable when it has DNA
+                        crafted.setCount(1);
+                    }
+                    break;
+                }
+            }
+        }
     }
 
     private void registerDefaults() {
@@ -37,7 +68,7 @@ public class Amphibia {
         );
     }
 
-    private void onBucketUse(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock event) {
+    private void onRightClickBlock(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock event) {
         if (event.getLevel().isClientSide) return;
         net.minecraft.world.item.ItemStack stack = event.getItemStack();
         if (stack.is(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_BUCKET.get())) {
@@ -49,6 +80,20 @@ public class Amphibia {
             }
             event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
             event.setCanceled(true);
+            return;
+        }
+
+        if (stack.getItem() instanceof com.simibubi.create.content.equipment.clipboard.ClipboardBlockItem) {
+            net.minecraft.world.level.block.entity.BlockEntity be = event.getLevel().getBlockEntity(event.getPos());
+            if (be instanceof com.sanhiruzu.amphibia.duck.IFrogportDNA duck) {
+                com.sanhiruzu.amphibia.genetics.FrogDNA dna = duck.amphibia$getDna();
+                if (dna != null) {
+                    FrogClipboardHandler.addDNAToClipboard(stack, dna, "Frogport DNA:");
+                    event.getEntity().displayClientMessage(net.minecraft.network.chat.Component.literal("DNA Diagnostics Copied!").withStyle(net.minecraft.ChatFormatting.AQUA), true);
+                    event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                }
+            }
         }
     }
 
@@ -61,7 +106,9 @@ public class Amphibia {
                 
                 net.minecraft.world.item.ItemStack frogBucket = new net.minecraft.world.item.ItemStack(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_BUCKET.get());
                 com.sanhiruzu.amphibia.genetics.FrogDNA dna = frog.getData(com.sanhiruzu.amphibia.register.AmphibiaAttachments.FROG_DNA);
-                frogBucket.set(com.sanhiruzu.amphibia.register.AmphibiaDataComponents.FROG_DNA, dna);
+                if (dna != null) {
+                    frogBucket.set(com.sanhiruzu.amphibia.register.AmphibiaDataComponents.FROG_DNA.get(), dna);
+                }
 
                 frog.playSound(net.minecraft.sounds.SoundEvents.BUCKET_FILL_FISH, 1.0f, 1.0f);
                 frog.discard();
@@ -76,6 +123,17 @@ public class Amphibia {
                 }
                 event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
                 event.setCanceled(true);
+                return;
+            }
+
+            if (stack.getItem() instanceof com.simibubi.create.content.equipment.clipboard.ClipboardBlockItem) {
+                com.sanhiruzu.amphibia.genetics.FrogDNA dna = frog.getData(com.sanhiruzu.amphibia.register.AmphibiaAttachments.FROG_DNA);
+                if (dna != null) {
+                    FrogClipboardHandler.addDNAToClipboard(stack, dna, "Frog DNA:");
+                    event.getEntity().displayClientMessage(net.minecraft.network.chat.Component.literal("DNA Sequenced!").withStyle(net.minecraft.ChatFormatting.AQUA), true);
+                    event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                }
             }
         }
     }
@@ -87,6 +145,30 @@ public class Amphibia {
         if (event.getTabKey() == net.minecraft.world.item.CreativeModeTabs.NATURAL_BLOCKS) {
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.MUCUS_COCOON);
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.GENETIC_FROGSPAWN);
+        }
+        if (event.getTabKey() == net.minecraft.world.item.CreativeModeTabs.INGREDIENTS) {
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaFluids.RAW_GENETIC_FLUID_BUCKET.get());
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaFluids.REFINED_GENETIC_FLUID_BUCKET.get());
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaFluids.SEQUENCED_GENETIC_FLUID_BUCKET.get());
+        }
+    }
+
+    private void onBlockPlaced(net.neoforged.neoforge.event.level.BlockEvent.EntityPlaceEvent event) {
+        if (!(event.getLevel() instanceof net.minecraft.server.level.ServerLevel)) return;
+        if (!event.getPlacedBlock().is(com.simibubi.create.AllBlocks.PACKAGE_FROGPORT.get())) return;
+
+        net.minecraft.world.item.ItemStack stack = event.getEntity() instanceof net.minecraft.world.entity.player.Player player
+            ? player.getMainHandItem() : null;
+
+        if (stack != null && !stack.isEmpty()) {
+            com.sanhiruzu.amphibia.genetics.FrogDNA dna = stack.get(com.sanhiruzu.amphibia.register.AmphibiaDataComponents.FROG_DNA.get());
+            if (dna != null) {
+                net.minecraft.world.level.block.entity.BlockEntity be = event.getLevel().getBlockEntity(event.getPos());
+                if (be instanceof com.sanhiruzu.amphibia.duck.IFrogportDNA duck) {
+                    duck.amphibia$setDna(dna);
+                    be.setChanged();
+                }
+            }
         }
     }
 

@@ -2,5 +2,7 @@
   "block.amphibia.mucus_cocoon": "Mucus Cocoon",
   "block.amphibia.genetic_frogspawn": "Genetic Frogspawn",
   "item.amphibia.frog_bucket": "Frog Bucket",
-  "amphibia.display_source.frog_genetics": "Frog Genetics"
+  "amphibia.display_source.frog_genetics": "Frog Genetics",
+  "gui.goggles.amphibia.frog_genetics": "Frog Genetics:",
+  "key.amphibia.show_frog_dna": "Show Frog DNA Overlay"
 }

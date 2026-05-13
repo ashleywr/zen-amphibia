@@ -3,12 +3,14 @@ package com.sanhiruzu.amphibia.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.sanhiruzu.amphibia.AmphibiaKeys;
+import com.sanhiruzu.amphibia.client.render.MutationRenderLayer;
+import com.sanhiruzu.amphibia.client.render.MutationVisualRegistry;
+import com.sanhiruzu.amphibia.client.render.MutationVisuals;
 import com.sanhiruzu.amphibia.genetics.FrogDNA;
 import com.sanhiruzu.amphibia.infrastructure.FrogDNADisplayHelper;
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import com.sanhiruzu.amphibia.item.FrogBucketItem;
 import com.sanhiruzu.amphibia.item.FrogportBlockItem;
-import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import com.sanhiruzu.amphibia.register.AmphibiaDataComponents;
 import com.simibubi.create.content.logistics.packagePort.frogport.FrogportBlock;
 import net.minecraft.client.model.FrogModel;
@@ -28,7 +30,6 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
-import com.sanhiruzu.amphibia.genetics.FrogMutation;
 
 @SuppressWarnings("removal")
 @EventBusSubscriber(modid = "amphibia", value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
@@ -67,7 +68,7 @@ public class AmphibiaClientEvents {
         FrogRenderer renderer = event.getRenderer(net.minecraft.world.entity.EntityType.FROG);
         if (renderer != null) {
             renderer.addLayer(new FrogColorLayer(renderer));
-            renderer.addLayer(new EnderFrogRenderLayer(renderer));
+            renderer.addLayer(new MutationRenderLayer(renderer));
         }
     }
 
@@ -76,17 +77,22 @@ public class AmphibiaClientEvents {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null || mc.player == null) return;
 
-        // Spawn particles around Ender Frogs
         for (Frog frog : mc.level.getEntitiesOfClass(Frog.class, mc.player.getBoundingBox().inflate(32))) {
-            if (FrogMutation.hasEnderMutation(frog) && mc.level.random.nextInt(10) == 0) {
-                double x = frog.getX() + (mc.level.random.nextDouble() - 0.5) * 1.5;
-                double y = frog.getY() + mc.level.random.nextDouble() * 1.5;
-                double z = frog.getZ() + (mc.level.random.nextDouble() - 0.5) * 1.5;
+            FrogDNA dna = frog.getData(AmphibiaAttachments.FROG_DNA);
+            if (dna == null || dna.mutations().isEmpty()) continue;
 
-                mc.level.addParticle(ParticleTypes.PORTAL, x, y, z,
-                    (mc.level.random.nextDouble() - 0.5) * 0.2,
-                    (mc.level.random.nextDouble() - 0.5) * 0.2,
-                    (mc.level.random.nextDouble() - 0.5) * 0.2);
+            for (String mutationId : dna.mutations()) {
+                MutationVisuals visuals = MutationVisualRegistry.get(mutationId);
+                if (visuals != null && mc.level.getGameTime() % visuals.particleInterval() == 0) {
+                    double x = frog.getX() + (mc.level.random.nextDouble() - 0.5) * 1.5;
+                    double y = frog.getY() + mc.level.random.nextDouble() * 1.5;
+                    double z = frog.getZ() + (mc.level.random.nextDouble() - 0.5) * 1.5;
+
+                    mc.level.addParticle(visuals.particleType(), x, y, z,
+                        (mc.level.random.nextDouble() - 0.5) * 0.2,
+                        (mc.level.random.nextDouble() - 0.5) * 0.2,
+                        (mc.level.random.nextDouble() - 0.5) * 0.2);
+                }
             }
         }
     }
