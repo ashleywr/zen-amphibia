@@ -8,7 +8,8 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "FrogMixin"
+    "FrogMixin",
+    "FrogEyeHeightMixin"
   ],
   "client": [
     "FrogportRendererMixin"

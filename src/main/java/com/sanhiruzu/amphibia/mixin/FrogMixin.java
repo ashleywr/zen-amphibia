@@ -94,9 +94,16 @@ public abstract class FrogMixin {
             }
         }
 
-        // Apply visual scale based on DNA
+        // Apply visual scale based on DNA and scale collision box
         float scale = FrogDNADisplayHelper.getScaleFromDNA(dna);
         frog.setData(AmphibiaAttachments.FROG_SCALE, scale);
+
+        // Scale the entity's eye height to match visual scale
+        try {
+            frog.refreshDimensions();
+        } catch (Exception e) {
+            // Ignore if refreshDimensions isn't available
+        }
 
         // Apply health and damage bonuses based on DNA
         FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(dna.getGene(FrogGeneRegistry.HEALTH));
