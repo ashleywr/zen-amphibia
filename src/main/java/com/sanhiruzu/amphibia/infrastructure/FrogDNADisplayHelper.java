@@ -46,6 +46,18 @@ public class FrogDNADisplayHelper {
         lines.add(Component.literal("Size: ").withStyle(ChatFormatting.GRAY)
             .append(Component.literal(String.format("%.2f", frog.getScale())).withStyle(ChatFormatting.YELLOW)));
 
+        // Mutations
+        if (dna != null && !dna.mutations().isEmpty()) {
+            lines.add(Component.empty());
+            lines.add(Component.literal("=== MUTATIONS ===").withStyle(ChatFormatting.LIGHT_PURPLE));
+            for (String mutationId : dna.mutations()) {
+                com.sanhiruzu.amphibia.genetics.FrogMutation mutation = com.sanhiruzu.amphibia.genetics.FrogMutation.getById(mutationId);
+                if (mutation != null) {
+                    lines.add(Component.literal("  ").append(Component.literal(mutation.displayName().getString()).withStyle(net.minecraft.network.chat.Style.EMPTY.withColor(net.minecraft.network.chat.TextColor.fromRgb(mutation.color())))));
+                }
+            }
+        }
+
         // Genetics
         lines.add(Component.empty());
         lines.add(Component.literal("=== GENETICS ===").withStyle(ChatFormatting.GREEN));

@@ -1,7 +1,10 @@
 package com.sanhiruzu.amphibia.mixin;
 
+import com.sanhiruzu.amphibia.genetics.FrogDNA;
 import com.sanhiruzu.amphibia.genetics.FrogGradeCalculator;
+import com.sanhiruzu.amphibia.genetics.FrogMutation;
 import com.sanhiruzu.amphibia.infrastructure.FrogDNADisplayHelper;
+import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import com.sanhiruzu.amphibia.register.AmphibiaBlocks;
 import com.sanhiruzu.zonectrl.zone.AtmosphereManager;
 import com.sanhiruzu.zonectrl.zone.FactoryZone;
@@ -27,10 +30,18 @@ public abstract class FrogMixin {
         if (level == null || level.isClientSide) return;
 
         // Ensure frog has DNA
-        com.sanhiruzu.amphibia.genetics.FrogDNA dna = frog.getData(com.sanhiruzu.amphibia.register.AmphibiaAttachments.FROG_DNA);
+        FrogDNA dna = frog.getData(AmphibiaAttachments.FROG_DNA);
         if (dna == null) {
-            dna = com.sanhiruzu.amphibia.genetics.FrogDNA.createDefault();
-            frog.setData(com.sanhiruzu.amphibia.register.AmphibiaAttachments.FROG_DNA, dna);
+            dna = FrogDNA.createDefault();
+            frog.setData(AmphibiaAttachments.FROG_DNA, dna);
+        }
+
+        // Apply mutations
+        for (String mutationId : dna.mutations()) {
+            FrogMutation mutation = FrogMutation.getById(mutationId);
+            if (mutation != null) {
+                mutation.applyToFrog(frog);
+            }
         }
 
         // Apply visual scale based on DNA (every tick for responsiveness)
