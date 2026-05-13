@@ -15,6 +15,10 @@ public class AmphibiaAttachments {
             "frog_dna", () -> AttachmentType.builder(FrogDNA::createDefault).serialize(FrogDNA.CODEC).sync(FrogDNA.STREAM_CODEC).copyOnDeath().build()
     );
 
+    public static final Supplier<AttachmentType<Boolean>> FROG_GENETICS_APPLIED = ATTACHMENTS.register(
+            "frog_genetics_applied", () -> AttachmentType.builder(() -> false).serialize(com.mojang.serialization.Codec.BOOL).build()
+    );
+
     public static final Supplier<AttachmentType<FrogDNA>> OFFSPRING_DNA = ATTACHMENTS.register(
             "offspring_dna", () -> AttachmentType.builder(FrogDNA::createDefault).serialize(FrogDNA.CODEC).sync(FrogDNA.STREAM_CODEC).build()
     );
