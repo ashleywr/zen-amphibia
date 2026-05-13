@@ -18,9 +18,9 @@ public class FrogScaleLayer {
         if (scale != null && Math.abs(scale - 1.0f) > 0.01f) {
             PoseStack poseStack = event.getPoseStack();
             poseStack.pushPose();
-            poseStack.translate(0.5f, 0, 0.5f);
+            poseStack.translate(0.5f, 0.25f, 0.5f);
             poseStack.scale(scale, scale, scale);
-            poseStack.translate(-0.5f, 0, -0.5f);
+            poseStack.translate(-0.5f, -0.25f, -0.5f);
         }
     }
 
