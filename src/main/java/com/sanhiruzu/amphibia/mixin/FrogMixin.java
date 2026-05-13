@@ -94,15 +94,14 @@ public abstract class FrogMixin {
             }
         }
 
-        // Apply visual scale based on DNA and scale collision box
+        // Apply scale based on DNA - uses Attributes.SCALE for automatic physics sync
         float scale = FrogDNADisplayHelper.getScaleFromDNA(dna);
         frog.setData(AmphibiaAttachments.FROG_SCALE, scale);
 
-        // Scale the entity's eye height to match visual scale
-        try {
+        var scaleAttribute = frog.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.SCALE);
+        if (scaleAttribute != null) {
+            scaleAttribute.setBaseValue(scale);
             frog.refreshDimensions();
-        } catch (Exception e) {
-            // Ignore if refreshDimensions isn't available
         }
 
         // Apply health and damage bonuses based on DNA
