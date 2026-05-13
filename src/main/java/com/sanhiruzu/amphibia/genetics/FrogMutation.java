@@ -32,6 +32,13 @@ public record FrogMutation(String id, Component displayName, int color) {
     private static void applyEnderMutation(Frog frog) {
         // Mark frog as Ender variant (can be used for rendering and AI)
         frog.getPersistentData().putBoolean("amphibia:ender_mutation", true);
+
+        // Add Ender teleport AI goal if on server
+        if (!frog.level().isClientSide) {
+            com.sanhiruzu.amphibia.entity.goal.EnderFrogTeleportGoal goal =
+                new com.sanhiruzu.amphibia.entity.goal.EnderFrogTeleportGoal(frog, 32.0);
+            frog.goalSelector.addGoal(2, goal);
+        }
     }
 
     public static boolean hasEnderMutation(Frog frog) {
