@@ -10,9 +10,13 @@ import net.minecraft.util.RandomSource;
 import java.util.ArrayList;
 import java.util.List;
 
-public record FrogDNA(Trait heatTolerance, Trait slimeViscosity, Trait growthRate, Trait health, Trait damage, List<String> mutations) {
+public record FrogDNA(Trait heatTolerance, Trait slimeViscosity, Trait growthRate, Trait health, Trait damage, Trait size, List<String> mutations) {
+    public FrogDNA(Trait heatTolerance, Trait slimeViscosity, Trait growthRate, Trait health, Trait damage, Trait size) {
+        this(heatTolerance, slimeViscosity, growthRate, health, damage, size, new ArrayList<>());
+    }
+
     public FrogDNA(Trait heatTolerance, Trait slimeViscosity, Trait growthRate, Trait health, Trait damage) {
-        this(heatTolerance, slimeViscosity, growthRate, health, damage, new ArrayList<>());
+        this(heatTolerance, slimeViscosity, growthRate, health, damage, Trait.defaultTrait(), new ArrayList<>());
     }
 
     public static final Codec<FrogDNA> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -21,18 +25,34 @@ public record FrogDNA(Trait heatTolerance, Trait slimeViscosity, Trait growthRat
             Trait.CODEC.fieldOf("growth_rate").forGetter(FrogDNA::growthRate),
             Trait.CODEC.fieldOf("health").forGetter(FrogDNA::health),
             Trait.CODEC.fieldOf("damage").forGetter(FrogDNA::damage),
+            Trait.CODEC.fieldOf("size").forGetter(FrogDNA::size),
             Codec.STRING.listOf().fieldOf("mutations").forGetter(FrogDNA::mutations)
     ).apply(instance, FrogDNA::new));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, FrogDNA> STREAM_CODEC = StreamCodec.composite(
-            Trait.STREAM_CODEC, FrogDNA::heatTolerance,
-            Trait.STREAM_CODEC, FrogDNA::slimeViscosity,
-            Trait.STREAM_CODEC, FrogDNA::growthRate,
-            Trait.STREAM_CODEC, FrogDNA::health,
-            Trait.STREAM_CODEC, FrogDNA::damage,
-            ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.collection(ArrayList::new)), FrogDNA::mutations,
-            FrogDNA::new
-    );
+    public static final StreamCodec<RegistryFriendlyByteBuf, FrogDNA> STREAM_CODEC = new StreamCodec<RegistryFriendlyByteBuf, FrogDNA>() {
+        @Override
+        public FrogDNA decode(RegistryFriendlyByteBuf buf) {
+            Trait heatTolerance = Trait.STREAM_CODEC.decode(buf);
+            Trait slimeViscosity = Trait.STREAM_CODEC.decode(buf);
+            Trait growthRate = Trait.STREAM_CODEC.decode(buf);
+            Trait health = Trait.STREAM_CODEC.decode(buf);
+            Trait damage = Trait.STREAM_CODEC.decode(buf);
+            Trait size = Trait.STREAM_CODEC.decode(buf);
+            java.util.List<String> mutations = ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.collection(ArrayList::new)).decode(buf);
+            return new FrogDNA(heatTolerance, slimeViscosity, growthRate, health, damage, size, mutations);
+        }
+
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, FrogDNA dna) {
+            Trait.STREAM_CODEC.encode(buf, dna.heatTolerance());
+            Trait.STREAM_CODEC.encode(buf, dna.slimeViscosity());
+            Trait.STREAM_CODEC.encode(buf, dna.growthRate());
+            Trait.STREAM_CODEC.encode(buf, dna.health());
+            Trait.STREAM_CODEC.encode(buf, dna.damage());
+            Trait.STREAM_CODEC.encode(buf, dna.size());
+            ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.collection(ArrayList::new)).encode(buf, new ArrayList<>(dna.mutations()));
+        }
+    };
 
     public static FrogDNA createDefault() {
         java.util.Random rand = new java.util.Random();
@@ -51,6 +71,7 @@ public record FrogDNA(Trait heatTolerance, Trait slimeViscosity, Trait growthRat
             new Trait(possibleGenes[rand.nextInt(possibleGenes.length)], possibleGenes[rand.nextInt(possibleGenes.length)]),
             new Trait(possibleGenes[rand.nextInt(possibleGenes.length)], possibleGenes[rand.nextInt(possibleGenes.length)]),
             new Trait(possibleGenes[rand.nextInt(possibleGenes.length)], possibleGenes[rand.nextInt(possibleGenes.length)]),
+            new Trait(possibleGenes[rand.nextInt(possibleGenes.length)], possibleGenes[rand.nextInt(possibleGenes.length)]),
             mutations
         );
     }
@@ -62,6 +83,7 @@ public record FrogDNA(Trait heatTolerance, Trait slimeViscosity, Trait growthRat
                 Trait.mix(parentA.growthRate(), parentB.growthRate(), random),
                 Trait.mix(parentA.health(), parentB.health(), random),
                 Trait.mix(parentA.damage(), parentB.damage(), random),
+                Trait.mix(parentA.size(), parentB.size(), random),
                 new ArrayList<>()  // Mutations are not inherited during natural breeding
         );
     }
@@ -77,6 +99,7 @@ public record FrogDNA(Trait heatTolerance, Trait slimeViscosity, Trait growthRat
                 Trait.mix(parentA.growthRate(), parentB.growthRate(), random),
                 Trait.mix(parentA.health(), parentB.health(), random),
                 Trait.mix(parentA.damage(), parentB.damage(), random),
+                Trait.mix(parentA.size(), parentB.size(), random),
                 inheritedMutations  // Mutations are preserved through special breeding methods
         );
     }

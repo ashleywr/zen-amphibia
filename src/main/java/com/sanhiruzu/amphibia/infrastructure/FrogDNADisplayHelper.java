@@ -28,6 +28,9 @@ public class FrogDNADisplayHelper {
         lines.add(Component.literal("  ").append(Component.literal("Growth: "))
             .append(Component.literal(dna.growthRate().geneA() + "/" + dna.growthRate().geneB()).withStyle(ChatFormatting.AQUA)));
 
+        lines.add(Component.literal("  ").append(Component.literal("Size: "))
+            .append(Component.literal(dna.size().geneA() + "/" + dna.size().geneB()).withStyle(ChatFormatting.LIGHT_PURPLE)));
+
         return lines;
     }
 
@@ -74,6 +77,9 @@ public class FrogDNADisplayHelper {
 
             lines.add(Component.literal("Growth Rate: ").withStyle(ChatFormatting.GRAY)
                 .append(Component.literal(dna.growthRate().geneA() + " / " + dna.growthRate().geneB()).withStyle(ChatFormatting.AQUA)));
+
+            lines.add(Component.literal("Size: ").withStyle(ChatFormatting.GRAY)
+                .append(Component.literal(dna.size().geneA() + " / " + dna.size().geneB()).withStyle(ChatFormatting.LIGHT_PURPLE)));
 
             // Combat traits with grades
             lines.add(Component.empty());
@@ -152,6 +158,9 @@ public class FrogDNADisplayHelper {
             lines.add(Component.literal("Growth Rate: ").withStyle(ChatFormatting.GRAY)
                 .append(Component.literal(dna.growthRate().geneA() + " / " + dna.growthRate().geneB()).withStyle(ChatFormatting.AQUA)));
 
+            lines.add(Component.literal("Size: ").withStyle(ChatFormatting.GRAY)
+                .append(Component.literal(dna.size().geneA() + " / " + dna.size().geneB()).withStyle(ChatFormatting.LIGHT_PURPLE)));
+
             lines.add(Component.empty());
             lines.add(Component.literal("Health: ").withStyle(ChatFormatting.GRAY)
                 .append(Component.literal(dna.health().geneA() + " / " + dna.health().geneB()).withStyle(ChatFormatting.WHITE))
@@ -194,7 +203,7 @@ public class FrogDNADisplayHelper {
     }
 
     public static float getScaleFromDNA(FrogDNA dna) {
-        int hashScale = Math.abs(dna.growthRate().geneA().hashCode() * 31 + dna.growthRate().geneB().hashCode());
+        int hashScale = Math.abs(dna.size().geneA().hashCode() * 31 + dna.size().geneB().hashCode());
         return 0.5f + ((hashScale * 739) % 100) / 50.0f;
     }
 }
