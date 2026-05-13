@@ -9,7 +9,7 @@
   },
   "mixins": [
     "FrogMixin",
-    "FrogEyeHeightMixin"
+    "FrogBoundingBoxMixin"
   ],
   "client": [
     "FrogportRendererMixin"
