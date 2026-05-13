@@ -93,13 +93,15 @@ public class AmphibiaClientEvents {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null || mc.player == null) return;
 
+        long gameTime = mc.level.getGameTime();
+
         for (Frog frog : mc.level.getEntitiesOfClass(Frog.class, mc.player.getBoundingBox().inflate(32))) {
             FrogDNA dna = frog.getData(AmphibiaAttachments.FROG_DNA);
             if (dna == null || dna.mutations().isEmpty()) continue;
 
             for (String mutationId : dna.mutations()) {
                 MutationVisuals visuals = MutationVisualRegistry.get(mutationId);
-                if (visuals != null && mc.level.getGameTime() % visuals.particleInterval() == 0) {
+                if (visuals != null && gameTime % visuals.particleInterval() == 0) {
                     double x = frog.getX() + (mc.level.random.nextDouble() - 0.5) * 1.5;
                     double y = frog.getY() + mc.level.random.nextDouble() * 1.5;
                     double z = frog.getZ() + (mc.level.random.nextDouble() - 0.5) * 1.5;
