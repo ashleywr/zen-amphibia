@@ -19,6 +19,10 @@ public class AmphibiaAttachments {
             "offspring_dna", () -> AttachmentType.builder(FrogDNA::createDefault).serialize(FrogDNA.CODEC).sync(FrogDNA.STREAM_CODEC).build()
     );
 
+    public static final Supplier<AttachmentType<Float>> FROG_SCALE = ATTACHMENTS.register(
+            "frog_scale", () -> AttachmentType.builder(() -> 1.0f).serialize(com.mojang.serialization.Codec.FLOAT).sync(net.minecraft.network.codec.ByteBufCodecs.FLOAT).build()
+    );
+
     public static void register(IEventBus eventBus) {
         ATTACHMENTS.register(eventBus);
     }

@@ -47,13 +47,9 @@ public abstract class FrogMixin {
 
         // Apply visual scale based on DNA (every tick for responsiveness)
         float scale = FrogDNADisplayHelper.getScaleFromDNA(dna);
-        try {
-            var scaleAttribute = frog.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.SCALE);
-            if (scaleAttribute != null && Math.abs(scaleAttribute.getBaseValue() - scale) > 0.01f) {
-                scaleAttribute.setBaseValue(scale);
-            }
-        } catch (Exception e) {
-            // Scale attribute not available, silently continue
+        Float currentScale = frog.getData(AmphibiaAttachments.FROG_SCALE);
+        if (Math.abs(currentScale - scale) > 0.01f) {
+            frog.setData(AmphibiaAttachments.FROG_SCALE, scale);
         }
 
         // Apply health and damage bonuses based on DNA (every tick for responsiveness)
