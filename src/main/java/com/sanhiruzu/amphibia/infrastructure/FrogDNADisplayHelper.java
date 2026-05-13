@@ -41,10 +41,7 @@ public class FrogDNADisplayHelper {
     public static List<Component> getFrogDebugInfo(Frog frog, FrogDNA dna) {
         List<Component> lines = new ArrayList<>();
 
-        lines.add(Component.literal("=== FROG DEBUG INFO ===").withStyle(ChatFormatting.LIGHT_PURPLE));
-
-        lines.add(Component.literal("UUID: ").withStyle(ChatFormatting.GRAY)
-            .append(Component.literal(frog.getUUID().toString()).withStyle(ChatFormatting.WHITE)));
+        lines.add(Component.literal("=== FROG INFO ===").withStyle(ChatFormatting.LIGHT_PURPLE));
 
         lines.add(Component.literal("Age: ").withStyle(ChatFormatting.GRAY)
             .append(Component.literal(frog.getAge() + " ticks").withStyle(ChatFormatting.YELLOW)));
@@ -110,12 +107,8 @@ public class FrogDNADisplayHelper {
         }
 
         lines.add(Component.empty());
-        lines.add(Component.literal("=== STATE ===").withStyle(ChatFormatting.BLUE));
         lines.add(Component.literal("InLove: ").withStyle(ChatFormatting.GRAY)
             .append(Component.literal(String.valueOf(frog.isInLove())).withStyle(ChatFormatting.YELLOW)));
-
-        lines.add(Component.literal("Position: ").withStyle(ChatFormatting.GRAY)
-            .append(Component.literal(String.format("[%.1f, %.1f, %.1f]", frog.getX(), frog.getY(), frog.getZ())).withStyle(ChatFormatting.WHITE)));
 
         return lines;
     }

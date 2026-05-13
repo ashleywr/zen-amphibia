@@ -53,18 +53,16 @@ public record FrogDNA(Map<String, Trait> genes, List<String> mutations) {
 
     public static FrogDNA createDefault() {
         java.util.Random rand = new java.util.Random();
-        String[] possibleGenes = {"w", "A", "B", "C", "D", "E", "F", "G"};
 
         Map<String, Trait> genes = new HashMap<>();
-        genes.put(FrogGeneRegistry.HEAT_TOLERANCE, randomTrait(possibleGenes, rand));
-        genes.put(FrogGeneRegistry.SLIME_VISCOSITY, randomTrait(possibleGenes, rand));
-        genes.put(FrogGeneRegistry.GROWTH_RATE, randomTrait(possibleGenes, rand));
-        genes.put(FrogGeneRegistry.HEALTH, randomTrait(possibleGenes, rand));
-        genes.put(FrogGeneRegistry.DAMAGE, randomTrait(possibleGenes, rand));
-        genes.put(FrogGeneRegistry.SIZE, randomTrait(possibleGenes, rand));
+        genes.put(FrogGeneRegistry.HEAT_TOLERANCE, randomTrait(rand));
+        genes.put(FrogGeneRegistry.SLIME_VISCOSITY, randomTrait(rand));
+        genes.put(FrogGeneRegistry.GROWTH_RATE, randomTrait(rand));
+        genes.put(FrogGeneRegistry.HEALTH, randomTrait(rand));
+        genes.put(FrogGeneRegistry.DAMAGE, randomTrait(rand));
+        genes.put(FrogGeneRegistry.SIZE, randomTrait(rand));
 
         List<String> mutations = new ArrayList<>();
-        // 0.1% chance for a mutation to spontaneously appear
         if (rand.nextDouble() < 0.001) {
             FrogMutation mutation = FrogMutation.ALL_MUTATIONS[rand.nextInt(FrogMutation.ALL_MUTATIONS.length)];
             mutations.add(mutation.id());
@@ -73,11 +71,19 @@ public record FrogDNA(Map<String, Trait> genes, List<String> mutations) {
         return new FrogDNA(genes, mutations);
     }
 
-    private static Trait randomTrait(String[] possibleGenes, java.util.Random rand) {
-        return new Trait(
-            possibleGenes[rand.nextInt(possibleGenes.length)],
-            possibleGenes[rand.nextInt(possibleGenes.length)]
-        );
+    private static Trait randomTrait(java.util.Random rand) {
+        return new Trait(selectWeightedAllele(rand), selectWeightedAllele(rand));
+    }
+
+    private static String selectWeightedAllele(java.util.Random rand) {
+        // Weighted allele pool for proper Mendelian inheritance
+        // 60% normal (N), 15% each of mild variants (A,B), 5% each rare (C,D)
+        int roll = rand.nextInt(100);
+        if (roll < 60) return "N";      // Normal (60%)
+        if (roll < 75) return "A";      // Mild variant (15%)
+        if (roll < 90) return "B";      // Mild variant (15%)
+        if (roll < 95) return "C";      // Rare (5%)
+        return "D";                     // Rare (5%)
     }
 
     public static FrogDNA mix(FrogDNA parentA, FrogDNA parentB, RandomSource random) {
