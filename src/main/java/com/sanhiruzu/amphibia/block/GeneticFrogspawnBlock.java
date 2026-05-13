@@ -1,7 +1,7 @@
 package com.sanhiruzu.amphibia.block;
 
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
-import com.sanhiruzu.amphibia.genetics.FrogDNA;
+import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -27,13 +27,13 @@ public class GeneticFrogspawnBlock extends FrogspawnBlock implements EntityBlock
 
     @Override
     protected void tick(@NotNull BlockState state, ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource random) {
-        // We replicate vanilla hatching logic but inject our DNA
+        // We replicate vanilla hatching logic but inject our genome
         // Vanilla: destroy block and spawn 2-5 tadpoles
-        
-        FrogDNA dna = FrogDNA.createDefault();
+
+        FrogGenome genome = FrogGenome.createDefault();
         BlockEntity be = level.getBlockEntity(pos);
         if (be instanceof GeneticFrogspawnBlockEntity gbe) {
-            dna = gbe.getDna();
+            genome = gbe.getGenome();
         }
 
         level.removeBlock(pos, false);
@@ -42,7 +42,7 @@ public class GeneticFrogspawnBlock extends FrogspawnBlock implements EntityBlock
         for (int j = 1; j <= i; ++j) {
             Tadpole tadpole = EntityType.TADPOLE.create(level);
             if (tadpole != null) {
-                tadpole.setData(AmphibiaAttachments.FROG_DNA, dna);
+                tadpole.setData(AmphibiaAttachments.FROG_GENOME, genome);
                 tadpole.setPersistenceRequired();
                 double d0 = (double)pos.getX() + random.nextDouble();
                 double d1 = (double)pos.getZ() + random.nextDouble();

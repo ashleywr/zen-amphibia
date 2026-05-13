@@ -10,8 +10,15 @@ public record FrogMutation(String id, Component displayName, int color) {
         0xFF1493  // Deep Pink
     );
 
+    public static final FrogMutation CREEPER = new FrogMutation(
+        "creeper",
+        Component.literal("Creeper"),
+        0x00FF00  // Creeper Green
+    );
+
     public static final FrogMutation[] ALL_MUTATIONS = {
-        ENDER
+        ENDER,
+        CREEPER
     };
 
     public static FrogMutation getById(String id) {
@@ -26,6 +33,7 @@ public record FrogMutation(String id, Component displayName, int color) {
     public void applyToFrog(Frog frog) {
         switch (this.id) {
             case "ender" -> applyEnderMutation(frog);
+            case "creeper" -> applyCreeperMutation(frog);
         }
     }
 
@@ -43,5 +51,14 @@ public record FrogMutation(String id, Component displayName, int color) {
 
     public static boolean hasEnderMutation(Frog frog) {
         return frog.getPersistentData().getBoolean("amphibia:ender_mutation");
+    }
+
+    private static void applyCreeperMutation(Frog frog) {
+        // Mark frog as Creeper variant
+        frog.getPersistentData().putBoolean("amphibia:creeper_mutation", true);
+    }
+
+    public static boolean hasCreeperMutation(Frog frog) {
+        return frog.getPersistentData().getBoolean("amphibia:creeper_mutation");
     }
 }

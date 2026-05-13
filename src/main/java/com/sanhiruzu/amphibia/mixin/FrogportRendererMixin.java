@@ -3,7 +3,7 @@ package com.sanhiruzu.amphibia.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.sanhiruzu.amphibia.duck.IFrogportDNA;
-import com.sanhiruzu.amphibia.genetics.FrogDNA;
+import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.simibubi.create.content.logistics.packagePort.frogport.FrogportBlockEntity;
 import com.simibubi.create.content.logistics.packagePort.frogport.FrogportRenderer;
 import net.createmod.catnip.render.SuperByteBuffer;
@@ -19,17 +19,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class FrogportRendererMixin {
 
     @Unique
-    private static final ThreadLocal<FrogDNA> CURRENT_DNA = new ThreadLocal<>();
+    private static final ThreadLocal<FrogGenome> CURRENT_GENOME = new ThreadLocal<>();
 
     @Inject(
         method = "renderSafe(Lcom/simibubi/create/content/logistics/packagePort/frogport/FrogportBlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V",
         at = @At("HEAD")
     )
-    private void amphibia$captureDNA(FrogportBlockEntity blockEntity, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay, CallbackInfo ci) {
+    private void amphibia$captureGenome(FrogportBlockEntity blockEntity, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay, CallbackInfo ci) {
         if (blockEntity instanceof IFrogportDNA duck) {
-            CURRENT_DNA.set(duck.amphibia$getDna());
+            CURRENT_GENOME.set(duck.amphibia$getGenome());
         } else {
-            CURRENT_DNA.remove();
+            CURRENT_GENOME.remove();
         }
     }
 
@@ -40,9 +40,9 @@ public abstract class FrogportRendererMixin {
     private void amphibia$colorFrogParts(SuperByteBuffer instance, PoseStack ms, VertexConsumer buffer) {
         int color = 0xFF80FFC8; // Default color
 
-        FrogDNA dna = CURRENT_DNA.get();
-        if (dna != null) {
-            color = com.sanhiruzu.amphibia.infrastructure.FrogDNADisplayHelper.getDNAColor(dna);
+        FrogGenome genome = CURRENT_GENOME.get();
+        if (genome != null) {
+            color = com.sanhiruzu.amphibia.infrastructure.FrogDNADisplayHelper.getGenomeColor(genome);
         }
 
         instance.color(color);

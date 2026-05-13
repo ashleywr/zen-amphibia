@@ -1,6 +1,6 @@
 package com.sanhiruzu.amphibia.item;
 
-import com.sanhiruzu.amphibia.genetics.FrogDNA;
+import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.sanhiruzu.amphibia.register.AmphibiaDataComponents;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -13,7 +13,7 @@ public class FrogportBlockItem extends BlockItem {
 
     @Override
     public int getMaxStackSize(ItemStack stack) {
-        FrogDNA dna = stack.get(AmphibiaDataComponents.FROG_DNA.get());
-        return dna != null ? 1 : 64;
+        FrogGenome genome = stack.get(AmphibiaDataComponents.FROG_DNA.get());
+        return genome != null ? 1 : 64;
     }
 }

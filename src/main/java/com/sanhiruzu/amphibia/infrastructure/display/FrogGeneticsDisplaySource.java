@@ -5,8 +5,8 @@ import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.content.redstone.displayLink.source.SingleLineDisplaySource;
 import com.simibubi.create.content.redstone.displayLink.target.DisplayTargetStats;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.sanhiruzu.amphibia.genetics.FrogDNA;
-import com.sanhiruzu.amphibia.genetics.FrogGeneRegistry;
+import com.sanhiruzu.amphibia.genetics.FrogGenome;
+import com.sanhiruzu.amphibia.genetics.Gene;
 import com.sanhiruzu.amphibia.register.AmphibiaDataComponents;
 import com.sanhiruzu.amphibia.register.AmphibiaItems;
 import net.minecraft.network.chat.Component;
@@ -22,9 +22,9 @@ public class FrogGeneticsDisplaySource extends SingleLineDisplaySource {
         BlockEntity sourceBE = context.getSourceBlockEntity();
         if (sourceBE == null) return EMPTY_LINE.copy();
 
-        TransportedItemStackHandlerBehaviour behaviour = 
+        TransportedItemStackHandlerBehaviour behaviour =
             BlockEntityBehaviour.get(context.level(), sourceBE.getBlockPos(), TransportedItemStackHandlerBehaviour.TYPE);
-        
+
         ItemStack stack = ItemStack.EMPTY;
 
         if (behaviour != null) {
@@ -40,12 +40,12 @@ public class FrogGeneticsDisplaySource extends SingleLineDisplaySource {
             return EMPTY_LINE.copy();
         }
 
-        FrogDNA dna = stack.get(AmphibiaDataComponents.FROG_DNA);
-        if (dna == null) return Component.literal("No DNA Data");
+        FrogGenome genome = stack.get(AmphibiaDataComponents.FROG_DNA);
+        if (genome == null) return Component.literal("No Genome Data");
 
-        var heatTrait = dna.getGene(FrogGeneRegistry.HEAT_TOLERANCE);
-        var viscosityTrait = dna.getGene(FrogGeneRegistry.SLIME_VISCOSITY);
-        var growthTrait = dna.getGene(FrogGeneRegistry.GROWTH_RATE);
+        var heatTrait = genome.getGene(Gene.HEAT_TOLERANCE);
+        var viscosityTrait = genome.getGene(Gene.SLIME_VISCOSITY);
+        var growthTrait = genome.getGene(Gene.GROWTH_RATE);
 
         return Component.literal(String.format("HT:%s%s SV:%s%s GR:%s%s",
                 heatTrait.geneA(), heatTrait.geneB(),

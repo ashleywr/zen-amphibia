@@ -1,7 +1,7 @@
 package com.sanhiruzu.amphibia.block;
 
 import com.sanhiruzu.amphibia.register.AmphibiaBlockEntities;
-import com.sanhiruzu.amphibia.genetics.FrogDNA;
+import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -10,32 +10,32 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 public class GeneticFrogspawnBlockEntity extends BlockEntity {
-    private FrogDNA dna = FrogDNA.createDefault();
+    private FrogGenome genome = FrogGenome.createDefault();
 
     public GeneticFrogspawnBlockEntity(BlockPos pos, BlockState state) {
         super(AmphibiaBlockEntities.GENETIC_FROGSPAWN.get(), pos, state);
     }
 
-    public void setDna(FrogDNA dna) {
-        this.dna = dna;
+    public void setGenome(FrogGenome genome) {
+        this.genome = genome;
         setChanged();
     }
 
-    public FrogDNA getDna() {
-        return dna;
+    public FrogGenome getGenome() {
+        return genome;
     }
 
     @Override
     protected void saveAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
         super.saveAdditional(tag, registries);
-        tag.put("FrogDNA", FrogDNA.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, dna).getOrThrow());
+        tag.put("FrogGenome", FrogGenome.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, genome).getOrThrow());
     }
 
     @Override
     protected void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
         super.loadAdditional(tag, registries);
-        if (tag.contains("FrogDNA")) {
-            dna = FrogDNA.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, tag.get("FrogDNA")).getOrThrow();
+        if (tag.contains("FrogGenome")) {
+            genome = FrogGenome.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, tag.get("FrogGenome")).getOrThrow();
         }
     }
 }

@@ -2,7 +2,7 @@ package com.sanhiruzu.amphibia.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.sanhiruzu.amphibia.genetics.FrogDNA;
+import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import net.minecraft.client.model.FrogModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -21,12 +21,12 @@ public class MutationRenderLayer extends RenderLayer<Frog, FrogModel<Frog>> {
     public void render(PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, Frog frog,
                        float pLimbSwing, float pLimbSwingAmount, float pPartialTicks, float pAgeInTicks,
                        float pNetHeadYaw, float pHeadPitch) {
-        FrogDNA dna = frog.getData(AmphibiaAttachments.FROG_DNA);
-        if (dna == null || dna.mutations().isEmpty()) {
+        FrogGenome genome = frog.getData(AmphibiaAttachments.FROG_GENOME);
+        if (genome == null || genome.mutations().isEmpty()) {
             return;
         }
 
-        for (String mutationId : dna.mutations()) {
+        for (String mutationId : genome.mutations()) {
             MutationVisuals visuals = MutationVisualRegistry.get(mutationId);
             if (visuals != null) {
                 renderMutationTint(pPoseStack, pBuffer, pPackedLight, frog, visuals);

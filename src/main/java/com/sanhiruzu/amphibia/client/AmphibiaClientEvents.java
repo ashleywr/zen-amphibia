@@ -6,7 +6,7 @@ import com.sanhiruzu.amphibia.AmphibiaKeys;
 import com.sanhiruzu.amphibia.client.render.MutationRenderLayer;
 import com.sanhiruzu.amphibia.client.render.MutationVisualRegistry;
 import com.sanhiruzu.amphibia.client.render.MutationVisuals;
-import com.sanhiruzu.amphibia.genetics.FrogDNA;
+import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.sanhiruzu.amphibia.infrastructure.FrogDNADisplayHelper;
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import com.sanhiruzu.amphibia.item.FrogBucketItem;
@@ -42,9 +42,9 @@ public class AmphibiaClientEvents {
     public static void onRegisterItemColors(RegisterColorHandlersEvent.Item event) {
         event.register((stack, tintIndex) -> {
             if (tintIndex == 1) { // Assume layer 1 is the tintable frog part
-                FrogDNA dna = stack.get(AmphibiaDataComponents.FROG_DNA.get());
-                if (dna != null) {
-                    return FrogDNADisplayHelper.getDNAColor(dna);
+                FrogGenome genome = stack.get(AmphibiaDataComponents.FROG_DNA.get());
+                if (genome != null) {
+                    return FrogDNADisplayHelper.getGenomeColor(genome);
                 }
             }
             return -1;
@@ -65,8 +65,8 @@ public class AmphibiaClientEvents {
                 net.minecraft.world.entity.Entity entity = entityHitResult.getEntity();
                 if (!(entity instanceof Frog frog)) return;
 
-                FrogDNA dna = frog.getData(AmphibiaAttachments.FROG_DNA);
-                java.util.List<net.minecraft.network.chat.Component> tooltip = FrogDNADisplayHelper.getFrogDebugInfo(frog, dna);
+                FrogGenome genome = frog.getData(AmphibiaAttachments.FROG_GENOME);
+                java.util.List<net.minecraft.network.chat.Component> tooltip = FrogDNADisplayHelper.getFrogDebugInfo(frog, genome);
 
                 int screenWidth = guiGraphics.guiWidth();
                 int screenHeight = guiGraphics.guiHeight();
@@ -96,10 +96,10 @@ public class AmphibiaClientEvents {
         long gameTime = mc.level.getGameTime();
 
         for (Frog frog : mc.level.getEntitiesOfClass(Frog.class, mc.player.getBoundingBox().inflate(32))) {
-            FrogDNA dna = frog.getData(AmphibiaAttachments.FROG_DNA);
-            if (dna == null || dna.mutations().isEmpty()) continue;
+            FrogGenome genome = frog.getData(AmphibiaAttachments.FROG_GENOME);
+            if (genome == null || genome.mutations().isEmpty()) continue;
 
-            for (String mutationId : dna.mutations()) {
+            for (String mutationId : genome.mutations()) {
                 MutationVisuals visuals = MutationVisualRegistry.get(mutationId);
                 if (visuals != null && gameTime % visuals.particleInterval() == 0) {
                     double x = frog.getX() + (mc.level.random.nextDouble() - 0.5) * 1.5;
@@ -122,9 +122,9 @@ public class AmphibiaClientEvents {
 
         @Override
         public void render(PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, Frog frog, float pLimbSwing, float pLimbSwingAmount, float pPartialTicks, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
-            FrogDNA dna = frog.getData(AmphibiaAttachments.FROG_DNA);
-            if (dna != null) {
-                int color = FrogDNADisplayHelper.getDNAColor(dna);
+            FrogGenome genome = frog.getData(AmphibiaAttachments.FROG_GENOME);
+            if (genome != null) {
+                int color = FrogDNADisplayHelper.getGenomeColor(genome);
                 VertexConsumer vertexconsumer = pBuffer.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(frog)));
                 this.getParentModel().renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, net.minecraft.client.renderer.entity.LivingEntityRenderer.getOverlayCoords(frog, 0.0F), color);
             }

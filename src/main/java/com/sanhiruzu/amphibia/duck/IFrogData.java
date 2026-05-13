@@ -1,8 +1,8 @@
 package com.sanhiruzu.amphibia.duck;
 
-import com.sanhiruzu.amphibia.genetics.FrogDNA;
+import com.sanhiruzu.amphibia.genetics.FrogGenome;
 
 public interface IFrogData {
-    FrogDNA amphibia$getFrogDNA();
-    void amphibia$setFrogDNA(FrogDNA dna);
+    FrogGenome amphibia$getFrogGenome();
+    void amphibia$setFrogGenome(FrogGenome genome);
 }

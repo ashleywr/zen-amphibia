@@ -1,7 +1,7 @@
 package com.sanhiruzu.amphibia.infrastructure;
 
-import com.sanhiruzu.amphibia.genetics.FrogDNA;
-import com.sanhiruzu.amphibia.genetics.FrogGeneRegistry;
+import com.sanhiruzu.amphibia.genetics.FrogGenome;
+import com.sanhiruzu.amphibia.genetics.Gene;
 import com.sanhiruzu.amphibia.genetics.FrogGradeCalculator;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -12,33 +12,33 @@ import java.util.List;
 
 public class FrogDNADisplayHelper {
 
-    public static List<Component> getDNATooltip(FrogDNA dna, boolean includeHeader) {
+    public static List<Component> getDNATooltip(FrogGenome genome, boolean includeHeader) {
         List<Component> lines = new ArrayList<>();
 
         if (includeHeader) {
             lines.add(Component.translatable("gui.goggles.amphibia.frog_genetics").withStyle(ChatFormatting.GREEN));
         }
 
-        var heatTrait = dna.getGene(FrogGeneRegistry.HEAT_TOLERANCE);
+        var heatTrait = genome.getGene(Gene.HEAT_TOLERANCE);
         lines.add(Component.literal("  ").append(Component.translatable("gui.create_kaizen.factory_manager.temperature"))
-            .append(Component.literal(": " + heatTrait.geneA() + "/" + heatTrait.geneB()).withStyle(ChatFormatting.GOLD)));
+            .append(Component.literal(": " + heatTrait.geneA() + "/" + heatTrait.geneB()).withStyle(Gene.HEAT_TOLERANCE.color)));
 
-        var viscosityTrait = dna.getGene(FrogGeneRegistry.SLIME_VISCOSITY);
+        var viscosityTrait = genome.getGene(Gene.SLIME_VISCOSITY);
         lines.add(Component.literal("  ").append(Component.translatable("gui.create_kaizen.factory_manager.purity"))
-            .append(Component.literal(": " + viscosityTrait.geneA() + "/" + viscosityTrait.geneB()).withStyle(ChatFormatting.GREEN)));
+            .append(Component.literal(": " + viscosityTrait.geneA() + "/" + viscosityTrait.geneB()).withStyle(Gene.SLIME_VISCOSITY.color)));
 
-        var growthTrait = dna.getGene(FrogGeneRegistry.GROWTH_RATE);
+        var growthTrait = genome.getGene(Gene.GROWTH_RATE);
         lines.add(Component.literal("  ").append(Component.literal("Growth: "))
-            .append(Component.literal(growthTrait.geneA() + "/" + growthTrait.geneB()).withStyle(ChatFormatting.AQUA)));
+            .append(Component.literal(growthTrait.geneA() + "/" + growthTrait.geneB()).withStyle(Gene.GROWTH_RATE.color)));
 
-        var sizeTrait = dna.getGene(FrogGeneRegistry.SIZE);
+        var sizeTrait = genome.getGene(Gene.SIZE);
         lines.add(Component.literal("  ").append(Component.literal("Size: "))
-            .append(Component.literal(sizeTrait.geneA() + "/" + sizeTrait.geneB()).withStyle(ChatFormatting.LIGHT_PURPLE)));
+            .append(Component.literal(sizeTrait.geneA() + "/" + sizeTrait.geneB()).withStyle(Gene.SIZE.color)));
 
         return lines;
     }
 
-    public static List<Component> getFrogDebugInfo(Frog frog, FrogDNA dna) {
+    public static List<Component> getFrogDebugInfo(Frog frog, FrogGenome genome) {
         List<Component> lines = new ArrayList<>();
 
         lines.add(Component.literal("=== FROG INFO ===").withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -49,10 +49,10 @@ public class FrogDNADisplayHelper {
         lines.add(Component.literal("Size: ").withStyle(ChatFormatting.GRAY)
             .append(Component.literal(String.format("%.2f", frog.getScale())).withStyle(ChatFormatting.YELLOW)));
 
-        if (dna != null && !dna.mutations().isEmpty()) {
+        if (genome != null && !genome.mutations().isEmpty()) {
             lines.add(Component.empty());
             lines.add(Component.literal("=== MUTATIONS ===").withStyle(ChatFormatting.LIGHT_PURPLE));
-            for (String mutationId : dna.mutations()) {
+            for (String mutationId : genome.mutations()) {
                 com.sanhiruzu.amphibia.genetics.FrogMutation mutation = com.sanhiruzu.amphibia.genetics.FrogMutation.getById(mutationId);
                 if (mutation != null) {
                     lines.add(Component.literal("  ").append(Component.literal(mutation.displayName().getString()).withStyle(net.minecraft.network.chat.Style.EMPTY.withColor(net.minecraft.network.chat.TextColor.fromRgb(mutation.color())))));
@@ -63,38 +63,38 @@ public class FrogDNADisplayHelper {
         lines.add(Component.empty());
         lines.add(Component.literal("=== GENETICS ===").withStyle(ChatFormatting.GREEN));
 
-        if (dna != null) {
-            FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(dna.getGene(FrogGeneRegistry.HEALTH));
-            FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(dna.getGene(FrogGeneRegistry.DAMAGE));
+        if (genome != null) {
+            FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.HEALTH));
+            FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.DAMAGE));
 
-            var heatTrait = dna.getGene(FrogGeneRegistry.HEAT_TOLERANCE);
+            var heatTrait = genome.getGene(Gene.HEAT_TOLERANCE);
             lines.add(Component.literal("Heat Tolerance: ").withStyle(ChatFormatting.GRAY)
-                .append(Component.literal(heatTrait.geneA() + " / " + heatTrait.geneB()).withStyle(ChatFormatting.GOLD)));
+                .append(Component.literal(heatTrait.geneA() + " / " + heatTrait.geneB()).withStyle(Gene.HEAT_TOLERANCE.color)));
 
-            var viscosityTrait = dna.getGene(FrogGeneRegistry.SLIME_VISCOSITY);
+            var viscosityTrait = genome.getGene(Gene.SLIME_VISCOSITY);
             lines.add(Component.literal("Viscosity: ").withStyle(ChatFormatting.GRAY)
-                .append(Component.literal(viscosityTrait.geneA() + " / " + viscosityTrait.geneB()).withStyle(ChatFormatting.GREEN)));
+                .append(Component.literal(viscosityTrait.geneA() + " / " + viscosityTrait.geneB()).withStyle(Gene.SLIME_VISCOSITY.color)));
 
-            var growthTrait = dna.getGene(FrogGeneRegistry.GROWTH_RATE);
+            var growthTrait = genome.getGene(Gene.GROWTH_RATE);
             lines.add(Component.literal("Growth Rate: ").withStyle(ChatFormatting.GRAY)
-                .append(Component.literal(growthTrait.geneA() + " / " + growthTrait.geneB()).withStyle(ChatFormatting.AQUA)));
+                .append(Component.literal(growthTrait.geneA() + " / " + growthTrait.geneB()).withStyle(Gene.GROWTH_RATE.color)));
 
-            var sizeTrait = dna.getGene(FrogGeneRegistry.SIZE);
+            var sizeTrait = genome.getGene(Gene.SIZE);
             lines.add(Component.literal("Size: ").withStyle(ChatFormatting.GRAY)
-                .append(Component.literal(sizeTrait.geneA() + " / " + sizeTrait.geneB()).withStyle(ChatFormatting.LIGHT_PURPLE)));
+                .append(Component.literal(sizeTrait.geneA() + " / " + sizeTrait.geneB()).withStyle(Gene.SIZE.color)));
 
             lines.add(Component.empty());
-            var healthTrait = dna.getGene(FrogGeneRegistry.HEALTH);
+            var healthTrait = genome.getGene(Gene.HEALTH);
             lines.add(Component.literal("Health: ").withStyle(ChatFormatting.GRAY)
                 .append(Component.literal(healthTrait.geneA() + " / " + healthTrait.geneB()).withStyle(ChatFormatting.WHITE))
                 .append(Component.literal(" [" + healthGrade.label + "]").withStyle(net.minecraft.network.chat.Style.EMPTY.withColor(net.minecraft.network.chat.TextColor.fromRgb(healthGrade.color)))));
 
-            var damageTrait = dna.getGene(FrogGeneRegistry.DAMAGE);
+            var damageTrait = genome.getGene(Gene.DAMAGE);
             lines.add(Component.literal("Damage: ").withStyle(ChatFormatting.GRAY)
                 .append(Component.literal(damageTrait.geneA() + " / " + damageTrait.geneB()).withStyle(ChatFormatting.WHITE))
                 .append(Component.literal(" [" + damageGrade.label + "]").withStyle(net.minecraft.network.chat.Style.EMPTY.withColor(net.minecraft.network.chat.TextColor.fromRgb(damageGrade.color)))));
 
-            int colorHash = getDNAColor(dna);
+            int colorHash = getGenomeColor(genome);
             int r = (colorHash >> 16) & 0xFF;
             int g = (colorHash >> 8) & 0xFF;
             int b = colorHash & 0xFF;
@@ -103,7 +103,7 @@ public class FrogDNADisplayHelper {
             lines.add(Component.literal("Color: ").withStyle(ChatFormatting.GRAY)
                 .append(Component.literal(colorName + " (RGB:" + r + "," + g + "," + b + ")").withStyle(ChatFormatting.WHITE)));
         } else {
-            lines.add(Component.literal("No DNA data").withStyle(ChatFormatting.RED));
+            lines.add(Component.literal("No genome data").withStyle(ChatFormatting.RED));
         }
 
         lines.add(Component.empty());
@@ -124,12 +124,12 @@ public class FrogDNADisplayHelper {
         return "Neutral";
     }
 
-    public static List<Component> getComprehensiveDNATooltip(FrogDNA dna) {
+    public static List<Component> getComprehensiveDNATooltip(FrogGenome genome) {
         List<Component> lines = new ArrayList<>();
 
-        if (dna != null && !dna.mutations().isEmpty()) {
+        if (genome != null && !genome.mutations().isEmpty()) {
             lines.add(Component.literal("=== MUTATIONS ===").withStyle(ChatFormatting.LIGHT_PURPLE));
-            for (String mutationId : dna.mutations()) {
+            for (String mutationId : genome.mutations()) {
                 com.sanhiruzu.amphibia.genetics.FrogMutation mutation = com.sanhiruzu.amphibia.genetics.FrogMutation.getById(mutationId);
                 if (mutation != null) {
                     lines.add(Component.literal("  ").append(Component.literal(mutation.displayName().getString()).withStyle(net.minecraft.network.chat.Style.EMPTY.withColor(net.minecraft.network.chat.TextColor.fromRgb(mutation.color())))));
@@ -140,38 +140,38 @@ public class FrogDNADisplayHelper {
 
         lines.add(Component.literal("=== GENETICS ===").withStyle(ChatFormatting.GREEN));
 
-        if (dna != null) {
-            FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(dna.getGene(FrogGeneRegistry.HEALTH));
-            FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(dna.getGene(FrogGeneRegistry.DAMAGE));
+        if (genome != null) {
+            FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.HEALTH));
+            FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.DAMAGE));
 
-            var heatTrait = dna.getGene(FrogGeneRegistry.HEAT_TOLERANCE);
+            var heatTrait = genome.getGene(Gene.HEAT_TOLERANCE);
             lines.add(Component.literal("Heat Tolerance: ").withStyle(ChatFormatting.GRAY)
-                .append(Component.literal(heatTrait.geneA() + " / " + heatTrait.geneB()).withStyle(ChatFormatting.GOLD)));
+                .append(Component.literal(heatTrait.geneA() + " / " + heatTrait.geneB()).withStyle(Gene.HEAT_TOLERANCE.color)));
 
-            var viscosityTrait = dna.getGene(FrogGeneRegistry.SLIME_VISCOSITY);
+            var viscosityTrait = genome.getGene(Gene.SLIME_VISCOSITY);
             lines.add(Component.literal("Viscosity: ").withStyle(ChatFormatting.GRAY)
-                .append(Component.literal(viscosityTrait.geneA() + " / " + viscosityTrait.geneB()).withStyle(ChatFormatting.GREEN)));
+                .append(Component.literal(viscosityTrait.geneA() + " / " + viscosityTrait.geneB()).withStyle(Gene.SLIME_VISCOSITY.color)));
 
-            var growthTrait = dna.getGene(FrogGeneRegistry.GROWTH_RATE);
+            var growthTrait = genome.getGene(Gene.GROWTH_RATE);
             lines.add(Component.literal("Growth Rate: ").withStyle(ChatFormatting.GRAY)
-                .append(Component.literal(growthTrait.geneA() + " / " + growthTrait.geneB()).withStyle(ChatFormatting.AQUA)));
+                .append(Component.literal(growthTrait.geneA() + " / " + growthTrait.geneB()).withStyle(Gene.GROWTH_RATE.color)));
 
-            var sizeTrait = dna.getGene(FrogGeneRegistry.SIZE);
+            var sizeTrait = genome.getGene(Gene.SIZE);
             lines.add(Component.literal("Size: ").withStyle(ChatFormatting.GRAY)
-                .append(Component.literal(sizeTrait.geneA() + " / " + sizeTrait.geneB()).withStyle(ChatFormatting.LIGHT_PURPLE)));
+                .append(Component.literal(sizeTrait.geneA() + " / " + sizeTrait.geneB()).withStyle(Gene.SIZE.color)));
 
             lines.add(Component.empty());
-            var healthTrait = dna.getGene(FrogGeneRegistry.HEALTH);
+            var healthTrait = genome.getGene(Gene.HEALTH);
             lines.add(Component.literal("Health: ").withStyle(ChatFormatting.GRAY)
                 .append(Component.literal(healthTrait.geneA() + " / " + healthTrait.geneB()).withStyle(ChatFormatting.WHITE))
                 .append(Component.literal(" [" + healthGrade.label + "]").withStyle(net.minecraft.network.chat.Style.EMPTY.withColor(net.minecraft.network.chat.TextColor.fromRgb(healthGrade.color)))));
 
-            var damageTrait = dna.getGene(FrogGeneRegistry.DAMAGE);
+            var damageTrait = genome.getGene(Gene.DAMAGE);
             lines.add(Component.literal("Damage: ").withStyle(ChatFormatting.GRAY)
                 .append(Component.literal(damageTrait.geneA() + " / " + damageTrait.geneB()).withStyle(ChatFormatting.WHITE))
                 .append(Component.literal(" [" + damageGrade.label + "]").withStyle(net.minecraft.network.chat.Style.EMPTY.withColor(net.minecraft.network.chat.TextColor.fromRgb(damageGrade.color)))));
 
-            int colorHash = getDNAColor(dna);
+            int colorHash = getGenomeColor(genome);
             int r = (colorHash >> 16) & 0xFF;
             int g = (colorHash >> 8) & 0xFF;
             int b = colorHash & 0xFF;
@@ -180,30 +180,17 @@ public class FrogDNADisplayHelper {
             lines.add(Component.literal("Color: ").withStyle(ChatFormatting.GRAY)
                 .append(Component.literal(colorName + " (RGB:" + r + "," + g + "," + b + ")").withStyle(ChatFormatting.WHITE)));
         } else {
-            lines.add(Component.literal("No DNA data").withStyle(ChatFormatting.RED));
+            lines.add(Component.literal("No genome data").withStyle(ChatFormatting.RED));
         }
 
         return lines;
     }
 
-    public static List<Component> getDebugDNATooltip(FrogDNA dna) {
-        return getComprehensiveDNATooltip(dna);
+    public static List<Component> getDebugDNATooltip(FrogGenome genome) {
+        return getComprehensiveDNATooltip(genome);
     }
 
-    public static int getDNAColor(FrogDNA dna) {
-        int hashRed = Math.abs(dna.getGene(FrogGeneRegistry.HEAT_TOLERANCE).hashCode());
-        int hashGreen = Math.abs(dna.getGene(FrogGeneRegistry.SLIME_VISCOSITY).hashCode());
-        int hashBlue = Math.abs(dna.getGene(FrogGeneRegistry.GROWTH_RATE).hashCode());
-
-        int r = 100 + (hashRed % 155);
-        int g = 100 + (hashGreen % 155);
-        int b = 100 + (hashBlue % 155);
-
-        return (255 << 24) | (r << 16) | (g << 8) | b;
-    }
-
-    public static float getScaleFromDNA(FrogDNA dna) {
-        int hashScale = Math.abs(dna.getGene(FrogGeneRegistry.SIZE).geneA().hashCode() * 31 + dna.getGene(FrogGeneRegistry.SIZE).geneB().hashCode());
-        return 0.5f + ((hashScale * 739) % 100) / 50.0f;
+    public static int getGenomeColor(FrogGenome genome) {
+        return genome.getColor();
     }
 }

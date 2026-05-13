@@ -1,7 +1,7 @@
 package com.sanhiruzu.amphibia.mixin;
 
 import com.sanhiruzu.amphibia.duck.IFrogportDNA;
-import com.sanhiruzu.amphibia.genetics.FrogDNA;
+import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.sanhiruzu.amphibia.infrastructure.FrogDNADisplayHelper;
 import com.simibubi.create.content.logistics.packagePort.frogport.FrogportBlockEntity;
 import net.minecraft.core.HolderLookup;
@@ -21,12 +21,12 @@ import java.util.List;
 public abstract class FrogportBlockEntityMixin implements IFrogportDNA, IHaveGoggleInformation {
 
     @Unique
-    private FrogDNA amphibia$dna = null;
+    private FrogGenome amphibia$genome = null;
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        if (isPlayerSneaking && this.amphibia$dna != null) {
-            tooltip.addAll(FrogDNADisplayHelper.getDNATooltip(this.amphibia$dna, true));
+        if (isPlayerSneaking && this.amphibia$genome != null) {
+            tooltip.addAll(FrogDNADisplayHelper.getDNATooltip(this.amphibia$genome, true));
             return true;
         }
         return false;
@@ -34,27 +34,27 @@ public abstract class FrogportBlockEntityMixin implements IFrogportDNA, IHaveGog
 
     @Inject(method = "write", at = @At("TAIL"))
     private void amphibia$write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket, CallbackInfo ci) {
-        if (this.amphibia$dna != null) {
-            compound.put("AmphibiaDNA", (CompoundTag) FrogDNA.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, this.amphibia$dna).getOrThrow());
+        if (this.amphibia$genome != null) {
+            compound.put("AmphibiaGenome", (CompoundTag) FrogGenome.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, this.amphibia$genome).getOrThrow());
         }
     }
 
     @Inject(method = "read", at = @At("TAIL"))
     private void amphibia$read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket, CallbackInfo ci) {
-        if (compound.contains("AmphibiaDNA")) {
-            FrogDNA.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, compound.getCompound("AmphibiaDNA"))
+        if (compound.contains("AmphibiaGenome")) {
+            FrogGenome.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, compound.getCompound("AmphibiaGenome"))
                 .resultOrPartial()
-                .ifPresent(dna -> this.amphibia$dna = dna);
+                .ifPresent(genome -> this.amphibia$genome = genome);
         }
     }
 
     @Override
-    public FrogDNA amphibia$getDna() {
-        return this.amphibia$dna;
+    public FrogGenome amphibia$getGenome() {
+        return this.amphibia$genome;
     }
 
     @Override
-    public void amphibia$setDna(FrogDNA dna) {
-        this.amphibia$dna = dna;
+    public void amphibia$setGenome(FrogGenome genome) {
+        this.amphibia$genome = genome;
     }
 }

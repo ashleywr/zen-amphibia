@@ -40,17 +40,17 @@ public class Amphibia {
             for (int i = 0; i < inv.getContainerSize(); i++) {
                 net.minecraft.world.item.ItemStack slotStack = inv.getItem(i);
                 if (slotStack.is(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_BUCKET.get())) {
-                    com.sanhiruzu.amphibia.genetics.FrogDNA dna = slotStack.get(com.sanhiruzu.amphibia.register.AmphibiaDataComponents.FROG_DNA.get());
-                    if (dna != null) {
-                        // Store DNA on item stack for tooltips
-                        crafted.set(com.sanhiruzu.amphibia.register.AmphibiaDataComponents.FROG_DNA.get(), dna);
+                    com.sanhiruzu.amphibia.genetics.FrogGenome genome = slotStack.get(com.sanhiruzu.amphibia.register.AmphibiaDataComponents.FROG_DNA.get());
+                    if (genome != null) {
+                        // Store genome on item stack for tooltips
+                        crafted.set(com.sanhiruzu.amphibia.register.AmphibiaDataComponents.FROG_DNA.get(), genome);
                         // Also store in block entity data for when placed
                         net.minecraft.world.item.component.CustomData.update(net.minecraft.core.component.DataComponents.BLOCK_ENTITY_DATA, crafted, tag -> {
                             try {
-                                tag.put("AmphibiaDNA", com.sanhiruzu.amphibia.genetics.FrogDNA.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, dna).getOrThrow());
+                                tag.put("AmphibiaGenome", com.sanhiruzu.amphibia.genetics.FrogGenome.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, genome).getOrThrow());
                             } catch (Exception e) {}
                         });
-                        // Make non-stackable when it has DNA
+                        // Make non-stackable when it has genetics
                         crafted.setCount(1);
                     }
                     break;
@@ -86,10 +86,10 @@ public class Amphibia {
         if (stack.getItem() instanceof com.simibubi.create.content.equipment.clipboard.ClipboardBlockItem) {
             net.minecraft.world.level.block.entity.BlockEntity be = event.getLevel().getBlockEntity(event.getPos());
             if (be instanceof com.sanhiruzu.amphibia.duck.IFrogportDNA duck) {
-                com.sanhiruzu.amphibia.genetics.FrogDNA dna = duck.amphibia$getDna();
-                if (dna != null) {
-                    FrogClipboardHandler.addDNAToClipboard(stack, dna, "Frogport DNA:");
-                    event.getEntity().displayClientMessage(net.minecraft.network.chat.Component.literal("DNA Diagnostics Copied!").withStyle(net.minecraft.ChatFormatting.AQUA), true);
+                com.sanhiruzu.amphibia.genetics.FrogGenome genome = duck.amphibia$getGenome();
+                if (genome != null) {
+                    FrogClipboardHandler.addDNAToClipboard(stack, genome, "Frogport Genetics:");
+                    event.getEntity().displayClientMessage(net.minecraft.network.chat.Component.literal("Genetics Diagnostics Copied!").withStyle(net.minecraft.ChatFormatting.AQUA), true);
                     event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
                     event.setCanceled(true);
                 }
@@ -103,11 +103,11 @@ public class Amphibia {
             net.minecraft.world.item.ItemStack stack = event.getItemStack();
             if (stack.is(net.minecraft.world.item.Items.BUCKET)) {
                 net.minecraft.world.entity.player.Player player = event.getEntity();
-                
+
                 net.minecraft.world.item.ItemStack frogBucket = new net.minecraft.world.item.ItemStack(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_BUCKET.get());
-                com.sanhiruzu.amphibia.genetics.FrogDNA dna = frog.getData(com.sanhiruzu.amphibia.register.AmphibiaAttachments.FROG_DNA);
-                if (dna != null) {
-                    frogBucket.set(com.sanhiruzu.amphibia.register.AmphibiaDataComponents.FROG_DNA.get(), dna);
+                com.sanhiruzu.amphibia.genetics.FrogGenome genome = frog.getData(com.sanhiruzu.amphibia.register.AmphibiaAttachments.FROG_GENOME);
+                if (genome != null) {
+                    frogBucket.set(com.sanhiruzu.amphibia.register.AmphibiaDataComponents.FROG_DNA.get(), genome);
                 }
 
                 frog.playSound(net.minecraft.sounds.SoundEvents.BUCKET_FILL_FISH, 1.0f, 1.0f);
@@ -127,10 +127,10 @@ public class Amphibia {
             }
 
             if (stack.getItem() instanceof com.simibubi.create.content.equipment.clipboard.ClipboardBlockItem) {
-                com.sanhiruzu.amphibia.genetics.FrogDNA dna = frog.getData(com.sanhiruzu.amphibia.register.AmphibiaAttachments.FROG_DNA);
-                if (dna != null) {
-                    FrogClipboardHandler.addDNAToClipboard(stack, dna, "Frog DNA:");
-                    event.getEntity().displayClientMessage(net.minecraft.network.chat.Component.literal("DNA Sequenced!").withStyle(net.minecraft.ChatFormatting.AQUA), true);
+                com.sanhiruzu.amphibia.genetics.FrogGenome genome = frog.getData(com.sanhiruzu.amphibia.register.AmphibiaAttachments.FROG_GENOME);
+                if (genome != null) {
+                    FrogClipboardHandler.addDNAToClipboard(stack, genome, "Frog Genetics:");
+                    event.getEntity().displayClientMessage(net.minecraft.network.chat.Component.literal("Genetics Sequenced!").withStyle(net.minecraft.ChatFormatting.AQUA), true);
                     event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
                     event.setCanceled(true);
                 }
@@ -161,11 +161,11 @@ public class Amphibia {
             ? player.getMainHandItem() : null;
 
         if (stack != null && !stack.isEmpty()) {
-            com.sanhiruzu.amphibia.genetics.FrogDNA dna = stack.get(com.sanhiruzu.amphibia.register.AmphibiaDataComponents.FROG_DNA.get());
-            if (dna != null) {
+            com.sanhiruzu.amphibia.genetics.FrogGenome genome = stack.get(com.sanhiruzu.amphibia.register.AmphibiaDataComponents.FROG_DNA.get());
+            if (genome != null) {
                 net.minecraft.world.level.block.entity.BlockEntity be = event.getLevel().getBlockEntity(event.getPos());
                 if (be instanceof com.sanhiruzu.amphibia.duck.IFrogportDNA duck) {
-                    duck.amphibia$setDna(dna);
+                    duck.amphibia$setGenome(genome);
                     be.setChanged();
                 }
             }

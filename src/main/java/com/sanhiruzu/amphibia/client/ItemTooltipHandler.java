@@ -2,7 +2,7 @@ package com.sanhiruzu.amphibia.client;
 
 import com.sanhiruzu.amphibia.infrastructure.FrogDNADisplayHelper;
 import com.sanhiruzu.amphibia.register.AmphibiaDataComponents;
-import com.sanhiruzu.amphibia.genetics.FrogDNA;
+import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -21,11 +21,11 @@ public class ItemTooltipHandler {
 
         // Handle Frogport items (from Create mod - we don't own this item class)
         if (stack.is(com.simibubi.create.AllBlocks.PACKAGE_FROGPORT.get().asItem())) {
-            FrogDNA dna = stack.get(AmphibiaDataComponents.FROG_DNA.get());
+            FrogGenome genome = stack.get(AmphibiaDataComponents.FROG_DNA.get());
 
-            if (dna != null) {
+            if (genome != null) {
                 if (Screen.hasShiftDown()) {
-                    event.getToolTip().addAll(FrogDNADisplayHelper.getDebugDNATooltip(dna));
+                    event.getToolTip().addAll(FrogDNADisplayHelper.getDebugDNATooltip(genome));
                 } else {
                     event.getToolTip().add(Component.literal("Hold SHIFT for genetics").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
                 }

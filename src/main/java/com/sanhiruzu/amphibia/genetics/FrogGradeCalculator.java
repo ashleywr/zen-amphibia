@@ -17,7 +17,7 @@ public class FrogGradeCalculator {
         }
     }
 
-    public static Grade calculateGrade(FrogDNA.Trait trait) {
+    public static Grade calculateGrade(FrogGenome.Trait trait) {
         int points = getGeneValue(trait.geneA()) + getGeneValue(trait.geneB());
         return pointsToGrade(points);
     }

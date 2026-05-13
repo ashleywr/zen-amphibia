@@ -1,6 +1,6 @@
 package com.sanhiruzu.amphibia.item;
 
-import com.sanhiruzu.amphibia.genetics.FrogDNA;
+import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.sanhiruzu.amphibia.infrastructure.FrogDNADisplayHelper;
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import com.sanhiruzu.amphibia.register.AmphibiaDataComponents;
@@ -34,8 +34,8 @@ public class FrogBucketItem extends BucketItem {
             Level level = target.level();
             if (!level.isClientSide) {
                 ItemStack bucket = new ItemStack(this);
-                FrogDNA dna = frog.getData(AmphibiaAttachments.FROG_DNA);
-                bucket.set(AmphibiaDataComponents.FROG_DNA.get(), dna);
+                FrogGenome genome = frog.getData(AmphibiaAttachments.FROG_GENOME);
+                bucket.set(AmphibiaDataComponents.FROG_DNA.get(), genome);
 
                 frog.playSound(SoundEvents.BUCKET_FILL_FISH, 1.0f, 1.0f);
                 frog.discard();
@@ -56,11 +56,11 @@ public class FrogBucketItem extends BucketItem {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, net.minecraft.world.item.Item.TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
-        FrogDNA dna = stack.get(AmphibiaDataComponents.FROG_DNA.get());
+        FrogGenome genome = stack.get(AmphibiaDataComponents.FROG_DNA.get());
 
-        if (dna != null) {
+        if (genome != null) {
             if (net.minecraft.client.gui.screens.Screen.hasShiftDown()) {
-                tooltip.addAll(FrogDNADisplayHelper.getComprehensiveDNATooltip(dna));
+                tooltip.addAll(FrogDNADisplayHelper.getComprehensiveDNATooltip(genome));
             } else {
                 tooltip.add(Component.literal("Hold SHIFT for genetics").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
             }
@@ -75,9 +75,9 @@ public class FrogBucketItem extends BucketItem {
         Frog frog = EntityType.FROG.create(level);
         if (frog != null) {
             frog.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-            FrogDNA dna = stack.get(AmphibiaDataComponents.FROG_DNA.get());
-            if (dna != null) {
-                frog.setData(AmphibiaAttachments.FROG_DNA, dna);
+            FrogGenome genome = stack.get(AmphibiaDataComponents.FROG_DNA.get());
+            if (genome != null) {
+                frog.setData(AmphibiaAttachments.FROG_GENOME, genome);
             }
             frog.setPersistenceRequired();
             frog.finalizeSpawn((net.minecraft.world.level.ServerLevelAccessor) level, level.getCurrentDifficultyAt(pos), net.minecraft.world.entity.MobSpawnType.BUCKET, null);

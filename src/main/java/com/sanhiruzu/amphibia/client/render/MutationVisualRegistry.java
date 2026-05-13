@@ -43,6 +43,13 @@ public class MutationVisualRegistry {
             12,
             false
         ));
+
+        register("creeper", new MutationVisuals(
+            0x00FF00,  // Creeper green
+            ParticleTypes.SMOKE,
+            4,
+            false
+        ));
     }
 
     public static void register(String mutationId, MutationVisuals visuals) {

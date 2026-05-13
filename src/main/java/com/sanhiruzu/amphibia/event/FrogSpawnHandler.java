@@ -1,7 +1,7 @@
 package com.sanhiruzu.amphibia.event;
 
-import com.sanhiruzu.amphibia.genetics.FrogDNA;
-import com.sanhiruzu.amphibia.genetics.FrogGeneRegistry;
+import com.sanhiruzu.amphibia.genetics.FrogGenome;
+import com.sanhiruzu.amphibia.genetics.Gene;
 import com.sanhiruzu.amphibia.genetics.FrogGradeCalculator;
 import com.sanhiruzu.amphibia.genetics.FrogMutation;
 import com.sanhiruzu.amphibia.infrastructure.FrogDNADisplayHelper;
@@ -24,29 +24,29 @@ public class FrogSpawnHandler {
         boolean geneticsApplied = frog.getData(AmphibiaAttachments.FROG_GENETICS_APPLIED);
         if (geneticsApplied) return;
 
-        // Get or create DNA
-        FrogDNA dna = frog.getData(AmphibiaAttachments.FROG_DNA);
-        if (dna == null) {
-            dna = FrogDNA.createDefault();
-            frog.setData(AmphibiaAttachments.FROG_DNA, dna);
+        // Get or create genome
+        FrogGenome genome = frog.getData(AmphibiaAttachments.FROG_GENOME);
+        if (genome == null) {
+            genome = FrogGenome.createDefault();
+            frog.setData(AmphibiaAttachments.FROG_GENOME, genome);
         }
 
         // Apply genetics immediately, before first render
-        applyGeneticsToFrog(frog, dna);
+        applyGeneticsToFrog(frog, genome);
         frog.setData(AmphibiaAttachments.FROG_GENETICS_APPLIED, true);
     }
 
-    private static void applyGeneticsToFrog(Frog frog, FrogDNA dna) {
+    private static void applyGeneticsToFrog(Frog frog, FrogGenome genome) {
         // Apply mutations
-        for (String mutationId : dna.mutations()) {
+        for (String mutationId : genome.mutations()) {
             FrogMutation mutation = FrogMutation.getById(mutationId);
             if (mutation != null) {
                 mutation.applyToFrog(frog);
             }
         }
 
-        // Apply scale based on DNA
-        float scale = FrogDNADisplayHelper.getScaleFromDNA(dna);
+        // Apply scale based on genome
+        float scale = genome.getScale();
         frog.setData(AmphibiaAttachments.FROG_SCALE, scale);
 
         var scaleAttribute = frog.getAttribute(Attributes.SCALE);
@@ -55,9 +55,9 @@ public class FrogSpawnHandler {
             frog.refreshDimensions();
         }
 
-        // Apply health and damage bonuses based on DNA
-        FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(dna.getGene(FrogGeneRegistry.HEALTH));
-        FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(dna.getGene(FrogGeneRegistry.DAMAGE));
+        // Apply health and damage bonuses based on genome
+        FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.HEALTH));
+        FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.DAMAGE));
 
         double healthBonus = FrogGradeCalculator.getHealthBonus(healthGrade);
         double damageBonus = FrogGradeCalculator.getDamageBonus(damageGrade);
