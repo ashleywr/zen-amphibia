@@ -30,62 +30,15 @@ public abstract class FrogMixin {
         Level level = frog.level();
         if (level == null || level.isClientSide) return;
 
-        // Ensure frog has DNA
+        // Initialize DNA only once on first tick
         FrogDNA dna = frog.getData(AmphibiaAttachments.FROG_DNA);
         if (dna == null) {
             dna = FrogDNA.createDefault();
             frog.setData(AmphibiaAttachments.FROG_DNA, dna);
+            applyGeneticsToFrog(frog, dna);
         }
 
-        // Apply mutations
-        for (String mutationId : dna.mutations()) {
-            FrogMutation mutation = FrogMutation.getById(mutationId);
-            if (mutation != null) {
-                mutation.applyToFrog(frog);
-            }
-        }
-
-        // Apply visual scale based on DNA (every tick for responsiveness)
-        float scale = FrogDNADisplayHelper.getScaleFromDNA(dna);
-        Float currentScale = frog.getData(AmphibiaAttachments.FROG_SCALE);
-        if (Math.abs(currentScale - scale) > 0.01f) {
-            frog.setData(AmphibiaAttachments.FROG_SCALE, scale);
-        }
-
-        // Apply health and damage bonuses based on DNA (every tick for responsiveness)
-        FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(dna.getGene(FrogGeneRegistry.HEALTH));
-        FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(dna.getGene(FrogGeneRegistry.DAMAGE));
-
-        double healthBonus = FrogGradeCalculator.getHealthBonus(healthGrade);
-        double damageBonus = FrogGradeCalculator.getDamageBonus(damageGrade);
-
-        try {
-            var healthAttribute = frog.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH);
-            if (healthAttribute != null) {
-                double baseHealth = 10; // Vanilla frog base health
-                double targetHealth = baseHealth + healthBonus;
-                if (Math.abs(healthAttribute.getBaseValue() - targetHealth) > 0.01) {
-                    healthAttribute.setBaseValue(targetHealth);
-                    frog.setHealth((float) Math.min(frog.getHealth() + healthBonus, targetHealth));
-                }
-            }
-        } catch (Exception e) {
-            // Health attribute not available, silently continue
-        }
-
-        try {
-            var attackDamageAttribute = frog.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE);
-            if (attackDamageAttribute != null) {
-                double baseAttackDamage = 1.0; // Vanilla frog base attack
-                double targetDamage = baseAttackDamage + damageBonus;
-                if (Math.abs(attackDamageAttribute.getBaseValue() - targetDamage) > 0.01) {
-                    attackDamageAttribute.setBaseValue(targetDamage);
-                }
-            }
-        } catch (Exception e) {
-            // Attack damage attribute not available, silently continue
-        }
-
+        // Check breeding conditions every 40 ticks
         if (level.getGameTime() % 40 != 0) return;
 
         FactoryZoneManager manager = FactoryZoneManager.get(level);
@@ -125,6 +78,50 @@ public abstract class FrogMixin {
                 level.setBlockAndUpdate(pos, AmphibiaBlocks.MUCUS_COCOON.get().defaultBlockState());
                 frog.discard();
             }
+        }
+    }
+
+    private void applyGeneticsToFrog(Frog frog, FrogDNA dna) {
+        // Apply mutations
+        for (String mutationId : dna.mutations()) {
+            FrogMutation mutation = FrogMutation.getById(mutationId);
+            if (mutation != null) {
+                mutation.applyToFrog(frog);
+            }
+        }
+
+        // Apply visual scale based on DNA
+        float scale = FrogDNADisplayHelper.getScaleFromDNA(dna);
+        frog.setData(AmphibiaAttachments.FROG_SCALE, scale);
+
+        // Apply health and damage bonuses based on DNA
+        FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(dna.getGene(FrogGeneRegistry.HEALTH));
+        FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(dna.getGene(FrogGeneRegistry.DAMAGE));
+
+        double healthBonus = FrogGradeCalculator.getHealthBonus(healthGrade);
+        double damageBonus = FrogGradeCalculator.getDamageBonus(damageGrade);
+
+        try {
+            var healthAttribute = frog.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH);
+            if (healthAttribute != null) {
+                double baseHealth = 10;
+                double targetHealth = baseHealth + healthBonus;
+                healthAttribute.setBaseValue(targetHealth);
+                frog.setHealth((float) targetHealth);
+            }
+        } catch (Exception e) {
+            // Health attribute not available, silently continue
+        }
+
+        try {
+            var attackDamageAttribute = frog.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE);
+            if (attackDamageAttribute != null) {
+                double baseAttackDamage = 1.0;
+                double targetDamage = baseAttackDamage + damageBonus;
+                attackDamageAttribute.setBaseValue(targetDamage);
+            }
+        } catch (Exception e) {
+            // Attack damage attribute not available, silently continue
         }
     }
 }
