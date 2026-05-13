@@ -30,11 +30,8 @@ public abstract class FrogMixin {
         Level level = frog.level();
         if (level == null || level.isClientSide) return;
 
-        System.out.println("[Amphibia] FrogMixin.tick called for frog at " + frog.getBlockX() + "," + frog.getBlockY() + "," + frog.getBlockZ());
-
         // Initialize DNA only once on first tick
         boolean geneticsApplied = frog.getData(AmphibiaAttachments.FROG_GENETICS_APPLIED);
-        System.out.println("[Amphibia] Genetics applied flag: " + geneticsApplied);
         if (!geneticsApplied) {
             FrogDNA dna = frog.getData(AmphibiaAttachments.FROG_DNA);
             if (dna == null) {
@@ -100,7 +97,6 @@ public abstract class FrogMixin {
         // Apply visual scale based on DNA
         float scale = FrogDNADisplayHelper.getScaleFromDNA(dna);
         frog.setData(AmphibiaAttachments.FROG_SCALE, scale);
-        System.out.println("[Amphibia] Applied genetics to frog - Size genes: " + dna.getGene(FrogGeneRegistry.SIZE).geneA() + "/" + dna.getGene(FrogGeneRegistry.SIZE).geneB() + " Scale: " + scale);
 
         // Apply health and damage bonuses based on DNA
         FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(dna.getGene(FrogGeneRegistry.HEALTH));

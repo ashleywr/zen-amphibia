@@ -16,7 +16,6 @@ public class FrogScaleLayer {
 
         Float scale = frog.getData(AmphibiaAttachments.FROG_SCALE);
         if (scale != null && Math.abs(scale - 1.0f) > 0.01f) {
-            System.out.println("[Amphibia] Rendering frog with scale: " + scale);
             PoseStack poseStack = event.getPoseStack();
             poseStack.pushPose();
             poseStack.translate(0.5f, 0, 0.5f);
