@@ -121,22 +121,64 @@ public class FrogDNADisplayHelper {
         return "Neutral";
     }
 
-    public static List<Component> getDebugDNATooltip(FrogDNA dna) {
+    public static List<Component> getComprehensiveDNATooltip(FrogDNA dna) {
         List<Component> lines = new ArrayList<>();
 
-        lines.add(Component.empty());
-        lines.add(Component.literal("DEBUG - Frog DNA:").withStyle(ChatFormatting.DARK_RED));
-        lines.add(Component.literal("  Heat Tolerance: " + dna.heatTolerance().geneA() + " / " + dna.heatTolerance().geneB()).withStyle(ChatFormatting.GOLD));
-        lines.add(Component.literal("  Slime Viscosity: " + dna.slimeViscosity().geneA() + " / " + dna.slimeViscosity().geneB()).withStyle(ChatFormatting.GREEN));
-        lines.add(Component.literal("  Growth Rate: " + dna.growthRate().geneA() + " / " + dna.growthRate().geneB()).withStyle(ChatFormatting.AQUA));
+        // Mutations section
+        if (dna != null && !dna.mutations().isEmpty()) {
+            lines.add(Component.literal("=== MUTATIONS ===").withStyle(ChatFormatting.LIGHT_PURPLE));
+            for (String mutationId : dna.mutations()) {
+                com.sanhiruzu.amphibia.genetics.FrogMutation mutation = com.sanhiruzu.amphibia.genetics.FrogMutation.getById(mutationId);
+                if (mutation != null) {
+                    lines.add(Component.literal("  ").append(Component.literal(mutation.displayName().getString()).withStyle(net.minecraft.network.chat.Style.EMPTY.withColor(net.minecraft.network.chat.TextColor.fromRgb(mutation.color())))));
+                }
+            }
+            lines.add(Component.empty());
+        }
 
-        FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(dna.health());
-        FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(dna.damage());
+        // Genetics section
+        lines.add(Component.literal("=== GENETICS ===").withStyle(ChatFormatting.GREEN));
 
-        lines.add(Component.literal("  Health: " + dna.health().geneA() + " / " + dna.health().geneB() + " [" + healthGrade.label + "]").withStyle(ChatFormatting.RED));
-        lines.add(Component.literal("  Damage: " + dna.damage().geneA() + " / " + dna.damage().geneB() + " [" + damageGrade.label + "]").withStyle(ChatFormatting.DARK_RED));
+        if (dna != null) {
+            FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(dna.health());
+            FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(dna.damage());
+
+            lines.add(Component.literal("Heat Tolerance: ").withStyle(ChatFormatting.GRAY)
+                .append(Component.literal(dna.heatTolerance().geneA() + " / " + dna.heatTolerance().geneB()).withStyle(ChatFormatting.GOLD)));
+
+            lines.add(Component.literal("Viscosity: ").withStyle(ChatFormatting.GRAY)
+                .append(Component.literal(dna.slimeViscosity().geneA() + " / " + dna.slimeViscosity().geneB()).withStyle(ChatFormatting.GREEN)));
+
+            lines.add(Component.literal("Growth Rate: ").withStyle(ChatFormatting.GRAY)
+                .append(Component.literal(dna.growthRate().geneA() + " / " + dna.growthRate().geneB()).withStyle(ChatFormatting.AQUA)));
+
+            lines.add(Component.empty());
+            lines.add(Component.literal("Health: ").withStyle(ChatFormatting.GRAY)
+                .append(Component.literal(dna.health().geneA() + " / " + dna.health().geneB()).withStyle(ChatFormatting.WHITE))
+                .append(Component.literal(" [" + healthGrade.label + "]").withStyle(net.minecraft.network.chat.Style.EMPTY.withColor(net.minecraft.network.chat.TextColor.fromRgb(healthGrade.color)))));
+
+            lines.add(Component.literal("Damage: ").withStyle(ChatFormatting.GRAY)
+                .append(Component.literal(dna.damage().geneA() + " / " + dna.damage().geneB()).withStyle(ChatFormatting.WHITE))
+                .append(Component.literal(" [" + damageGrade.label + "]").withStyle(net.minecraft.network.chat.Style.EMPTY.withColor(net.minecraft.network.chat.TextColor.fromRgb(damageGrade.color)))));
+
+            // Color info
+            int colorHash = getDNAColor(dna);
+            int r = (colorHash >> 16) & 0xFF;
+            int g = (colorHash >> 8) & 0xFF;
+            int b = colorHash & 0xFF;
+            String colorName = getColorName(r, g, b);
+
+            lines.add(Component.literal("Color: ").withStyle(ChatFormatting.GRAY)
+                .append(Component.literal(colorName + " (RGB:" + r + "," + g + "," + b + ")").withStyle(ChatFormatting.WHITE)));
+        } else {
+            lines.add(Component.literal("No DNA data").withStyle(ChatFormatting.RED));
+        }
 
         return lines;
+    }
+
+    public static List<Component> getDebugDNATooltip(FrogDNA dna) {
+        return getComprehensiveDNATooltip(dna);
     }
 
     public static int getDNAColor(FrogDNA dna) {
