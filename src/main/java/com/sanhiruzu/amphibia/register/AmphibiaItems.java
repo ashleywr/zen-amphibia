@@ -13,7 +13,12 @@ public class AmphibiaItems {
     public static final DeferredItem<com.sanhiruzu.amphibia.item.FrogBucketItem> FROG_BUCKET = ITEMS.register("frog_bucket",
             () -> new com.sanhiruzu.amphibia.item.FrogBucketItem(new net.minecraft.world.item.Item.Properties().stacksTo(1)));
 
+    public static final DeferredItem<BlockItem> DORMANT_FROGSPAWN = ITEMS.registerSimpleBlockItem("dormant_frogspawn", AmphibiaBlocks.DORMANT_FROGSPAWN);
+
     public static final DeferredItem<BlockItem> GENETIC_FROGSPAWN = ITEMS.registerSimpleBlockItem("genetic_frogspawn", AmphibiaBlocks.GENETIC_FROGSPAWN);
+
+    public static final DeferredItem<com.sanhiruzu.amphibia.item.BottledFrogspawnItem> BOTTLED_FROGSPAWN = ITEMS.register("bottled_frogspawn",
+            () -> new com.sanhiruzu.amphibia.item.BottledFrogspawnItem(new net.minecraft.world.item.Item.Properties().stacksTo(1)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

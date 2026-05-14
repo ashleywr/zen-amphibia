@@ -1,7 +1,9 @@
 {
   "block.amphibia.mucus_cocoon": "Mucus Cocoon",
+  "block.amphibia.dormant_frogspawn": "Dormant Frogspawn",
   "block.amphibia.genetic_frogspawn": "Genetic Frogspawn",
   "item.amphibia.frog_bucket": "Frog Bucket",
+  "item.amphibia.bottled_frogspawn": "Bottled Frogspawn",
   "amphibia.display_source.frog_genetics": "Frog Genetics",
   "gui.goggles.amphibia.frog_genetics": "Frog Genetics:",
   "key.categories.amphibia": "Amphibia",

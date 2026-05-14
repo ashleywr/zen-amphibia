@@ -1,5 +1,6 @@
 package com.sanhiruzu.amphibia.register;
 
+import com.sanhiruzu.amphibia.block.DormantFrogspawnBlock;
 import com.sanhiruzu.amphibia.block.GeneticFrogspawnBlock;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.Block;
@@ -20,6 +21,16 @@ public class AmphibiaBlocks {
                     .strength(0.5f)
                     .sound(SoundType.SLIME_BLOCK)
                     .ignitedByLava()
+            ));
+
+    public static final DeferredHolder<Block, DormantFrogspawnBlock> DORMANT_FROGSPAWN = BLOCKS.register("dormant_frogspawn",
+            () -> new DormantFrogspawnBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WATER)
+                    .noCollission()
+                    .noOcclusion()
+                    .instabreak()
+                    .sound(SoundType.FROGSPAWN)
+                    .pushReaction(PushReaction.DESTROY)
             ));
 
     public static final DeferredHolder<Block, GeneticFrogspawnBlock> GENETIC_FROGSPAWN = BLOCKS.register("genetic_frogspawn",
