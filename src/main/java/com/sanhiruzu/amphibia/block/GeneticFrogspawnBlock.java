@@ -46,7 +46,7 @@ public class GeneticFrogspawnBlock extends FrogspawnBlock implements EntityBlock
                 tadpole.setPersistenceRequired();
                 double d0 = (double)pos.getX() + random.nextDouble();
                 double d1 = (double)pos.getZ() + random.nextDouble();
-                tadpole.moveTo(d0, (double)pos.getY(), d1, random.nextFloat() * 360.0F, 0.0F);
+                tadpole.moveTo(d0, pos.getY(), d1, random.nextFloat() * 360.0F, 0.0F);
                 level.addFreshEntity(tadpole);
             }
         }

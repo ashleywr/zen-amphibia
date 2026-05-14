@@ -4,7 +4,6 @@ import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.sanhiruzu.amphibia.genetics.Gene;
 import com.sanhiruzu.amphibia.genetics.FrogGradeCalculator;
 import com.sanhiruzu.amphibia.genetics.FrogMutation;
-import com.sanhiruzu.amphibia.infrastructure.FrogDNADisplayHelper;
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.ai.attributes.Attributes;

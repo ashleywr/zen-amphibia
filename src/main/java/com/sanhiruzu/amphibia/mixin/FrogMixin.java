@@ -1,14 +1,7 @@
 package com.sanhiruzu.amphibia.mixin;
 
-import com.sanhiruzu.amphibia.genetics.FrogGenome;
-import com.sanhiruzu.amphibia.genetics.Gene;
-import com.sanhiruzu.amphibia.genetics.FrogGradeCalculator;
-import com.sanhiruzu.amphibia.genetics.FrogMutation;
-import com.sanhiruzu.amphibia.infrastructure.FrogDNADisplayHelper;
-import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import com.sanhiruzu.amphibia.register.AmphibiaBlocks;
 import com.sanhiruzu.zonectrl.zone.AtmosphereManager;
-import com.sanhiruzu.zonectrl.zone.FactoryZone;
 import com.sanhiruzu.zonectrl.zone.FactoryZoneManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.animal.frog.Frog;
@@ -18,8 +11,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Optional;
 
 @Mixin(value = Frog.class, remap = false)
 public abstract class FrogMixin {

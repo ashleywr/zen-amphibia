@@ -2,17 +2,13 @@ package com.sanhiruzu.amphibia.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.sanhiruzu.amphibia.AmphibiaKeys;
 import com.sanhiruzu.amphibia.client.render.MutationRenderLayer;
 import com.sanhiruzu.amphibia.client.render.MutationVisualRegistry;
 import com.sanhiruzu.amphibia.client.render.MutationVisuals;
 import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.sanhiruzu.amphibia.infrastructure.FrogDNADisplayHelper;
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
-import com.sanhiruzu.amphibia.item.FrogBucketItem;
-import com.sanhiruzu.amphibia.item.FrogportBlockItem;
 import com.sanhiruzu.amphibia.register.AmphibiaDataComponents;
-import com.simibubi.create.content.logistics.packagePort.frogport.FrogportBlock;
 import net.minecraft.client.model.FrogModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -20,7 +16,6 @@ import net.minecraft.client.renderer.entity.FrogRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.animal.frog.Frog;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -29,7 +24,6 @@ import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.particles.ParticleTypes;
 
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import com.sanhiruzu.amphibia.register.AmphibiaItems;
@@ -115,6 +109,7 @@ public class AmphibiaClientEvents {
         }
     }
 
+    @SuppressWarnings("NullableProblems")
     public static class FrogColorLayer extends RenderLayer<Frog, FrogModel<Frog>> {
         public FrogColorLayer(RenderLayerParent<Frog, FrogModel<Frog>> pRenderer) {
             super(pRenderer);

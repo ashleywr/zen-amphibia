@@ -3,7 +3,6 @@ package com.sanhiruzu.amphibia.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.sanhiruzu.amphibia.genetics.FrogMutation;
-import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import net.minecraft.client.model.FrogModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -11,6 +10,7 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.animal.frog.Frog;
 
+@SuppressWarnings("NullableProblems")
 public class EnderFrogRenderLayer extends RenderLayer<Frog, FrogModel<Frog>> {
     public EnderFrogRenderLayer(RenderLayerParent<Frog, FrogModel<Frog>> pRenderer) {
         super(pRenderer);

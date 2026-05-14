@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
+
 import java.util.List;
 
 @Mixin(value = FrogportBlockEntity.class, remap = false)
@@ -33,16 +33,16 @@ public abstract class FrogportBlockEntityMixin implements IFrogportDNA, IHaveGog
     }
 
     @Inject(method = "write", at = @At("TAIL"))
-    private void amphibia$write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket, CallbackInfo ci) {
+    private void amphibia$write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket, CallbackInfo ci) {
         if (this.amphibia$genome != null) {
-            compound.put("AmphibiaGenome", (CompoundTag) FrogGenome.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, this.amphibia$genome).getOrThrow());
+            tag.put("AmphibiaGenome", FrogGenome.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, this.amphibia$genome).getOrThrow());
         }
     }
 
     @Inject(method = "read", at = @At("TAIL"))
-    private void amphibia$read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket, CallbackInfo ci) {
-        if (compound.contains("AmphibiaGenome")) {
-            FrogGenome.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, compound.getCompound("AmphibiaGenome"))
+    private void amphibia$read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket, CallbackInfo ci) {
+        if (tag.contains("AmphibiaGenome")) {
+            FrogGenome.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, tag.getCompound("AmphibiaGenome"))
                 .resultOrPartial()
                 .ifPresent(genome -> this.amphibia$genome = genome);
         }

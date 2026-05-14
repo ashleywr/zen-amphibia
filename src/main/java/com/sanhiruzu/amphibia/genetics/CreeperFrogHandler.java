@@ -17,10 +17,7 @@ public class CreeperFrogHandler {
 	@SubscribeEvent
 	public static void onFrogTick(EntityTickEvent.Post event) {
 		if (!(event.getEntity() instanceof Frog frog)) return;
-		if (frog.level().isClientSide) return;
-		if (!FrogMutation.hasCreeperMutation(frog)) return;
-
-		FrogGenome genome = frog.getData(AmphibiaAttachments.FROG_GENOME);
+		FrogGenome genome = validateCreeperFrog(frog);
 		if (genome == null) return;
 
 		FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.DAMAGE));
@@ -40,10 +37,7 @@ public class CreeperFrogHandler {
 	@SubscribeEvent
 	public static void onFrogDamage(LivingDamageEvent.Post event) {
 		if (!(event.getEntity() instanceof Frog frog)) return;
-		if (frog.level().isClientSide) return;
-		if (!FrogMutation.hasCreeperMutation(frog)) return;
-
-		FrogGenome genome = frog.getData(AmphibiaAttachments.FROG_GENOME);
+		FrogGenome genome = validateCreeperFrog(frog);
 		if (genome == null) return;
 
 		FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.DAMAGE));
@@ -95,5 +89,11 @@ public class CreeperFrogHandler {
 			case A -> 2.5f;
 			case S -> 3.0f;
 		};
+	}
+
+	private static FrogGenome validateCreeperFrog(Frog frog) {
+		if (frog.level().isClientSide) return null;
+		if (!FrogMutation.hasCreeperMutation(frog)) return null;
+		return frog.getData(AmphibiaAttachments.FROG_GENOME);
 	}
 }

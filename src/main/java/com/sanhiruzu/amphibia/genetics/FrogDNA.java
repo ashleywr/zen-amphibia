@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("NullableProblems")
 public record FrogDNA(Map<String, Trait> genes, List<String> mutations) {
     public FrogDNA(Map<String, Trait> genes) {
         this(genes, new ArrayList<>());
@@ -75,7 +76,7 @@ public record FrogDNA(Map<String, Trait> genes, List<String> mutations) {
         return new Trait(selectWeightedAllele(rand), selectWeightedAllele(rand));
     }
 
-    private static String selectWeightedAllele(java.util.Random rand) {
+    public static String selectWeightedAllele(java.util.Random rand) {
         // Weighted allele pool for proper Mendelian inheritance
         // 60% normal (N), 15% each of mild variants (A,B), 5% each rare (C,D)
         int roll = rand.nextInt(100);
@@ -87,25 +88,17 @@ public record FrogDNA(Map<String, Trait> genes, List<String> mutations) {
     }
 
     public static FrogDNA mix(FrogDNA parentA, FrogDNA parentB, RandomSource random) {
-        Map<String, Trait> mixedGenes = new HashMap<>();
-
-        mixedGenes.put(FrogGeneRegistry.HEAT_TOLERANCE,
-            Trait.mix(parentA.getGene(FrogGeneRegistry.HEAT_TOLERANCE), parentB.getGene(FrogGeneRegistry.HEAT_TOLERANCE), random));
-        mixedGenes.put(FrogGeneRegistry.SLIME_VISCOSITY,
-            Trait.mix(parentA.getGene(FrogGeneRegistry.SLIME_VISCOSITY), parentB.getGene(FrogGeneRegistry.SLIME_VISCOSITY), random));
-        mixedGenes.put(FrogGeneRegistry.GROWTH_RATE,
-            Trait.mix(parentA.getGene(FrogGeneRegistry.GROWTH_RATE), parentB.getGene(FrogGeneRegistry.GROWTH_RATE), random));
-        mixedGenes.put(FrogGeneRegistry.HEALTH,
-            Trait.mix(parentA.getGene(FrogGeneRegistry.HEALTH), parentB.getGene(FrogGeneRegistry.HEALTH), random));
-        mixedGenes.put(FrogGeneRegistry.DAMAGE,
-            Trait.mix(parentA.getGene(FrogGeneRegistry.DAMAGE), parentB.getGene(FrogGeneRegistry.DAMAGE), random));
-        mixedGenes.put(FrogGeneRegistry.SIZE,
-            Trait.mix(parentA.getGene(FrogGeneRegistry.SIZE), parentB.getGene(FrogGeneRegistry.SIZE), random));
-
-        return new FrogDNA(mixedGenes, new ArrayList<>());
+        return new FrogDNA(createMixedGenes(parentA, parentB, random), new ArrayList<>());
     }
 
     public static FrogDNA mixWithMutationPreservation(FrogDNA parentA, FrogDNA parentB, RandomSource random) {
+        List<String> inheritedMutations = new ArrayList<>();
+        inheritedMutations.addAll(parentA.mutations);
+        inheritedMutations.addAll(parentB.mutations);
+        return new FrogDNA(createMixedGenes(parentA, parentB, random), inheritedMutations);
+    }
+
+    private static Map<String, Trait> createMixedGenes(FrogDNA parentA, FrogDNA parentB, RandomSource random) {
         Map<String, Trait> mixedGenes = new HashMap<>();
 
         mixedGenes.put(FrogGeneRegistry.HEAT_TOLERANCE,
@@ -121,11 +114,7 @@ public record FrogDNA(Map<String, Trait> genes, List<String> mutations) {
         mixedGenes.put(FrogGeneRegistry.SIZE,
             Trait.mix(parentA.getGene(FrogGeneRegistry.SIZE), parentB.getGene(FrogGeneRegistry.SIZE), random));
 
-        List<String> inheritedMutations = new ArrayList<>();
-        inheritedMutations.addAll(parentA.mutations);
-        inheritedMutations.addAll(parentB.mutations);
-
-        return new FrogDNA(mixedGenes, inheritedMutations);
+        return mixedGenes;
     }
 
     public int getColor() {

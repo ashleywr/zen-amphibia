@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("NullableProblems")
 public record FrogGenome(Map<Gene, Trait> genes, List<String> mutations) {
 	public FrogGenome(Map<Gene, Trait> genes) {
 		this(genes, new ArrayList<>());
@@ -89,17 +90,9 @@ public record FrogGenome(Map<Gene, Trait> genes, List<String> mutations) {
 	}
 
 	private static Trait randomTrait(java.util.Random rand) {
-		return new Trait(selectWeightedAllele(rand), selectWeightedAllele(rand));
+		return new Trait(FrogDNA.selectWeightedAllele(rand), FrogDNA.selectWeightedAllele(rand));
 	}
 
-	private static String selectWeightedAllele(java.util.Random rand) {
-		int roll = rand.nextInt(100);
-		if (roll < 60) return "N";
-		if (roll < 75) return "A";
-		if (roll < 90) return "B";
-		if (roll < 95) return "C";
-		return "D";
-	}
 
 	public int getColor() {
 		int hashRed = Math.abs(getGene(Gene.HEAT_TOLERANCE).hashCode());

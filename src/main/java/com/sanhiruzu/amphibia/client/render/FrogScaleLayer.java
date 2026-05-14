@@ -11,6 +11,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 @EventBusSubscriber(modid = "amphibia", value = Dist.CLIENT)
 public class FrogScaleLayer {
     @SubscribeEvent
+    @SuppressWarnings("rawtypes")
     public static void onFrogRender(RenderLivingEvent.Pre event) {
         if (!(event.getEntity() instanceof Frog frog)) return;
 
@@ -25,6 +26,7 @@ public class FrogScaleLayer {
     }
 
     @SubscribeEvent
+    @SuppressWarnings("rawtypes")
     public static void onFrogRenderPost(RenderLivingEvent.Post event) {
         if (!(event.getEntity() instanceof Frog frog)) return;
 

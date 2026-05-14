@@ -25,7 +25,7 @@ public abstract class FrogportRendererMixin {
         method = "renderSafe(Lcom/simibubi/create/content/logistics/packagePort/frogport/FrogportBlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V",
         at = @At("HEAD")
     )
-    private void amphibia$captureGenome(FrogportBlockEntity blockEntity, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay, CallbackInfo ci) {
+    private void amphibia$captureGenome(FrogportBlockEntity blockEntity, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay, CallbackInfo ci) {
         if (blockEntity instanceof IFrogportDNA duck) {
             CURRENT_GENOME.set(duck.amphibia$getGenome());
         } else {

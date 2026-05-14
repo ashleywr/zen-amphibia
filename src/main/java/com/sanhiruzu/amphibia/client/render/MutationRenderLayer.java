@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.animal.frog.Frog;
 
+@SuppressWarnings("NullableProblems")
 public class MutationRenderLayer extends RenderLayer<Frog, FrogModel<Frog>> {
     public MutationRenderLayer(RenderLayerParent<Frog, FrogModel<Frog>> pRenderer) {
         super(pRenderer);

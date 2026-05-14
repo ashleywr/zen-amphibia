@@ -3,9 +3,6 @@ package com.sanhiruzu.amphibia.entity.goal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.phys.Vec3;
-import com.simibubi.create.AllBlocks;
 
 import java.util.EnumSet;
 
@@ -86,12 +83,16 @@ public class EnderFrogTeleportGoal extends Goal {
 
         // Check for Create-specific blocks
         try {
-            String blockName = block.builtInRegistryHolder().key().location().getPath();
-            return blockName.contains("gear") || blockName.contains("shaft") || blockName.contains("bearing") ||
-                   blockName.contains("cogwheel") || blockName.contains("chain") || blockName.contains("belt");
+            var key = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(block);
+            if (key != null) {
+                String blockName = key.getPath();
+                return blockName.contains("gear") || blockName.contains("shaft") || blockName.contains("bearing") ||
+                       blockName.contains("cogwheel") || blockName.contains("chain") || blockName.contains("belt");
+            }
         } catch (Exception e) {
             return false;
         }
+        return false;
     }
 
     private void randomTeleport() {
