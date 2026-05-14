@@ -31,6 +31,8 @@ public class Amphibia {
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(this::onEntityInteract);
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(this::onItemCrafted);
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(this::onBlockPlaced);
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(this::onReloadListeners);
+        com.sanhiruzu.amphibia.event.CommandEvents.register();
     }
 
     private void onItemCrafted(net.neoforged.neoforge.event.entity.player.PlayerEvent.ItemCraftedEvent event) {
@@ -172,7 +174,13 @@ public class Amphibia {
         }
     }
 
+    private void onReloadListeners(net.neoforged.neoforge.event.AddReloadListenerEvent event) {
+        event.addListener(new com.sanhiruzu.amphibia.config.EstivationConfigManager());
+    }
+
     private void setup(final FMLCommonSetupEvent event) {
         LOGGER.info("Amphibia (Frog Breeding) initialized!");
+        com.sanhiruzu.amphibia.compat.patchouli.PatchouliCompat.checkPatchouliLoaded();
+        com.sanhiruzu.amphibia.api.AmphibiaPluginRegistry.loadAll();
     }
 }

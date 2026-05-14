@@ -5,6 +5,10 @@ import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import com.sanhiruzu.amphibia.register.AmphibiaBlocks;
 import com.sanhiruzu.amphibia.register.AmphibiaDataComponents;
 import com.sanhiruzu.amphibia.block.GeneticFrogspawnBlockEntity;
+import com.sanhiruzu.zonectrl.zone.FactoryZone;
+import com.sanhiruzu.zonectrl.zone.FactoryZoneManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.animal.frog.Tadpole;
@@ -48,13 +52,17 @@ public class GeneticEvents {
                         // Place fluid instead of eggs
                         serverLevel.setBlock(event.getPos(), com.sanhiruzu.amphibia.register.AmphibiaFluids.RAW_GENETIC_FLUID_BLOCK.get().defaultBlockState(), 3);
 
-                        // Upload to ledger
+                        // Encode genome to NBT
+                        net.minecraft.nbt.CompoundTag genomeTag = (net.minecraft.nbt.CompoundTag) FrogGenome.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, genome).getOrThrow();
+
+                        // Store in WildGeneticsRegistry (for extraction trigger)
+                        com.sanhiruzu.zonectrl.zone.WildGeneticsRegistry.get(serverLevel).put(event.getPos(), genomeTag);
+
+                        // Also upload to ledger immediately if in a zone
                         net.minecraft.nbt.CompoundTag ledgerTag = manager.getGenetics(zone.getId());
                         if (ledgerTag == null) ledgerTag = new net.minecraft.nbt.CompoundTag();
 
                         net.minecraft.nbt.ListTag discovered = ledgerTag.getList("DiscoveredGenomes", net.minecraft.nbt.Tag.TAG_COMPOUND);
-                        // Simple serialization for MVP
-                        net.minecraft.nbt.CompoundTag genomeTag = (net.minecraft.nbt.CompoundTag) FrogGenome.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, genome).getOrThrow();
                         discovered.add(genomeTag);
                         ledgerTag.put("DiscoveredGenomes", discovered);
 
@@ -164,6 +172,35 @@ public class GeneticEvents {
         if (event.getEntity() instanceof Tadpole tadpole && event.getOutcome() instanceof Frog frog) {
             FrogGenome genome = tadpole.getData(AmphibiaAttachments.FROG_GENOME);
             frog.setData(AmphibiaAttachments.FROG_GENOME, genome);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onBucketInteract(BlockEvent.FluidPlaceBlockEvent event) {
+        // Handle logic for placing fluid with NBT if needed
+    }
+
+    @SubscribeEvent
+    public static void onBlockInteract(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock event) {
+        if (event.getLevel().isClientSide) return;
+        
+        net.minecraft.world.level.Level level = event.getLevel();
+        BlockPos pos = event.getPos();
+        net.minecraft.world.item.ItemStack stack = event.getItemStack();
+        
+        // 1. Draining Bio-Broth into a bucket (Pick up)
+        if (stack.is(net.minecraft.world.item.Items.BUCKET)) {
+            BlockState state = level.getBlockState(pos);
+            if (state.is(com.sanhiruzu.amphibia.register.AmphibiaFluids.RAW_GENETIC_FLUID_BLOCK.get())) {
+                com.sanhiruzu.zonectrl.zone.WildGeneticsRegistry wildRegistry = com.sanhiruzu.zonectrl.zone.WildGeneticsRegistry.get(level);
+                net.minecraft.nbt.CompoundTag genetics = wildRegistry.remove(pos);
+                
+                if (genetics != null) {
+                    // We need to wait for the bucket to be filled to apply NBT. 
+                    // But BucketItem.use handles the swap.
+                    // This is tricky. Let's use a Mixin on BucketItem instead for robustness.
+                }
+            }
         }
     }
 }

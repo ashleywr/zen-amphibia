@@ -1,0 +1,6 @@
+{
+  "enabled": true,
+  "max_temperature": 35.0,
+  "min_humidity": 20.0,
+  "cooldown_ticks_after_revival": 6000
+}

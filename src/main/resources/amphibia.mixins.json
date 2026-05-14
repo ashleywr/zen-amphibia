@@ -9,7 +9,9 @@
   },
   "mixins": [
     "FrogMixin",
-    "FrogportBlockEntityMixin"
+    "FrogportBlockEntityMixin",
+    "FluidDrainingBehaviourMixin",
+    "BucketItemMixin"
   ],
   "client": [
     "FrogportRendererMixin"

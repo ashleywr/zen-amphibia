@@ -57,10 +57,17 @@ public abstract class FrogMixin {
                     frog.setInLove(null);
                 }
             }
-        } else if (temp > 35.0f || hum < 20.0f) {
-            if (level.getBlockState(pos).isAir()) {
-                level.setBlockAndUpdate(pos, AmphibiaBlocks.MUCUS_COCOON.get().defaultBlockState());
-                frog.discard();
+        } else {
+            com.sanhiruzu.amphibia.config.EstivationConfig config = com.sanhiruzu.amphibia.config.EstivationConfigManager.getConfig();
+            if (config.shouldEstivate(temp, hum)) {
+                long lastCocoonTick = frog.getPersistentData().getLong("amphibia:last_cocoon_tick");
+                long ticksSinceCocoon = level.getGameTime() - lastCocoonTick;
+                if (ticksSinceCocoon > config.cooledownTicksAfterRevival()) {
+                    if (level.getBlockState(pos).isAir()) {
+                        level.setBlockAndUpdate(pos, AmphibiaBlocks.MUCUS_COCOON.get().defaultBlockState());
+                        frog.discard();
+                    }
+                }
             }
         }
     }

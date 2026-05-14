@@ -90,7 +90,16 @@ public record FrogGenome(Map<Gene, Trait> genes, List<String> mutations) {
 	}
 
 	private static Trait randomTrait(java.util.Random rand) {
-		return new Trait(FrogDNA.selectWeightedAllele(rand), FrogDNA.selectWeightedAllele(rand));
+		return new Trait(selectWeightedAllele(rand), selectWeightedAllele(rand));
+	}
+
+	private static String selectWeightedAllele(java.util.Random rand) {
+		int roll = rand.nextInt(100);
+		if (roll < 60) return "N";      // Normal (60%)
+		if (roll < 75) return "A";      // Mild variant (15%)
+		if (roll < 90) return "B";      // Mild variant (15%)
+		if (roll < 95) return "C";      // Rare (5%)
+		return "D";                     // Rare (5%)
 	}
 
 
