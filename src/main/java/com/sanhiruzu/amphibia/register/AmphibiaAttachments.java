@@ -27,6 +27,14 @@ public class AmphibiaAttachments {
             "frog_scale", () -> AttachmentType.builder(() -> 1.0f).serialize(com.mojang.serialization.Codec.FLOAT).sync(net.minecraft.network.codec.ByteBufCodecs.FLOAT).build()
     );
 
+    public static final Supplier<AttachmentType<Boolean>> STUNTED_GROWTH = ATTACHMENTS.register(
+            "stunted_growth", () -> AttachmentType.builder(() -> false).serialize(com.mojang.serialization.Codec.BOOL).build()
+    );
+
+    public static final Supplier<AttachmentType<Boolean>> ACCELERATED_GROWTH = ATTACHMENTS.register(
+            "accelerated_growth", () -> AttachmentType.builder(() -> false).serialize(com.mojang.serialization.Codec.BOOL).build()
+    );
+
     public static void register(IEventBus eventBus) {
         ATTACHMENTS.register(eventBus);
     }

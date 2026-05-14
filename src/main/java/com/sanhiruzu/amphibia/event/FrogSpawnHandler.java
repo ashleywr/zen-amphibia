@@ -1,11 +1,13 @@
 package com.sanhiruzu.amphibia.event;
 
+import com.sanhiruzu.amphibia.entity.goal.GrazeKelpGoal;
 import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.sanhiruzu.amphibia.genetics.Gene;
 import com.sanhiruzu.amphibia.genetics.FrogGradeCalculator;
 import com.sanhiruzu.amphibia.genetics.FrogMutation;
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import net.minecraft.world.entity.animal.frog.Frog;
+import net.minecraft.world.entity.animal.frog.Tadpole;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -16,23 +18,29 @@ public class FrogSpawnHandler {
 
     @SubscribeEvent
     public static void onFrogJoinLevel(EntityJoinLevelEvent event) {
-        if (!(event.getEntity() instanceof Frog frog)) return;
-        if (frog.level().isClientSide) return;
+        if (event.getEntity() instanceof Frog frog) {
+            if (frog.level().isClientSide) return;
 
-        // Check if genetics have already been applied (e.g., from NBT on load)
-        boolean geneticsApplied = frog.getData(AmphibiaAttachments.FROG_GENETICS_APPLIED);
-        if (geneticsApplied) return;
+            // Check if genetics have already been applied (e.g., from NBT on load)
+            boolean geneticsApplied = frog.getData(AmphibiaAttachments.FROG_GENETICS_APPLIED);
+            if (geneticsApplied) return;
 
-        // Get or create genome
-        FrogGenome genome = frog.getData(AmphibiaAttachments.FROG_GENOME);
-        if (genome == null) {
-            genome = FrogGenome.createDefault();
-            frog.setData(AmphibiaAttachments.FROG_GENOME, genome);
+            // Get or create genome
+            FrogGenome genome = frog.getData(AmphibiaAttachments.FROG_GENOME);
+            if (genome == null) {
+                genome = FrogGenome.createDefault();
+                frog.setData(AmphibiaAttachments.FROG_GENOME, genome);
+            }
+
+            // Apply genetics immediately, before first render
+            applyGeneticsToFrog(frog, genome);
+            frog.setData(AmphibiaAttachments.FROG_GENETICS_APPLIED, true);
+        } else if (event.getEntity() instanceof Tadpole tadpole) {
+            if (tadpole.level().isClientSide) return;
+
+            // Inject grazing AI goal for tadpoles
+            tadpole.goalSelector.addGoal(4, new GrazeKelpGoal(tadpole, 8));
         }
-
-        // Apply genetics immediately, before first render
-        applyGeneticsToFrog(frog, genome);
-        frog.setData(AmphibiaAttachments.FROG_GENETICS_APPLIED, true);
     }
 
     private static void applyGeneticsToFrog(Frog frog, FrogGenome genome) {
