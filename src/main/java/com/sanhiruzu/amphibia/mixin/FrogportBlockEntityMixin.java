@@ -17,7 +17,7 @@ import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
-@Mixin(value = FrogportBlockEntity.class, remap = false)
+@Mixin(FrogportBlockEntity.class)
 public abstract class FrogportBlockEntityMixin implements IFrogportDNA, IHaveGoggleInformation {
 
     @Unique

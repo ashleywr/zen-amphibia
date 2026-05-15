@@ -18,18 +18,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluids;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-@SuppressWarnings("NullableProblems")
 public class FrogBucketItem extends BucketItem {
     public FrogBucketItem(Properties properties) {
         super(Fluids.EMPTY, properties);
     }
 
     @Override
-    public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack stack, @NotNull Player player, net.minecraft.world.entity.@NotNull LivingEntity target, @NotNull InteractionHand hand) {
+    public InteractionResult interactLivingEntity(ItemStack stack, Player player, net.minecraft.world.entity.LivingEntity target, InteractionHand hand) {
         if (target instanceof Frog frog && !frog.isBaby()) {
             Level level = target.level();
             if (!level.isClientSide) {
@@ -55,7 +53,7 @@ public class FrogBucketItem extends BucketItem {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, net.minecraft.world.item.Item.TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, net.minecraft.world.item.Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         FrogGenome genome = stack.get(AmphibiaDataComponents.FROG_DNA.get());
 
         if (genome != null) {

@@ -10,18 +10,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CauldronBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.InteractionResult;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-@SuppressWarnings("NullableProblems")
 public class BottledFrogspawnItem extends Item {
     public BottledFrogspawnItem(Properties properties) {
         super(properties.stacksTo(1));
@@ -57,7 +54,7 @@ public class BottledFrogspawnItem extends Item {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         FrogGenome genome = stack.get(AmphibiaDataComponents.FROG_DNA.get());
 
         if (genome != null) {

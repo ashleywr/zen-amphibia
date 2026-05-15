@@ -1,10 +1,8 @@
 package com.sanhiruzu.amphibia.config;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.resources.ResourceLocation;
 import com.mojang.serialization.JsonOps;

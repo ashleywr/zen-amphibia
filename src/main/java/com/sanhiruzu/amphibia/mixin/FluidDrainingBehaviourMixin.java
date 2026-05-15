@@ -4,7 +4,6 @@ import com.sanhiruzu.amphibia.register.AmphibiaFluids;
 import com.sanhiruzu.zonectrl.zone.FactoryZoneManager;
 import com.sanhiruzu.zonectrl.zone.WildGeneticsRegistry;
 import com.simibubi.create.content.fluids.transfer.FluidDrainingBehaviour;
-import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -12,24 +11,24 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import com.llamalad7.mixinextras.sugar.Local;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.UUID;
 
-@Mixin(value = FluidDrainingBehaviour.class, remap = false)
+@Mixin(FluidDrainingBehaviour.class)
 public abstract class FluidDrainingBehaviourMixin {
 
     @Inject(
         method = "pullNext",
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z"),
-        locals = LocalCapture.CAPTURE_FAILSOFT
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z")
     )
-    private void amphibia$onFluidDrained(BlockPos root, boolean simulate, CallbackInfoReturnable<Boolean> cir, 
-                                        Level world, BlockPos currentPos, BlockState blockState, BlockState emptied) {
+    private void amphibia$onFluidDrained(BlockPos root, boolean simulate, CallbackInfoReturnable<Boolean> cir,
+                                         @Local(name = "world") Level world, @Local(name = "currentPos") BlockPos currentPos, @Local(name = "blockState") BlockState blockState) {
         
         if (world instanceof ServerLevel serverLevel && blockState.is(AmphibiaFluids.RAW_GENETIC_FLUID_BLOCK.get())) {
             // Extraction phase: Upload DNA to local ledger
@@ -48,6 +47,7 @@ public abstract class FluidDrainingBehaviourMixin {
         }
     }
 
+    @Unique
     private void amphibia$uploadToLedger(FactoryZoneManager manager, UUID zoneId, CompoundTag genomeTag) {
         CompoundTag ledgerTag = manager.getGenetics(zoneId);
         if (ledgerTag == null) ledgerTag = new CompoundTag();

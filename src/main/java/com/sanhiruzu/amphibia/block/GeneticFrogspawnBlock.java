@@ -11,22 +11,19 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.FrogspawnBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class GeneticFrogspawnBlock extends FrogspawnBlock implements EntityBlock {
     public GeneticFrogspawnBlock(Properties properties) {
         super(properties);
     }
 
-    @Nullable
     @Override
-    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new GeneticFrogspawnBlockEntity(pos, state);
     }
 
     @Override
-    protected void tick(@NotNull BlockState state, ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource random) {
+    protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         // We replicate vanilla hatching logic but inject our genome
         // Vanilla: destroy block and spawn 2-5 tadpoles
 

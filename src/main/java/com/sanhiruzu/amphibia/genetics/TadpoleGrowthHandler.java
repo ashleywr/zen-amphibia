@@ -10,8 +10,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
-import java.util.List;
-
 @EventBusSubscriber(modid = "amphibia")
 public class TadpoleGrowthHandler {
     private static final int CHECK_INTERVAL = 40;
@@ -29,7 +27,8 @@ public class TadpoleGrowthHandler {
         FactoryZoneManager manager = FactoryZoneManager.get(level);
         if (manager == null) return;
 
-        FactoryZone zone = manager.getZoneAt(pos);
+        com.sanhiruzu.zonectrl.zone.Zone genericZone = manager.getZoneAt(pos);
+        FactoryZone zone = genericZone instanceof FactoryZone fz ? fz : null;
 
         if (zone != null) {
             applyZoneGrowthModifier(tadpole, zone, level, pos);

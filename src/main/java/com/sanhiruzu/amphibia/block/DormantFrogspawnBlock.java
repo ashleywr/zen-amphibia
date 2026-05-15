@@ -1,6 +1,5 @@
 package com.sanhiruzu.amphibia.block;
 
-import com.sanhiruzu.amphibia.register.AmphibiaBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -13,22 +12,19 @@ import net.minecraft.world.level.block.FrogspawnBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class DormantFrogspawnBlock extends FrogspawnBlock implements EntityBlock {
     public DormantFrogspawnBlock(Properties properties) {
         super(properties);
     }
 
-    @Nullable
     @Override
-    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new DormantFrogspawnBlockEntity(pos, state);
     }
 
     @Override
-    protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (level.isClientSide) return InteractionResult.SUCCESS;
 
         ItemStack handStack = player.getItemInHand(InteractionHand.MAIN_HAND);

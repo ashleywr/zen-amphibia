@@ -15,14 +15,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = FrogportRenderer.class, remap = false)
+@Mixin(FrogportRenderer.class)
 public abstract class FrogportRendererMixin {
 
     @Unique
     private static final ThreadLocal<FrogGenome> CURRENT_GENOME = new ThreadLocal<>();
 
     @Inject(
-        method = "renderSafe(Lcom/simibubi/create/content/logistics/packagePort/frogport/FrogportBlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V",
+        method = "renderSafe*",
         at = @At("HEAD")
     )
     private void amphibia$captureGenome(FrogportBlockEntity blockEntity, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay, CallbackInfo ci) {
@@ -34,7 +34,7 @@ public abstract class FrogportRendererMixin {
     }
 
     @Redirect(
-        method = "renderSafe(Lcom/simibubi/create/content/logistics/packagePort/frogport/FrogportBlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V",
+        method = "renderSafe*",
         at = @At(value = "INVOKE", target = "Lnet/createmod/catnip/render/SuperByteBuffer;renderInto(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;)V")
     )
     private void amphibia$colorFrogParts(SuperByteBuffer instance, PoseStack ms, VertexConsumer buffer) {

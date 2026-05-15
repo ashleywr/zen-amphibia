@@ -1,0 +1,3 @@
+rootProject.name = 'zen-amphibia'
+include 'zen-zones'
+project(':zen-zones').projectDir = file('../zen-zones')
