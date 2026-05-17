@@ -6,9 +6,9 @@
   "item.amphibia.bottled_frogspawn": "Bottled Frogspawn",
   "amphibia.display_source.frog_genetics": "Frog Genetics",
   "gui.goggles.amphibia.frog_genetics": "Frog Genetics:",
+  "gui.goggles.amphibia.heat_tolerance": "Heat Tolerance",
+  "gui.goggles.amphibia.slime_viscosity": "Slime Viscosity",
   "key.categories.amphibia": "Zen Amphibia",
   "key.amphibia.show_frog_dna": "Show Frog DNA Overlay",
   "Zen Amphibia": "Zen Amphibia"
-}
-phibia": "Amphibia"
 }

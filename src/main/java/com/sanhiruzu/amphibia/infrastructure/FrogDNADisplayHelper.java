@@ -20,11 +20,11 @@ public class FrogDNADisplayHelper {
         }
 
         var heatTrait = genome.getGene(Gene.HEAT_TOLERANCE);
-        lines.add(Component.literal("  ").append(Component.translatable("gui.create_kaizen.factory_manager.temperature"))
+        lines.add(Component.literal("  ").append(Component.translatable("gui.goggles.amphibia.heat_tolerance"))
             .append(Component.literal(": " + heatTrait.geneA() + "/" + heatTrait.geneB()).withStyle(Gene.HEAT_TOLERANCE.color)));
 
         var viscosityTrait = genome.getGene(Gene.SLIME_VISCOSITY);
-        lines.add(Component.literal("  ").append(Component.translatable("gui.create_kaizen.factory_manager.purity"))
+        lines.add(Component.literal("  ").append(Component.translatable("gui.goggles.amphibia.slime_viscosity"))
             .append(Component.literal(": " + viscosityTrait.geneA() + "/" + viscosityTrait.geneB()).withStyle(Gene.SLIME_VISCOSITY.color)));
 
         var growthTrait = genome.getGene(Gene.GROWTH_RATE);
