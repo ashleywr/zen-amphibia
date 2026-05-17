@@ -1,8 +1,8 @@
 package com.sanhiruzu.amphibia.genetics;
 
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
-import com.sanhiruzu.zonectrl.zone.FactoryZone;
-import com.sanhiruzu.zonectrl.zone.FactoryZoneManager;
+import com.sanhiruzu.zen_zones.zone.StandardZone;
+import com.sanhiruzu.zen_zones.zone.ZoneManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.animal.frog.Tadpole;
 import net.minecraft.world.level.Level;
@@ -24,11 +24,11 @@ public class TadpoleGrowthHandler {
         Level level = tadpole.level();
         BlockPos pos = tadpole.blockPosition();
 
-        FactoryZoneManager manager = FactoryZoneManager.get(level);
+        ZoneManager manager = ZoneManager.get(level);
         if (manager == null) return;
 
-        com.sanhiruzu.zonectrl.zone.Zone genericZone = manager.getZoneAt(pos);
-        FactoryZone zone = genericZone instanceof FactoryZone fz ? fz : null;
+        com.sanhiruzu.zen_zones.zone.Zone genericZone = manager.getZoneAt(pos);
+        StandardZone zone = genericZone instanceof StandardZone fz ? fz : null;
 
         if (zone != null) {
             applyZoneGrowthModifier(tadpole, zone, level, pos);
@@ -37,7 +37,7 @@ public class TadpoleGrowthHandler {
         }
     }
 
-    private static void applyZoneGrowthModifier(Tadpole tadpole, FactoryZone zone, Level level, BlockPos pos) {
+    private static void applyZoneGrowthModifier(Tadpole tadpole, StandardZone zone, Level level, BlockPos pos) {
         // Calculate water volume within zone bounds
         TadpoleZoneEcology.WaterVolumeResult volumeResult = calculateZoneWaterVolume(zone, level);
         int waterVolume = volumeResult.blockCount;
@@ -70,7 +70,7 @@ public class TadpoleGrowthHandler {
         }
     }
 
-    private static TadpoleZoneEcology.WaterVolumeResult calculateZoneWaterVolume(FactoryZone zone, Level level) {
+    private static TadpoleZoneEcology.WaterVolumeResult calculateZoneWaterVolume(StandardZone zone, Level level) {
         BlockPos center = new BlockPos(
             (zone.getBounds().minX() + zone.getBounds().maxX()) / 2,
             (zone.getBounds().minY() + zone.getBounds().maxY()) / 2,
@@ -79,7 +79,7 @@ public class TadpoleGrowthHandler {
         return TadpoleZoneEcology.calculateWaterVolume(center, level);
     }
 
-    private static int countTadpolesInZone(Level level, FactoryZone zone) {
+    private static int countTadpolesInZone(Level level, StandardZone zone) {
         int count = 0;
         net.minecraft.world.level.levelgen.structure.BoundingBox bounds = zone.getBounds();
         net.minecraft.world.phys.AABB aabb = new net.minecraft.world.phys.AABB(
@@ -90,7 +90,7 @@ public class TadpoleGrowthHandler {
         for (Tadpole tadpole : level.getEntities(
             net.minecraft.world.entity.EntityType.TADPOLE,
             aabb,
-            (tadpole) -> zone.contains(tadpole.blockPosition())
+            (t) -> zone.contains(t.blockPosition())
         )) {
             count++;
         }

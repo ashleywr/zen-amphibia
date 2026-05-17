@@ -3,7 +3,7 @@ package com.sanhiruzu.amphibia.mixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.sanhiruzu.amphibia.register.AmphibiaFluids;
-import com.sanhiruzu.zonectrl.zone.WildGeneticsRegistry;
+import com.sanhiruzu.zen_zones.zone.WildGeneticsRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;

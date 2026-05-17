@@ -88,4 +88,4 @@ your_datapack/
 
 ## Zone Integration
 
-Estivation respects zone atmospheres (via ZoneCtrl integration). Frogs in detected zones will check temperature and humidity from their zone definition. Outside zones, they check ambient conditions.
+Estivation respects zone atmospheres (via Zen Zones integration). Frogs in detected zones will check temperature and humidity from their zone definition. Outside zones, they check ambient conditions.

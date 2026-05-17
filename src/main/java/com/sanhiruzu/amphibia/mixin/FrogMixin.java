@@ -1,8 +1,8 @@
 package com.sanhiruzu.amphibia.mixin;
 
 import com.sanhiruzu.amphibia.register.AmphibiaBlocks;
-import com.sanhiruzu.zonectrl.zone.AtmosphereManager;
-import com.sanhiruzu.zonectrl.zone.FactoryZoneManager;
+import com.sanhiruzu.zen_zones.zone.AtmosphereManager;
+import com.sanhiruzu.zen_zones.zone.ZoneManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.level.Level;
@@ -25,11 +25,11 @@ public abstract class FrogMixin {
         // Check breeding conditions every 40 ticks
         if (level.getGameTime() % 40 != 0) return;
 
-        FactoryZoneManager manager = FactoryZoneManager.get(level);
+        ZoneManager manager = ZoneManager.get(level);
         if (manager == null) return;
 
         BlockPos pos = frog.blockPosition();
-        com.sanhiruzu.zonectrl.api.IAtmosphere atmosphereZone = manager.getAt(pos);
+        com.sanhiruzu.zen_zones.api.IAtmosphere atmosphereZone = manager.getAt(pos);
         if (atmosphereZone == null) return;
 
         float temp = atmosphereZone.getTemperature();

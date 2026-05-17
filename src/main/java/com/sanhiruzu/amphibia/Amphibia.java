@@ -2,7 +2,7 @@ package com.sanhiruzu.amphibia;
 
 import com.sanhiruzu.amphibia.infrastructure.FrogClipboardHandler;
 import com.sanhiruzu.amphibia.item.FrogBucketItem;
-import com.sanhiruzu.zonectrl.api.AtmosphereRegistry;
+import com.sanhiruzu.zen_zones.api.AtmosphereRegistry;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.bus.api.IEventBus;

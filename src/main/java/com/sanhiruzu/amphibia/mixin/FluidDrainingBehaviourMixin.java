@@ -1,8 +1,8 @@
 package com.sanhiruzu.amphibia.mixin;
 
 import com.sanhiruzu.amphibia.register.AmphibiaFluids;
-import com.sanhiruzu.zonectrl.zone.FactoryZoneManager;
-import com.sanhiruzu.zonectrl.zone.WildGeneticsRegistry;
+import com.sanhiruzu.zen_zones.zone.ZoneManager;
+import com.sanhiruzu.zen_zones.zone.WildGeneticsRegistry;
 import com.simibubi.create.content.fluids.transfer.FluidDrainingBehaviour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -36,10 +36,10 @@ public abstract class FluidDrainingBehaviourMixin {
             CompoundTag genetics = wildRegistry.remove(currentPos);
             
             if (genetics != null) {
-                FactoryZoneManager zoneManager = FactoryZoneManager.get(serverLevel);
+                ZoneManager zoneManager = ZoneManager.get(serverLevel);
                 if (zoneManager != null) {
-                    com.sanhiruzu.zonectrl.api.IAtmosphere atmosphere = zoneManager.getAt(currentPos);
-                    if (atmosphere instanceof com.sanhiruzu.zonectrl.zone.FactoryZone zone) {
+                    com.sanhiruzu.zen_zones.api.IAtmosphere atmosphere = zoneManager.getAt(currentPos);
+                    if (atmosphere instanceof com.sanhiruzu.zen_zones.zone.StandardZone zone) {
                         amphibia$uploadToLedger(zoneManager, zone.getId(), genetics);
                     }
                 }
@@ -48,7 +48,7 @@ public abstract class FluidDrainingBehaviourMixin {
     }
 
     @Unique
-    private void amphibia$uploadToLedger(FactoryZoneManager manager, UUID zoneId, CompoundTag genomeTag) {
+    private void amphibia$uploadToLedger(ZoneManager manager, UUID zoneId, CompoundTag genomeTag) {
         CompoundTag ledgerTag = manager.getGenetics(zoneId);
         if (ledgerTag == null) ledgerTag = new CompoundTag();
 

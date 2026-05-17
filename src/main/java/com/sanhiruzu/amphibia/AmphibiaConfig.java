@@ -12,7 +12,7 @@ public class AmphibiaConfig {
         builder.push("Genetics");
         
         OPTIMAL_BREEDING_ATMOSPHERE = builder
-            .comment("The specific ZoneCtrl atmosphere ID required for frogs to breed and produce raw genetic fluid.")
+            .comment("The specific Zen Zones atmosphere ID required for frogs to breed and produce raw genetic fluid.")
             .define("optimal_breeding_atmosphere", "monsoon_chamber");
             
         builder.pop();

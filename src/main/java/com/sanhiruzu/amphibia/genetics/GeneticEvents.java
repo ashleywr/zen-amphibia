@@ -39,11 +39,11 @@ public class GeneticEvents {
         if (event.getPlacedBlock().is(Blocks.FROGSPAWN) && event.getEntity() instanceof Frog mom) {
             if (!(event.getLevel() instanceof net.minecraft.server.level.ServerLevel serverLevel)) return;
 
-            com.sanhiruzu.zonectrl.zone.FactoryZoneManager manager = com.sanhiruzu.zonectrl.zone.FactoryZoneManager.get(serverLevel);
+            com.sanhiruzu.zen_zones.zone.ZoneManager manager = com.sanhiruzu.zen_zones.zone.ZoneManager.get(serverLevel);
             if (manager != null) {
-                com.sanhiruzu.zonectrl.api.IAtmosphere atmosphere = manager.getAt(event.getPos());
-                if (atmosphere instanceof com.sanhiruzu.zonectrl.zone.FactoryZone zone) {
-                    if (com.sanhiruzu.zonectrl.zone.AtmosphereManager.determineAtmosphere(zone).equals(com.sanhiruzu.amphibia.AmphibiaConfig.OPTIMAL_BREEDING_ATMOSPHERE.get())) {
+                com.sanhiruzu.zen_zones.api.IAtmosphere atmosphere = manager.getAt(event.getPos());
+                if (atmosphere instanceof com.sanhiruzu.zen_zones.zone.StandardZone zone) {
+                    if (com.sanhiruzu.zen_zones.zone.AtmosphereManager.determineAtmosphere(zone).equals(com.sanhiruzu.amphibia.AmphibiaConfig.OPTIMAL_BREEDING_ATMOSPHERE.get())) {
                         FrogGenome genome = mom.getData(AmphibiaAttachments.OFFSPRING_GENOME);
 
                         // Place fluid instead of eggs
@@ -53,7 +53,7 @@ public class GeneticEvents {
                         net.minecraft.nbt.CompoundTag genomeTag = (net.minecraft.nbt.CompoundTag) FrogGenome.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, genome).getOrThrow();
 
                         // Store in WildGeneticsRegistry (for extraction trigger)
-                        com.sanhiruzu.zonectrl.zone.WildGeneticsRegistry.get(serverLevel).put(event.getPos(), genomeTag);
+                        com.sanhiruzu.zen_zones.zone.WildGeneticsRegistry.get(serverLevel).put(event.getPos(), genomeTag);
 
                         // Also upload to ledger immediately if in a zone
                         net.minecraft.nbt.CompoundTag ledgerTag = manager.getGenetics(zone.getId());
@@ -189,7 +189,7 @@ public class GeneticEvents {
         if (stack.is(net.minecraft.world.item.Items.BUCKET)) {
             BlockState state = level.getBlockState(pos);
             if (state.is(com.sanhiruzu.amphibia.register.AmphibiaFluids.RAW_GENETIC_FLUID_BLOCK.get())) {
-                com.sanhiruzu.zonectrl.zone.WildGeneticsRegistry wildRegistry = com.sanhiruzu.zonectrl.zone.WildGeneticsRegistry.get(level);
+                com.sanhiruzu.zen_zones.zone.WildGeneticsRegistry wildRegistry = com.sanhiruzu.zen_zones.zone.WildGeneticsRegistry.get(level);
                 net.minecraft.nbt.CompoundTag genetics = wildRegistry.remove(pos);
                 
                 if (genetics != null) {
