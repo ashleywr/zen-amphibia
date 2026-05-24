@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 /**
- * Configurable settings for frog estivation (hibernation in mucus cocoons).
+ * Configurable settings for frog estivation (dormant state during harsh conditions).
  * Data-driven via datapacks for full modpack customization.
  */
 public record EstivationConfig(
@@ -15,8 +15,8 @@ public record EstivationConfig(
 ) {
     public static final EstivationConfig DEFAULT = new EstivationConfig(
         true,           // enabled
-        35.0f,          // maxTemperature - trigger estivation above this
-        20.0f,          // minHumidity - trigger estivation below this
+        30.0f,          // maxTemperature - trigger estivation above this (biome temp * 20, e.g. desert=40)
+        25.0f,          // minHumidity - trigger estivation below this (dry biomes=20, wet biomes=80)
         6000L           // cooldownTicksAfterRevival - 5 minutes (6000 ticks)
     );
 

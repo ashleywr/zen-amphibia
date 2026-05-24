@@ -1,10 +1,15 @@
 package com.sanhiruzu.amphibia.event;
 
 import com.sanhiruzu.amphibia.entity.goal.GrazeKelpGoal;
+import com.sanhiruzu.amphibia.entity.goal.FrogBiteGoal;
+import com.sanhiruzu.amphibia.entity.goal.FrogTongueGoal;
+import com.sanhiruzu.amphibia.entity.goal.FrogHostileTargetGoal;
 import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.sanhiruzu.amphibia.genetics.Gene;
 import com.sanhiruzu.amphibia.genetics.FrogGradeCalculator;
 import com.sanhiruzu.amphibia.genetics.FrogMutation;
+import com.sanhiruzu.amphibia.genetics.FrogCombatCapability;
+import com.sanhiruzu.amphibia.genetics.FrogAttackType;
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.animal.frog.Tadpole;
@@ -13,7 +18,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
-@EventBusSubscriber(modid = "amphibia")
+@EventBusSubscriber(modid = "zen_amphibia")
 public class FrogSpawnHandler {
 
     @SubscribeEvent
@@ -43,7 +48,7 @@ public class FrogSpawnHandler {
         }
     }
 
-    private static void applyGeneticsToFrog(Frog frog, FrogGenome genome) {
+    public static void applyGeneticsToFrog(Frog frog, FrogGenome genome) {
         // Apply mutations
         for (String mutationId : genome.mutations()) {
             FrogMutation mutation = FrogMutation.getById(mutationId);
@@ -52,15 +57,9 @@ public class FrogSpawnHandler {
             }
         }
 
-        // Apply scale based on genome
+        // Apply scale based on genome (visual scaling handled by FrogScaleLayer)
         float scale = genome.getScale();
         frog.setData(AmphibiaAttachments.FROG_SCALE, scale);
-
-        var scaleAttribute = frog.getAttribute(Attributes.SCALE);
-        if (scaleAttribute != null) {
-            scaleAttribute.setBaseValue(scale);
-            frog.refreshDimensions();
-        }
 
         // Apply health and damage bonuses based on genome
         FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.HEALTH));
@@ -90,6 +89,21 @@ public class FrogSpawnHandler {
             }
         } catch (Exception e) {
             // Attack damage attribute not available, silently continue
+        }
+
+        // Apply combat goals based on genetics
+        FrogAttackType attackType = FrogCombatCapability.getAttackType(genome);
+        if (attackType != FrogAttackType.NONE) {
+            // Add targeting goal
+            frog.targetSelector.addGoal(2, new FrogHostileTargetGoal(frog));
+
+            // Add attack goals based on type
+            if (attackType == FrogAttackType.BITE || attackType == FrogAttackType.BOTH) {
+                frog.goalSelector.addGoal(3, new FrogBiteGoal(frog, damageBonus));
+            }
+            if (attackType == FrogAttackType.TONGUE || attackType == FrogAttackType.BOTH) {
+                frog.goalSelector.addGoal(4, new FrogTongueGoal(frog, damageBonus));
+            }
         }
     }
 }

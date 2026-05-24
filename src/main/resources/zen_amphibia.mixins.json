@@ -3,15 +3,15 @@
   "minVersion": "0.8.5",
   "package": "com.sanhiruzu.amphibia.mixin",
   "compatibilityLevel": "JAVA_21",
-  "refmap": "amphibia.refmap.json",
+  "refmap": "zen_amphibia.refmap.json",
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
-    "FrogMixin",
-    "FrogportBlockEntityMixin",
+    "BucketItemMixin",
     "FluidDrainingBehaviourMixin",
-    "BucketItemMixin"
+    "FrogMixin",
+    "FrogportBlockEntityMixin"
   ],
   "client": [
     "FrogportRendererMixin"

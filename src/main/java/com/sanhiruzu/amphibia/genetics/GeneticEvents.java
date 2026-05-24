@@ -1,78 +1,94 @@
 package com.sanhiruzu.amphibia.genetics;
 
+import com.sanhiruzu.amphibia.AmphibiaConfig;
+import com.sanhiruzu.amphibia.block.GeneticFrogspawnBlockEntity;
+import com.sanhiruzu.amphibia.event.FrogSpawnHandler;
+import com.sanhiruzu.amphibia.genetics.WildGeneticsRegistry;
 import com.sanhiruzu.amphibia.item.BottledFrogspawnItem;
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import com.sanhiruzu.amphibia.register.AmphibiaBlocks;
 import com.sanhiruzu.amphibia.register.AmphibiaDataComponents;
-import com.sanhiruzu.amphibia.block.GeneticFrogspawnBlockEntity;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.state.BlockState;
+import com.sanhiruzu.amphibia.register.AmphibiaFluids;
+import com.sanhiruzu.atelier.api.ZoneAPI;
+import com.sanhiruzu.atelier.space.zone.ZoneData;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.animal.frog.Tadpole;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
 import net.neoforged.neoforge.event.entity.living.LivingConversionEvent;
-import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.LevelEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
-@EventBusSubscriber(modid = "amphibia")
+@EventBusSubscriber(modid = "zen_amphibia")
 public class GeneticEvents {
-
-    @SubscribeEvent
-    public static void onBreed(BabyEntitySpawnEvent event) {
-        if (event.getParentA() instanceof Frog mom && event.getParentB() instanceof Frog dad && event.getChild() instanceof Frog baby) {
-            FrogGenome momGenome = mom.getData(AmphibiaAttachments.FROG_GENOME);
-            FrogGenome dadGenome = dad.getData(AmphibiaAttachments.FROG_GENOME);
-            FrogGenome childGenome = FrogGenetics.breed(momGenome, dadGenome, mom.getRandom());
-            baby.setData(AmphibiaAttachments.FROG_GENOME, childGenome);
-        }
-    }
 
     @SubscribeEvent
     public static void onPlaceSpawn(BlockEvent.EntityPlaceEvent event) {
         if (event.getPlacedBlock().is(Blocks.FROGSPAWN) && event.getEntity() instanceof Frog mom) {
-            if (!(event.getLevel() instanceof net.minecraft.server.level.ServerLevel serverLevel)) return;
+            if (!(event.getLevel() instanceof ServerLevel serverLevel)) return;
 
-            com.sanhiruzu.zen_zones.zone.ZoneManager manager = com.sanhiruzu.zen_zones.zone.ZoneManager.get(serverLevel);
-            if (manager != null) {
-                com.sanhiruzu.zen_zones.api.IAtmosphere atmosphere = manager.getAt(event.getPos());
-                if (atmosphere instanceof com.sanhiruzu.zen_zones.zone.StandardZone zone) {
-                    if (com.sanhiruzu.zen_zones.zone.AtmosphereManager.determineAtmosphere(zone).equals(com.sanhiruzu.amphibia.AmphibiaConfig.OPTIMAL_BREEDING_ATMOSPHERE.get())) {
-                        FrogGenome genome = mom.getData(AmphibiaAttachments.OFFSPRING_GENOME);
+            boolean isOptimalZone = false;
+            ZoneData zone = null;
 
-                        // Place fluid instead of eggs
-                        serverLevel.setBlock(event.getPos(), com.sanhiruzu.amphibia.register.AmphibiaFluids.RAW_GENETIC_FLUID_BLOCK.get().defaultBlockState(), 3);
-
-                        // Encode genome to NBT
-                        net.minecraft.nbt.CompoundTag genomeTag = (net.minecraft.nbt.CompoundTag) FrogGenome.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, genome).getOrThrow();
-
-                        // Store in WildGeneticsRegistry (for extraction trigger)
-                        com.sanhiruzu.zen_zones.zone.WildGeneticsRegistry.get(serverLevel).put(event.getPos(), genomeTag);
-
-                        // Also upload to ledger immediately if in a zone
-                        net.minecraft.nbt.CompoundTag ledgerTag = manager.getGenetics(zone.getId());
-                        if (ledgerTag == null) ledgerTag = new net.minecraft.nbt.CompoundTag();
-
-                        net.minecraft.nbt.ListTag discovered = ledgerTag.getList("DiscoveredGenomes", net.minecraft.nbt.Tag.TAG_COMPOUND);
-                        discovered.add(genomeTag);
-                        ledgerTag.put("DiscoveredGenomes", discovered);
-
-                        manager.saveGenetics(zone.getId(), ledgerTag);
-
-                        mom.setData(AmphibiaAttachments.OFFSPRING_GENOME, FrogGenome.createDefault());
-                        event.setCanceled(true);
-                        return;
-                    }
+            if (ModList.get().isLoaded("zen_atelier")) {
+                zone = ZoneAPI.getZoneAt(serverLevel, event.getPos());
+                if (zone != null) {
+                    String optimalType = AmphibiaConfig.OPTIMAL_BREEDING_ZONE_TYPE.get();
+                    isOptimalZone = ZoneAPI.isZoneType(zone, optimalType);
                 }
             }
 
-            // Fallback for non-optimal zones: normal genetic frogspawn
+            if (isOptimalZone) {
+                FrogGenome genome = mom.getData(AmphibiaAttachments.OFFSPRING_GENOME);
+
+                CompoundTag genomeTag = (CompoundTag) FrogGenome.CODEC.encodeStart(NbtOps.INSTANCE, genome).getOrThrow();
+
+                serverLevel.setBlock(event.getPos(),
+                    com.sanhiruzu.amphibia.register.AmphibiaFluids.RAW_GENETIC_FLUID_BLOCK.get().defaultBlockState(), 3);
+
+                WildGeneticsRegistry.get(serverLevel).put(event.getPos(), genomeTag);
+
+                // Upload to zone genetics ledger via ZoneDataStore
+                if (zone != null) {
+                    CompoundTag ledgerTag = ZoneAPI.ZoneDataStore.get(
+                        zone.getRegionId(), "amphibia_genetics_ledger", CompoundTag.class);
+                    if (ledgerTag == null) ledgerTag = new CompoundTag();
+
+                    ListTag discovered = ledgerTag.getList("DiscoveredGenomes", Tag.TAG_COMPOUND);
+
+                    boolean exists = false;
+                    for (int i = 0; i < discovered.size(); i++) {
+                        if (discovered.getCompound(i).equals(genomeTag)) {
+                            exists = true;
+                            break;
+                        }
+                    }
+
+                    if (!exists) {
+                        discovered.add(genomeTag.copy());
+                        ledgerTag.put("DiscoveredGenomes", discovered);
+                        ZoneAPI.ZoneDataStore.set(zone.getRegionId(), "amphibia_genetics_ledger", ledgerTag);
+                    }
+                }
+
+                mom.setData(AmphibiaAttachments.OFFSPRING_GENOME, FrogGenome.createDefault());
+                event.setCanceled(true);
+                return;
+            }
+
+            // Fallback: normal genetic frogspawn
             FrogGenome genome = mom.getData(AmphibiaAttachments.OFFSPRING_GENOME);
             serverLevel.setBlock(event.getPos(), AmphibiaBlocks.GENETIC_FROGSPAWN.get().defaultBlockState(), 3);
 
@@ -139,7 +155,6 @@ public class GeneticEvents {
 
         int slime = tag.getInt("CatalystSlime");
         if (slime > 0) {
-            // Increase SLIME_VISCOSITY trait
             incubatedGenome = applySlimeMutation(incubatedGenome, slime);
         }
 
@@ -156,7 +171,6 @@ public class GeneticEvents {
     }
 
     private static FrogGenome applySlimeMutation(FrogGenome genome, int count) {
-        // For now, just add slime viscosity mutation if count > 0
         var mutations = new java.util.ArrayList<>(genome.mutations());
         if (!mutations.contains("slime_viscosity") && count > 0) {
             mutations.add("slime_viscosity");
@@ -169,35 +183,29 @@ public class GeneticEvents {
         if (event.getEntity() instanceof Tadpole tadpole && event.getOutcome() instanceof Frog frog) {
             FrogGenome genome = tadpole.getData(AmphibiaAttachments.FROG_GENOME);
             frog.setData(AmphibiaAttachments.FROG_GENOME, genome);
+            frog.setData(AmphibiaAttachments.FROG_GENETICS_APPLIED, false);
+            FrogSpawnHandler.applyGeneticsToFrog(frog, genome);
+            frog.setData(AmphibiaAttachments.FROG_GENETICS_APPLIED, true);
         }
     }
 
     @SubscribeEvent
     public static void onBucketInteract(BlockEvent.FluidPlaceBlockEvent event) {
-        // Handle logic for placing fluid with NBT if needed
+        // Handled via BucketItemMixin for NBT transfer
     }
 
     @SubscribeEvent
-    public static void onBlockInteract(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock event) {
-        if (event.getLevel().isClientSide) return;
-        
-        net.minecraft.world.level.Level level = event.getLevel();
-        BlockPos pos = event.getPos();
-        net.minecraft.world.item.ItemStack stack = event.getItemStack();
-        
-        // 1. Draining Bio-Broth into a bucket (Pick up)
-        if (stack.is(net.minecraft.world.item.Items.BUCKET)) {
-            BlockState state = level.getBlockState(pos);
-            if (state.is(com.sanhiruzu.amphibia.register.AmphibiaFluids.RAW_GENETIC_FLUID_BLOCK.get())) {
-                com.sanhiruzu.zen_zones.zone.WildGeneticsRegistry wildRegistry = com.sanhiruzu.zen_zones.zone.WildGeneticsRegistry.get(level);
-                net.minecraft.nbt.CompoundTag genetics = wildRegistry.remove(pos);
-                
-                if (genetics != null) {
-                    // We need to wait for the bucket to be filled to apply NBT. 
-                    // But BucketItem.use handles the swap.
-                    // This is tricky. Let's use a Mixin on BucketItem instead for robustness.
-                }
-            }
+    public static void onBlockBreak(BlockEvent.BreakEvent event) {
+        if (event.getState().is(AmphibiaFluids.RAW_GENETIC_FLUID_BLOCK.get())
+            && event.getLevel() instanceof ServerLevel serverLevel) {
+            WildGeneticsRegistry.get(serverLevel).remove(event.getPos());
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLevelUnload(LevelEvent.Unload event) {
+        if (event.getLevel() instanceof ServerLevel serverLevel) {
+            WildGeneticsRegistry.unload(serverLevel);
         }
     }
 }

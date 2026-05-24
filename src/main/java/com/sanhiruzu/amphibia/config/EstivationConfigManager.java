@@ -25,8 +25,8 @@ public class EstivationConfigManager extends SimpleJsonResourceReloadListener {
     protected void apply(java.util.Map<ResourceLocation, com.google.gson.JsonElement> pObject, ResourceManager pResourceManager, ProfilerFiller pProfiler) {
         EstivationConfig loadedConfig = EstivationConfig.DEFAULT;
 
-        // Try to load from amphibia namespace
-        ResourceLocation configPath = ResourceLocation.parse("amphibia:estivation/config");
+        // Try to load from zen_amphibia namespace
+        ResourceLocation configPath = ResourceLocation.parse("zen_amphibia:estivation/config");
         if (pObject.containsKey(configPath)) {
             try {
                 com.google.gson.JsonElement json = pObject.get(configPath);

@@ -73,20 +73,13 @@ public record FrogGenome(Map<Gene, Trait> genes, List<String> mutations) {
 	};
 
 	public static FrogGenome createDefault() {
-		java.util.Random rand = new java.util.Random();
 		Map<Gene, Trait> genes = new HashMap<>();
 
 		for (Gene gene : Gene.values()) {
-			genes.put(gene, randomTrait(rand));
+			genes.put(gene, Trait.defaultTrait());
 		}
 
-		List<String> mutations = new ArrayList<>();
-		if (rand.nextDouble() < 0.001) {
-			FrogMutation mutation = FrogMutation.ALL_MUTATIONS[rand.nextInt(FrogMutation.ALL_MUTATIONS.length)];
-			mutations.add(mutation.id());
-		}
-
-		return new FrogGenome(genes, mutations);
+		return new FrogGenome(genes, new ArrayList<>());
 	}
 
 	private static Trait randomTrait(java.util.Random rand) {
@@ -116,8 +109,8 @@ public record FrogGenome(Map<Gene, Trait> genes, List<String> mutations) {
 	}
 
 	public float getScale() {
-		int hashScale = Math.abs(getGene(Gene.SIZE).geneA().hashCode() * 31 + getGene(Gene.SIZE).geneB().hashCode());
-		return 0.5f + ((hashScale * 739) % 100) / 50.0f;
+		long hashScale = Math.abs((long)getGene(Gene.SIZE).geneA().hashCode() * 31 + getGene(Gene.SIZE).geneB().hashCode());
+		return 0.5f + (int)((hashScale * 739) % 100) / 50.0f;
 	}
 
 	public record Trait(String geneA, String geneB) {

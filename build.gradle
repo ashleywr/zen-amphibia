@@ -5,8 +5,6 @@ plugins {
     id 'idea'
 }
 
-evaluationDependsOn(':zen-zones')
-
 version = mod_version
 group = mod_group_id
 
@@ -17,6 +15,7 @@ sourceSets.main.resources {
 }
 
 repositories {
+    mavenLocal()
     maven { url = "https://maven.createmod.net" }
     maven { url = "https://maven.ithundxr.dev/snapshots" }
     maven {
@@ -25,6 +24,7 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven { url = "https://api.modrinth.com/maven" }
 }
 
 base {
@@ -40,22 +40,36 @@ neoForge {
         minecraftVersion = project.parchment_minecraft_version
     }
 
+    runs {
+        client {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            logLevel = org.slf4j.event.Level.DEBUG
+            jvmArgument '-ea'
+        }
+
+        configureEach {
+            systemProperty 'forge.logging.markers', 'SCAN,REGISTRIES,LOADING'
+        }
+    }
+
     mods {
         "${mod_id}" {
             sourceSet(sourceSets.main)
-        }
-        "zen_zones" {
-            sourceSet(project(":zen-zones").sourceSets.main)
         }
     }
 }
 
 configurations {
     runtimeClasspath.extendsFrom localRuntime
+    devLocalMods {
+        canBeConsumed = false
+        canBeResolved = true
+    }
 }
 
 dependencies {
-    implementation project(':zen-zones')
+    compileOnly files('../Atelier/build/libs/zen_atelier-1.0.0.jar')
     implementation("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     implementation("net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}")
     compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
@@ -67,7 +81,67 @@ dependencies {
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.mockito:mockito-core:5.7.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.7.0'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.register('buildEmi', Exec) {
+    group = 'neoforge runs'
+    description = 'Builds the latest EMI JAR from its source project.'
+    workingDir = file('../EMI')
+    commandLine = ['.\\gradlew.bat', ':neoforge:build', '-x', 'test']
+}
+
+tasks.register('buildAmi', Exec) {
+    group = 'neoforge runs'
+    description = 'Builds the latest AMI JAR from its source project.'
+    workingDir = file('../../AutomatedMaterialsIndex')
+    commandLine = ['.\\gradlew.bat', 'build', '-x', 'test']
+}
+
+tasks.register('buildAtelier', Exec) {
+    group = 'neoforge runs'
+    description = 'Builds the latest Zen Atelier JAR from its source project.'
+    workingDir = file('../Atelier')
+    commandLine = ['.\\gradlew.bat', 'build', '-x', 'test']
+}
+
+tasks.register('syncDevLocalMods', Sync) {
+    group = 'neoforge runs'
+    description = 'Copies local builds of AMI, Zen Atelier, and EMI into the run mods folder for dev client testing.'
+
+    def modsDir = project.file('run/mods')
+
+    into modsDir
+    from fileTree(file('../../AutomatedMaterialsIndex/build/libs')) {
+        include 'ami-*.jar'
+    }
+    from fileTree(file('../Atelier/build/libs')) {
+        include 'zen_atelier-*.jar'
+    }
+    from fileTree(file('../EMI/neoforge/build/libs')) {
+        include 'emi-*+neoforge.jar'
+        exclude '*api*'
+        exclude '*source*'
+        exclude '*dev-shadow*'
+    }
+
+    doFirst {
+        modsDir.mkdirs()
+    }
+
+    doLast {
+        modsDir.listFiles()?.findAll { it.name.endsWith('.jar') }?.each {
+            logger.lifecycle("Dev mod staged: ${it.name}")
+        }
+    }
+
+    dependsOn buildEmi, buildAmi, buildAtelier
+}
+
+tasks.named('prepareClientRun').configure {
+    dependsOn syncDevLocalMods
 }
 
 test {

@@ -9,7 +9,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
-@EventBusSubscriber(modid = "amphibia")
+@EventBusSubscriber(modid = "zen_amphibia")
 public class CreeperFrogHandler {
 
 	private static final float BASE_EXPLOSION_POWER = 1.0f;

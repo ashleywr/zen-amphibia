@@ -1,0 +1,68 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "top": "amphibia:block/dormant_frogspawn_top",
+    "bottom": "amphibia:block/dormant_frogspawn_bottom",
+    "side": "amphibia:block/dormant_frogspawn_side"
+  },
+  "elements": [
+    {
+      "name": "base_layer",
+      "from": [0, 0, 0],
+      "to": [16, 8, 16],
+      "faces": {
+        "down": {
+          "uv": [0, 0, 16, 16],
+          "texture": "#bottom"
+        },
+        "up": {
+          "uv": [0, 0, 16, 16],
+          "texture": "#side"
+        },
+        "north": {
+          "uv": [0, 0, 16, 8],
+          "texture": "#side"
+        },
+        "south": {
+          "uv": [0, 0, 16, 8],
+          "texture": "#side"
+        },
+        "west": {
+          "uv": [0, 0, 16, 8],
+          "texture": "#side"
+        },
+        "east": {
+          "uv": [0, 0, 16, 8],
+          "texture": "#side"
+        }
+      }
+    },
+    {
+      "name": "top_layer",
+      "from": [2, 8, 2],
+      "to": [14, 14, 14],
+      "faces": {
+        "up": {
+          "uv": [2, 2, 14, 14],
+          "texture": "#top"
+        },
+        "north": {
+          "uv": [2, 0, 14, 6],
+          "texture": "#side"
+        },
+        "south": {
+          "uv": [2, 0, 14, 6],
+          "texture": "#side"
+        },
+        "west": {
+          "uv": [2, 0, 14, 6],
+          "texture": "#side"
+        },
+        "east": {
+          "uv": [2, 0, 14, 6],
+          "texture": "#side"
+        }
+      }
+    }
+  ]
+}

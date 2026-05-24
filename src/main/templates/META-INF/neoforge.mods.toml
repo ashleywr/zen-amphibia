@@ -35,8 +35,8 @@ config="${mod_id}.mixins.json"
     side="BOTH"
 
 [[dependencies.${mod_id}]]
-    modId="zen_zones"
-    type="required"
+    modId="zen_atelier"
+    type="optional"
     versionRange="[1.0.0,)"
     ordering="AFTER"
     side="BOTH"

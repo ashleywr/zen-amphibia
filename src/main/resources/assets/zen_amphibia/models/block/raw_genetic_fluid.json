@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/liquid",
+  "textures": {
+    "fluid": "amphibia:block/raw_genetic_fluid_still"
+  }
+}

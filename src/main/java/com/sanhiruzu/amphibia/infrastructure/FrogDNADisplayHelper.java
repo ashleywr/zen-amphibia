@@ -1,8 +1,10 @@
 package com.sanhiruzu.amphibia.infrastructure;
 
+import com.sanhiruzu.amphibia.genetics.FrogBreedingHelper;
 import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.sanhiruzu.amphibia.genetics.Gene;
 import com.sanhiruzu.amphibia.genetics.FrogGradeCalculator;
+import com.sanhiruzu.amphibia.genetics.FrogState;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.animal.frog.Frog;
@@ -39,22 +41,33 @@ public class FrogDNADisplayHelper {
     }
 
     public static List<Component> getFrogDebugInfo(Frog frog, FrogGenome genome) {
+        FrogState state = FrogState.fromFrog(frog);
+        return formatFrogState(state);
+    }
+
+    private static List<Component> formatFrogState(FrogState state) {
         List<Component> lines = new ArrayList<>();
 
         lines.add(Component.literal("=== FROG INFO ===").withStyle(ChatFormatting.LIGHT_PURPLE));
 
         lines.add(Component.literal("Age: ").withStyle(ChatFormatting.GRAY)
-            .append(Component.literal(frog.getAge() + " ticks").withStyle(ChatFormatting.YELLOW)));
+            .append(Component.literal(state.age + " ticks").withStyle(ChatFormatting.YELLOW)));
 
         lines.add(Component.literal("Size: ").withStyle(ChatFormatting.GRAY)
-            .append(Component.literal(String.format("%.2f", frog.getScale())).withStyle(ChatFormatting.YELLOW)));
+            .append(Component.literal(String.format("%.2f", state.scale)).withStyle(ChatFormatting.YELLOW)));
 
-        addMutationsSection(lines, genome);
-        addGeneticsSection(lines, genome);
+        addMutationsSection(lines, state.genome);
+        addGeneticsSection(lines, state.genome);
 
         lines.add(Component.empty());
         lines.add(Component.literal("InLove: ").withStyle(ChatFormatting.GRAY)
-            .append(Component.literal(String.valueOf(frog.isInLove())).withStyle(ChatFormatting.YELLOW)));
+            .append(Component.literal(String.valueOf(state.inLove)).withStyle(ChatFormatting.YELLOW)));
+
+        if (state.eggLayingStatus != null) {
+            ChatFormatting statusColor = state.inWater ? ChatFormatting.GREEN : ChatFormatting.YELLOW;
+            lines.add(Component.literal("Eggs: ").withStyle(ChatFormatting.GRAY)
+                .append(Component.literal(state.eggLayingStatus).withStyle(statusColor)));
+        }
 
         return lines;
     }

@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "level=0": {"model": "amphibia:block/sequenced_genetic_fluid"},
+    "level=1": {"model": "amphibia:block/sequenced_genetic_fluid"},
+    "level=2": {"model": "amphibia:block/sequenced_genetic_fluid"},
+    "level=3": {"model": "amphibia:block/sequenced_genetic_fluid"},
+    "level=4": {"model": "amphibia:block/sequenced_genetic_fluid"},
+    "level=5": {"model": "amphibia:block/sequenced_genetic_fluid"},
+    "level=6": {"model": "amphibia:block/sequenced_genetic_fluid"},
+    "level=7": {"model": "amphibia:block/sequenced_genetic_fluid"},
+    "level=8": {"model": "amphibia:block/sequenced_genetic_fluid"},
+    "level=9": {"model": "amphibia:block/sequenced_genetic_fluid"},
+    "level=10": {"model": "amphibia:block/sequenced_genetic_fluid"},
+    "level=11": {"model": "amphibia:block/sequenced_genetic_fluid"},
+    "level=12": {"model": "amphibia:block/sequenced_genetic_fluid"},
+    "level=13": {"model": "amphibia:block/sequenced_genetic_fluid"},
+    "level=14": {"model": "amphibia:block/sequenced_genetic_fluid"},
+    "level=15": {"model": "amphibia:block/sequenced_genetic_fluid"}
+  }
+}

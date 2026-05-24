@@ -5,14 +5,17 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.sanhiruzu.amphibia.genetics.FrogMutation;
+import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import com.sanhiruzu.amphibia.register.AmphibiaDataComponents;
 import com.sanhiruzu.amphibia.register.AmphibiaItems;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.animal.frog.Tadpole;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -42,6 +45,9 @@ public class AmphibiaCommand {
                         .executes(ctx -> spawnBottledFrogspawn(ctx.getSource(), IntegerArgumentType.getInteger(ctx, "count")))
                     )
                 )
+            )
+            .then(Commands.literal("overlay")
+                .executes(ctx -> toggleOverlay(ctx.getSource()))
             )
         );
     }
@@ -115,5 +121,18 @@ public class AmphibiaCommand {
 
         source.sendSuccess(() -> Component.literal("Spawned " + count + " bottled frogspawn item(s)"), true);
         return count;
+    }
+
+    private static int toggleOverlay(CommandSourceStack source) {
+        if (!(source.getEntity() instanceof Player player)) {
+            source.sendFailure(Component.literal("Must be executed by a player"));
+            return 0;
+        }
+        boolean current = player.getData(AmphibiaAttachments.FROG_DNA_OVERLAY_ENABLED);
+        boolean newState = !current;
+        player.setData(AmphibiaAttachments.FROG_DNA_OVERLAY_ENABLED, newState);
+        source.sendSuccess(() -> Component.literal("Frog DNA overlay: " + (newState ? "ON" : "OFF"))
+            .withStyle(newState ? ChatFormatting.GREEN : ChatFormatting.RED), true);
+        return 1;
     }
 }

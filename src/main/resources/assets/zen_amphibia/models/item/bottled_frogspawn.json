@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "amphibia:item/bottle",
+    "layer1": "amphibia:item/bottled_frogspawn"
+  }
+}

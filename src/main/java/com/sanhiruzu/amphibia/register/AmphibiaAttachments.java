@@ -6,6 +6,8 @@ import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
+import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public class AmphibiaAttachments {
@@ -33,6 +35,14 @@ public class AmphibiaAttachments {
 
     public static final Supplier<AttachmentType<Boolean>> ACCELERATED_GROWTH = ATTACHMENTS.register(
             "accelerated_growth", () -> AttachmentType.builder(() -> false).serialize(com.mojang.serialization.Codec.BOOL).build()
+    );
+
+    public static final Supplier<AttachmentType<Boolean>> FROG_DNA_OVERLAY_ENABLED = ATTACHMENTS.register(
+            "frog_dna_overlay_enabled", () -> AttachmentType.builder(() -> false)
+                .serialize(com.mojang.serialization.Codec.BOOL)
+                .sync(net.minecraft.network.codec.ByteBufCodecs.BOOL)
+                .copyOnDeath()
+                .build()
     );
 
     public static void register(IEventBus eventBus) {

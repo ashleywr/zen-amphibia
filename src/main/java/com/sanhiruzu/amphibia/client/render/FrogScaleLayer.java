@@ -8,7 +8,7 @@ import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import net.minecraft.world.entity.animal.frog.Frog;
 import com.mojang.blaze3d.vertex.PoseStack;
 
-@EventBusSubscriber(modid = "amphibia", value = Dist.CLIENT)
+@EventBusSubscriber(modid = "zen_amphibia", value = Dist.CLIENT)
 public class FrogScaleLayer {
     @SubscribeEvent
     @SuppressWarnings("rawtypes")

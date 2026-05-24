@@ -2,7 +2,6 @@ package com.sanhiruzu.amphibia.register;
 
 import com.sanhiruzu.amphibia.block.DormantFrogspawnBlock;
 import com.sanhiruzu.amphibia.block.GeneticFrogspawnBlock;
-import com.sanhiruzu.amphibia.block.MucusCocoonBlock;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -14,15 +13,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class AmphibiaBlocks {
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(Registries.BLOCK, "amphibia");
-
-    public static final DeferredHolder<Block, MucusCocoonBlock> MUCUS_COCOON = BLOCKS.register("mucus_cocoon",
-            () -> new MucusCocoonBlock(BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.COLOR_LIGHT_GREEN)
-                    .strength(0.5f)
-                    .sound(SoundType.SLIME_BLOCK)
-                    .ignitedByLava()
-            ));
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(Registries.BLOCK, "zen_amphibia");
 
     public static final DeferredHolder<Block, DormantFrogspawnBlock> DORMANT_FROGSPAWN = BLOCKS.register("dormant_frogspawn",
             () -> new DormantFrogspawnBlock(BlockBehaviour.Properties.of()

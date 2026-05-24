@@ -25,11 +25,12 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.minecraft.client.Minecraft;
 
+import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import com.sanhiruzu.amphibia.register.AmphibiaItems;
 
 @SuppressWarnings("removal")
-@EventBusSubscriber(modid = "amphibia", value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = "zen_amphibia", value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class AmphibiaClientEvents {
 
     @SubscribeEvent
@@ -51,7 +52,13 @@ public class AmphibiaClientEvents {
             (guiGraphics, partialTick) -> {
                 net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
                 if (mc.options.hideGui || mc.gameMode == null || mc.player == null) return;
-                if (!com.simibubi.create.content.equipment.goggles.GogglesItem.isWearingGoggles(mc.player)) return;
+
+                boolean overlayEnabled = mc.player.getData(AmphibiaAttachments.FROG_DNA_OVERLAY_ENABLED);
+                boolean wearingGoggles = false;
+                if (ModList.get().isLoaded("create")) {
+                    wearingGoggles = com.simibubi.create.content.equipment.goggles.GogglesItem.isWearingGoggles(mc.player);
+                }
+                if (!overlayEnabled && !wearingGoggles) return;
 
                 net.minecraft.world.phys.HitResult hitResult = mc.hitResult;
                 if (!(hitResult instanceof net.minecraft.world.phys.EntityHitResult entityHitResult)) return;
@@ -62,14 +69,43 @@ public class AmphibiaClientEvents {
                 FrogGenome genome = frog.getData(AmphibiaAttachments.FROG_GENOME);
                 java.util.List<net.minecraft.network.chat.Component> tooltip = FrogDNADisplayHelper.getFrogDebugInfo(frog, genome);
 
+                var lines = tooltip.stream()
+                    .map(net.minecraft.network.chat.Component::getVisualOrderText)
+                    .toList();
+
+                // Measure tooltip to clamp within screen bounds
+                int maxWidth = 0;
+                for (var line : lines) {
+                    int w = mc.font.width(line);
+                    if (w > maxWidth) maxWidth = w;
+                }
+                int lineHeight = mc.font.lineHeight + 1;
+                int paddingX = 12;
+                int paddingY = 6;
+                int tooltipW = maxWidth + paddingX;
+                int tooltipH = lines.size() * lineHeight + paddingY;
+
                 int screenWidth = guiGraphics.guiWidth();
                 int screenHeight = guiGraphics.guiHeight();
-                int x = screenWidth / 2 + 15;
-                int y = screenHeight / 2 + 15;
+                int cx = screenWidth / 2;
+                int cy = screenHeight / 2;
 
-                guiGraphics.renderTooltip(mc.font, tooltip.stream()
-                    .map(net.minecraft.network.chat.Component::getVisualOrderText)
-                    .toList(), x, y);
+                // Default: right of crosshair, slightly below
+                int x = cx + 15;
+                int y = cy + 15;
+
+                // If it clips the right edge, flip to left of crosshair
+                if (x + tooltipW > screenWidth - 4) {
+                    x = cx - tooltipW - 17;
+                }
+                // If it clips the bottom, pull up
+                if (y + tooltipH > screenHeight - 4) {
+                    y = screenHeight - tooltipH - 4;
+                }
+                if (x < 4) x = 4;
+                if (y < 4) y = 4;
+
+                guiGraphics.renderTooltip(mc.font, lines, x, y);
             });
     }
 

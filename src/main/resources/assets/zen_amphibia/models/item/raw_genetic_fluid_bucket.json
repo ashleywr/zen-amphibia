@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/bucket",
+  "textures": {
+    "base": "minecraft:item/bucket",
+    "fluid": "amphibia:block/raw_genetic_fluid_still"
+  }
+}

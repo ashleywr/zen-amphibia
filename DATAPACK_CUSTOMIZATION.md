@@ -4,7 +4,7 @@ This document explains how modpack creators can customize Amphibia's frog estiva
 
 ## Estivation Configuration
 
-Frogs will enter a protective mucus cocoon when environmental conditions become too harsh. Modpack creators can customize when this happens.
+Frogs will enter a dormant "estivation" state when environmental conditions become too harsh — they slow down, emit dust and genetic particles, and wait for conditions to improve. Modpack creators can customize when this happens.
 
 ### Custom Config
 
