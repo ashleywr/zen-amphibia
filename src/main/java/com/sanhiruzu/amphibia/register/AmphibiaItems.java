@@ -1,6 +1,7 @@
 package com.sanhiruzu.amphibia.register;
 
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -20,6 +21,9 @@ public class AmphibiaItems {
 
     public static final DeferredItem<net.minecraft.world.item.Item> CRICKET = ITEMS.register("cricket",
             () -> new net.minecraft.world.item.Item(new net.minecraft.world.item.Item.Properties().stacksTo(64)));
+
+    public static final DeferredItem<SpawnEggItem> CRICKET_SPAWN_EGG = ITEMS.register("cricket_spawn_egg",
+            () -> new SpawnEggItem(AmphibiaEntityTypes.CRICKET.get(), 0x8B4513, 0xA0522D, new net.minecraft.world.item.Item.Properties()));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

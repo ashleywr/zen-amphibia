@@ -3,6 +3,8 @@
   "block.amphibia.genetic_frogspawn": "Genetic Frogspawn",
   "item.amphibia.frog_bucket": "Frog Bucket",
   "item.amphibia.bottled_frogspawn": "Bottled Frogspawn",
+  "item.amphibia.cricket": "Cricket",
+  "item.amphibia.cricket_spawn_egg": "Cricket Spawn Egg",
   "amphibia.display_source.frog_genetics": "Frog Genetics",
   "gui.goggles.amphibia.frog_genetics": "Frog Genetics:",
   "gui.goggles.amphibia.heat_tolerance": "Heat Tolerance",
