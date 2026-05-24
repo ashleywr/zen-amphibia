@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/liquid",
+  "parent": "minecraft:block/fluid",
   "textures": {
-    "fluid": "amphibia:block/sequenced_genetic_fluid_still"
+    "fluid": "zen_amphibia:block/sequenced_genetic_fluid_still"
   }
 }
