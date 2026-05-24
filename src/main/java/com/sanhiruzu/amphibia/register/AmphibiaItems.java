@@ -23,7 +23,7 @@ public class AmphibiaItems {
             () -> new net.minecraft.world.item.Item(new net.minecraft.world.item.Item.Properties().stacksTo(64)));
 
     public static final DeferredItem<SpawnEggItem> CRICKET_SPAWN_EGG = ITEMS.register("cricket_spawn_egg",
-            () -> new SpawnEggItem(AmphibiaEntityTypes.CRICKET.get(), 0x8B4513, 0xA0522D, new net.minecraft.world.item.Item.Properties()));
+            () -> new SpawnEggItem(AmphibiaEntityTypes.CRICKET.get(), 0x8B4513, 0xA0522D, new net.minecraft.world.item.Item.Properties().stacksTo(64)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

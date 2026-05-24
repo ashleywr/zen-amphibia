@@ -140,7 +140,7 @@ public class Amphibia {
     private void addCreative(net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == net.minecraft.world.item.CreativeModeTabs.SPAWN_EGGS) {
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_BUCKET);
-            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.CRICKET_SPAWN_EGG);
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.CRICKET_SPAWN_EGG.get());
         }
         if (event.getTabKey() == net.minecraft.world.item.CreativeModeTabs.NATURAL_BLOCKS) {
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.DORMANT_FROGSPAWN);
