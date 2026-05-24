@@ -1,9 +1,9 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "top": "amphibia:block/genetic_frogspawn_top",
-    "bottom": "amphibia:block/genetic_frogspawn_bottom",
-    "side": "amphibia:block/genetic_frogspawn_side"
+    "top": "zen_amphibia:block/genetic_frogspawn_top",
+    "bottom": "zen_amphibia:block/genetic_frogspawn_bottom",
+    "side": "zen_amphibia:block/genetic_frogspawn_side"
   },
   "elements": [
     {
