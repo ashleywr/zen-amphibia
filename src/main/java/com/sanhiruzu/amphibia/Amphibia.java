@@ -9,8 +9,9 @@ import net.neoforged.bus.api.IEventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Mod("zen_amphibia")
+@Mod(Amphibia.MOD_ID)
 public class Amphibia {
+    public static final String MOD_ID = "zen_amphibia";
     private static final Logger LOGGER = LoggerFactory.getLogger(Amphibia.class);
 
     public Amphibia(IEventBus modEventBus, net.neoforged.fml.ModContainer modContainer) {
