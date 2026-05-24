@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "amphibia:item/frog_bucket_base",
-    "layer1": "amphibia:item/frog_bucket_frog"
+    "layer0": "zen_amphibia:item/frog_bucket_base",
+    "layer1": "zen_amphibia:item/frog_bucket_frog"
   }
 }
