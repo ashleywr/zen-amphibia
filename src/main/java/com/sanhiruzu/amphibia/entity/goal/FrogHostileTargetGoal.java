@@ -17,7 +17,7 @@ public class FrogHostileTargetGoal extends NearestAttackableTargetGoal<Monster> 
         Frog frog = (Frog) this.mob;
 
         // Don't target if estivating
-        if (frog.getPersistentData().getBoolean("amphibia:estivating")) {
+        if (frog.getPersistentData().getBoolean("zen_amphibia:estivating")) {
             return false;
         }
 

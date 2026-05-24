@@ -39,7 +39,7 @@ public record FrogMutation(String id, Component displayName, int color) {
 
     private static void applyEnderMutation(Frog frog) {
         // Mark frog as Ender variant (can be used for rendering and AI)
-        frog.getPersistentData().putBoolean("amphibia:ender_mutation", true);
+        frog.getPersistentData().putBoolean("zen_amphibia:ender_mutation", true);
 
         // Add Ender teleport AI goal if on server
         if (!frog.level().isClientSide) {
@@ -50,15 +50,15 @@ public record FrogMutation(String id, Component displayName, int color) {
     }
 
     public static boolean hasEnderMutation(Frog frog) {
-        return frog.getPersistentData().getBoolean("amphibia:ender_mutation");
+        return frog.getPersistentData().getBoolean("zen_amphibia:ender_mutation");
     }
 
     private static void applyCreeperMutation(Frog frog) {
         // Mark frog as Creeper variant
-        frog.getPersistentData().putBoolean("amphibia:creeper_mutation", true);
+        frog.getPersistentData().putBoolean("zen_amphibia:creeper_mutation", true);
     }
 
     public static boolean hasCreeperMutation(Frog frog) {
-        return frog.getPersistentData().getBoolean("amphibia:creeper_mutation");
+        return frog.getPersistentData().getBoolean("zen_amphibia:creeper_mutation");
     }
 }

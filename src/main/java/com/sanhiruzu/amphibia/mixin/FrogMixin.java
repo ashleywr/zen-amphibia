@@ -29,8 +29,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Frog.class)
 public abstract class FrogMixin {
 
-    private static final String ESTIVATING_KEY = "amphibia:estivating";
-    private static final String LAST_REVIVAL_KEY = "amphibia:last_revival_tick";
+    private static final String ESTIVATING_KEY = "zen_amphibia:estivating";
+    private static final String LAST_REVIVAL_KEY = "zen_amphibia:last_revival_tick";
 
     @Inject(method = "spawnChildFromBreeding", at = @At("HEAD"))
     private void amphibia$mixGenomesOnBreed(ServerLevel level, Animal partner, CallbackInfo ci) {

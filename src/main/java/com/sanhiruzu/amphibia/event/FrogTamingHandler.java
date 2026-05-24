@@ -22,7 +22,7 @@ public class FrogTamingHandler {
         if (!event.getItemStack().is(AmphibiaItems.CRICKET.get())) return;
 
         Player player = event.getEntity();
-        String ownerUUID = frog.getPersistentData().getString("amphibia:tamed_by");
+        String ownerUUID = frog.getPersistentData().getString("zen_amphibia:tamed_by");
 
         // Check if already tamed
         if (!ownerUUID.isEmpty()) {
@@ -54,7 +54,7 @@ public class FrogTamingHandler {
         }
 
         // Tame the frog
-        frog.getPersistentData().putString("amphibia:tamed_by", player.getUUID().toString());
+        frog.getPersistentData().putString("zen_amphibia:tamed_by", player.getUUID().toString());
         frog.setPersistenceRequired();
 
         if (!player.isCreative()) {

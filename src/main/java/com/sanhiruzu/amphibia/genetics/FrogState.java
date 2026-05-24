@@ -33,7 +33,7 @@ public class FrogState {
     public static FrogState fromFrog(Frog frog) {
         FrogGenome genome = frog.getData(AmphibiaAttachments.FROG_GENOME);
         FrogGenome offspringGenome = frog.getData(AmphibiaAttachments.OFFSPRING_GENOME);
-        boolean estivating = frog.getPersistentData().getBoolean("amphibia:estivating");
+        boolean estivating = frog.getPersistentData().getBoolean("zen_amphibia:estivating");
         String eggLayingStatus = FrogBreedingHelper.getEggLayingStatus(frog);
         boolean hasEgg = offspringGenome != null && !offspringGenome.equals(FrogGenome.createDefault());
 
