@@ -5,11 +5,11 @@
   "item.zen_amphibia.bottled_frogspawn": "Bottled Frogspawn",
   "item.zen_amphibia.cricket": "Cricket",
   "item.zen_amphibia.cricket_spawn_egg": "Cricket Spawn Egg",
-  "amphibia.display_source.frog_genetics": "Frog Genetics",
-  "gui.goggles.amphibia.frog_genetics": "Frog Genetics:",
-  "gui.goggles.amphibia.heat_tolerance": "Heat Tolerance",
-  "gui.goggles.amphibia.slime_viscosity": "Slime Viscosity",
-  "key.categories.amphibia": "Zen Amphibia",
-  "key.amphibia.show_frog_dna": "Show Frog DNA Overlay",
+  "zen_amphibia.display_source.frog_genetics": "Frog Genetics",
+  "gui.goggles.zen_amphibia.frog_genetics": "Frog Genetics:",
+  "gui.goggles.zen_amphibia.heat_tolerance": "Heat Tolerance",
+  "gui.goggles.zen_amphibia.slime_viscosity": "Slime Viscosity",
+  "key.categories.zen_amphibia": "Zen Amphibia",
+  "key.zen_amphibia.show_frog_dna": "Show Frog DNA Overlay",
   "Zen Amphibia": "Zen Amphibia"
 }
