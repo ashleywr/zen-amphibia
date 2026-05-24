@@ -143,10 +143,12 @@ public class Amphibia {
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.CRICKET_SPAWN_EGG);
         }
         if (event.getTabKey() == net.minecraft.world.item.CreativeModeTabs.NATURAL_BLOCKS) {
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.DORMANT_FROGSPAWN);
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.GENETIC_FROGSPAWN);
         }
         if (event.getTabKey() == net.minecraft.world.item.CreativeModeTabs.INGREDIENTS) {
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.CRICKET);
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.BOTTLED_FROGSPAWN);
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaFluids.RAW_GENETIC_FLUID_BUCKET.get());
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaFluids.REFINED_GENETIC_FLUID_BUCKET.get());
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaFluids.SEQUENCED_GENETIC_FLUID_BUCKET.get());
