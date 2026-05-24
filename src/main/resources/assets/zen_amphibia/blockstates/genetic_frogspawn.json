@@ -1,5 +1,5 @@
 {
   "variants": {
-    "": {"model": "amphibia:block/genetic_frogspawn"}
+    "": {"model": "zen_amphibia:block/genetic_frogspawn"}
   }
 }
