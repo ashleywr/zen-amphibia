@@ -20,8 +20,8 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import java.util.function.Supplier;
 
 public class AmphibiaFluids {
-    public static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES, "amphibia");
-    public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(Registries.FLUID, "amphibia");
+    public static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES, "zen_amphibia");
+    public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(Registries.FLUID, "zen_amphibia");
 
     // Raw Genetic Fluid (Raw Breeding Output)
     public static final Supplier<FluidType> RAW_GENETIC_FLUID_TYPE = FLUID_TYPES.register("raw_genetic_fluid", () -> new FluidType(FluidType.Properties.create()

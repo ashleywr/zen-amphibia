@@ -11,7 +11,7 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 public class AmphibiaAttachments {
-    private static final DeferredRegister<AttachmentType<?>> ATTACHMENTS = DeferredRegister.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, "amphibia");
+    private static final DeferredRegister<AttachmentType<?>> ATTACHMENTS = DeferredRegister.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, "zen_amphibia");
 
     public static final Supplier<AttachmentType<FrogGenome>> FROG_GENOME = ATTACHMENTS.register(
             "frog_genome", () -> AttachmentType.builder(FrogGenome::createDefault).serialize(FrogGenome.CODEC).sync(FrogGenome.STREAM_CODEC).copyOnDeath().build()

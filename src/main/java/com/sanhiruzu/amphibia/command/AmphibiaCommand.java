@@ -21,7 +21,7 @@ import net.minecraft.world.level.Level;
 
 public class AmphibiaCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("amphibia")
+        dispatcher.register(Commands.literal("zen_amphibia")
             .requires(source -> source.hasPermission(2))
             .then(Commands.literal("spawn")
                 .then(Commands.literal("frog")

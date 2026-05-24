@@ -11,7 +11,7 @@ import java.util.function.UnaryOperator;
 
 public class AmphibiaDataComponents {
     public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENT_TYPES =
-        DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, "amphibia");
+        DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, "zen_amphibia");
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<FrogGenome>> FROG_DNA =
         register("frog_dna", builder -> builder.persistent(FrogGenome.CODEC).networkSynchronized(FrogGenome.STREAM_CODEC));

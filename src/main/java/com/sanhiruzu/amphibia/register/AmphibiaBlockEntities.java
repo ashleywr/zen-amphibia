@@ -9,7 +9,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class AmphibiaBlockEntities {
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, "amphibia");
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, "zen_amphibia");
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<DormantFrogspawnBlockEntity>> DORMANT_FROGSPAWN = BLOCK_ENTITIES.register("dormant_frogspawn",
             () -> BlockEntityType.Builder.of(DormantFrogspawnBlockEntity::new, AmphibiaBlocks.DORMANT_FROGSPAWN.get()).build(null));

@@ -14,7 +14,7 @@ public class AmphibiaDisplaySources {
     public static void onRegister(RegisterEvent event) {
         if (event.getRegistryKey().equals(com.simibubi.create.api.registry.CreateRegistries.DISPLAY_SOURCE)) {
             event.register(com.simibubi.create.api.registry.CreateRegistries.DISPLAY_SOURCE, 
-                ResourceLocation.fromNamespaceAndPath("amphibia", "frog_genetics"), 
+                ResourceLocation.fromNamespaceAndPath("zen_amphibia", "frog_genetics"), 
                 () -> FROG_GENETICS);
         }
     }

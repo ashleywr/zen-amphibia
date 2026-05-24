@@ -48,7 +48,7 @@ public class AmphibiaClientEvents {
 
     @SubscribeEvent
     public static void onRegisterGuiLayers(RegisterGuiLayersEvent event) {
-        event.registerAbove(VanillaGuiLayers.HOTBAR, net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("amphibia", "frog_dna_overlay"),
+        event.registerAbove(VanillaGuiLayers.HOTBAR, net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("zen_amphibia", "frog_dna_overlay"),
             (guiGraphics, partialTick) -> {
                 net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
                 if (mc.options.hideGui || mc.gameMode == null || mc.player == null) return;

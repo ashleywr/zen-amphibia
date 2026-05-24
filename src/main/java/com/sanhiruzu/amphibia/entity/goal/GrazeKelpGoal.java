@@ -144,7 +144,7 @@ public class GrazeKelpGoal extends Goal {
 
     private boolean isRootProtected(BlockPos rootPos, Level level) {
         BlockState rootState = level.getBlockState(rootPos);
-        return rootState.is(BlockTags.create(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("amphibia", "growth_accelerators")));
+        return rootState.is(BlockTags.create(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("zen_amphibia", "growth_accelerators")));
     }
 
     private void removePlantFromTop(BlockPos pos) {
