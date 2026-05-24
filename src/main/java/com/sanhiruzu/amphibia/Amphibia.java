@@ -3,9 +3,13 @@ package com.sanhiruzu.amphibia;
 import com.sanhiruzu.amphibia.infrastructure.FrogClipboardHandler;
 import com.sanhiruzu.amphibia.item.FrogBucketItem;
 import com.sanhiruzu.amphibia.genetics.FrogGenome;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.entity.animal.Animal;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +38,7 @@ public class Amphibia {
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(this::onItemCrafted);
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(this::onBlockPlaced);
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(this::onReloadListeners);
+        modEventBus.addListener(this::onRegisterSpawnPlacements);
         com.sanhiruzu.amphibia.event.CommandEvents.register();
     }
 
@@ -177,6 +182,16 @@ public class Amphibia {
 
     private void onReloadListeners(net.neoforged.neoforge.event.AddReloadListenerEvent event) {
         event.addListener(new com.sanhiruzu.amphibia.config.EstivationConfigManager());
+    }
+
+    private void onRegisterSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+        event.register(
+                com.sanhiruzu.amphibia.register.AmphibiaEntityTypes.CRICKET.get(),
+                SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Animal::checkAnimalSpawnRules,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
     }
 
     private void setup(final FMLCommonSetupEvent event) {
