@@ -11,9 +11,9 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 public class AmphibiaKeys {
 
     public static final KeyMapping SHOW_FROG_DNA = new KeyMapping(
-        "key.amphibia.show_frog_dna",
+        "key.zen_amphibia.show_frog_dna",
         GLFW.GLFW_KEY_LEFT_SHIFT,
-        "Amphibia"
+        "Zen Amphibia"
     );
 
     @SubscribeEvent
