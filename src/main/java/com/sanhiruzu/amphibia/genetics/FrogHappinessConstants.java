@@ -22,4 +22,9 @@ public final class FrogHappinessConstants {
 
     // Per-locus allele upgrade chance multiplier when breeding with happiness bonus
     public static final float BREEDING_HAPPINESS_CHANCE_FACTOR = 0.15f;
+
+    // Minimum happiness to start suppressing long jumps
+    public static final float JUMP_SUPPRESS_THRESHOLD = 0.4f;
+    // Max LONG_JUMP_COOLDOWN_TICKS applied at happiness 1.0 (scales linearly from threshold)
+    public static final int HAPPY_JUMP_COOLDOWN_MAX = 600;
 }

@@ -4,6 +4,7 @@ import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -41,13 +42,17 @@ public class TerrariumHappinessHandler {
         if (level.isClientSide) return;
 
         float newHappiness = computeHappiness(frog, level);
+        float finalHappiness;
 
         if (newHappiness > 0) {
-            frog.setData(AmphibiaAttachments.FROG_HAPPINESS, newHappiness);
+            finalHappiness = newHappiness;
         } else {
             float current = frog.getData(AmphibiaAttachments.FROG_HAPPINESS);
-            frog.setData(AmphibiaAttachments.FROG_HAPPINESS, Math.max(0, current - HAPPINESS_DECAY_PER_INTERVAL));
+            finalHappiness = Math.max(0, current - HAPPINESS_DECAY_PER_INTERVAL);
         }
+
+        frog.setData(AmphibiaAttachments.FROG_HAPPINESS, finalHappiness);
+        applyJumpSuppression(frog, finalHappiness);
     }
 
     private static float computeHappiness(Frog frog, Level level) {
@@ -181,5 +186,20 @@ public class TerrariumHappinessHandler {
         if (value >= range[0] && value <= range[1]) return 1.0f;
         float dist = Math.min(Math.abs(value - range[0]), Math.abs(value - range[1]));
         return Math.max(0f, 1f - dist * 4f);
+    }
+
+    // Suppress long jump behavior for happy frogs by maintaining a minimum cooldown.
+    // Happy frogs spend more time idle in their terrariums instead of escaping.
+    private static void applyJumpSuppression(Frog frog, float happiness) {
+        if (happiness < FrogHappinessConstants.JUMP_SUPPRESS_THRESHOLD) return;
+
+        int minCooldown = (int)(happiness * FrogHappinessConstants.HAPPY_JUMP_COOLDOWN_MAX);
+        int current = frog.getBrain()
+            .getMemory(MemoryModuleType.LONG_JUMP_COOLDOWN_TICKS)
+            .orElse(0);
+
+        if (current < minCooldown) {
+            frog.getBrain().setMemory(MemoryModuleType.LONG_JUMP_COOLDOWN_TICKS, minCooldown);
+        }
     }
 }
