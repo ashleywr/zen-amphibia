@@ -1,0 +1,18 @@
+{
+  "name": "Genetic Froglights",
+  "icon": "zen_amphibia:verdant_genetic_froglight",
+  "category": "zen_amphibia:resources",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Genetic froglights are colored lights made with $(l:zen_amphibia:resources/frog_slime)Frog Slime$(/l), Glowstone Dust, Magma Cream, and dye. This gives frog keepers an Overworld-friendly route into frog-themed lighting."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "zen_amphibia:verdant_genetic_froglight",
+      "recipe2": "zen_amphibia:azure_genetic_froglight",
+      "title": "Froglight Colors"
+    }
+  ]
+}

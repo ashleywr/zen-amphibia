@@ -9,29 +9,32 @@ import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.sanhiruzu.amphibia.infrastructure.FrogDNADisplayHelper;
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import com.sanhiruzu.amphibia.register.AmphibiaDataComponents;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.FrogModel;
+import net.minecraft.client.model.TadpoleModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.FrogRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.TadpoleRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.animal.frog.Frog;
-import net.neoforged.api.distmarker.Dist;
+import net.minecraft.world.entity.animal.frog.Tadpole;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.minecraft.client.Minecraft;
-
-import net.neoforged.fml.ModList;
-import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import com.sanhiruzu.amphibia.register.AmphibiaItems;
 
-@SuppressWarnings("removal")
-@EventBusSubscriber(modid = "zen_amphibia", value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class AmphibiaClientEvents {
+    public static void register(IEventBus modEventBus) {
+        modEventBus.register(AmphibiaClientEvents.class);
+        NeoForge.EVENT_BUS.addListener(AmphibiaClientEvents::onClientTick);
+    }
 
     @SubscribeEvent
     public static void onRegisterItemColors(RegisterColorHandlersEvent.Item event) {
@@ -48,65 +51,9 @@ public class AmphibiaClientEvents {
 
     @SubscribeEvent
     public static void onRegisterGuiLayers(RegisterGuiLayersEvent event) {
-        event.registerAbove(VanillaGuiLayers.HOTBAR, net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("zen_amphibia", "frog_dna_overlay"),
-            (guiGraphics, partialTick) -> {
-                net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
-                if (mc.options.hideGui || mc.gameMode == null || mc.player == null) return;
-
-                boolean overlayEnabled = mc.player.getData(AmphibiaAttachments.FROG_DNA_OVERLAY_ENABLED);
-                boolean wearingGoggles = false;
-                if (ModList.get().isLoaded("create")) {
-                    wearingGoggles = com.simibubi.create.content.equipment.goggles.GogglesItem.isWearingGoggles(mc.player);
-                }
-                if (!overlayEnabled && !wearingGoggles) return;
-
-                net.minecraft.world.phys.HitResult hitResult = mc.hitResult;
-                if (!(hitResult instanceof net.minecraft.world.phys.EntityHitResult entityHitResult)) return;
-
-                net.minecraft.world.entity.Entity entity = entityHitResult.getEntity();
-                if (!(entity instanceof Frog frog)) return;
-
-                FrogGenome genome = frog.getData(AmphibiaAttachments.FROG_GENOME);
-                java.util.List<net.minecraft.network.chat.Component> tooltip = FrogDNADisplayHelper.getFrogDebugInfo(frog, genome);
-
-                var lines = tooltip.stream()
-                    .map(net.minecraft.network.chat.Component::getVisualOrderText)
-                    .toList();
-
-                // Measure tooltip to clamp within screen bounds
-                int maxWidth = 0;
-                for (var line : lines) {
-                    int w = mc.font.width(line);
-                    if (w > maxWidth) maxWidth = w;
-                }
-                int lineHeight = mc.font.lineHeight + 1;
-                int paddingX = 12;
-                int paddingY = 6;
-                int tooltipW = maxWidth + paddingX;
-                int tooltipH = lines.size() * lineHeight + paddingY;
-
-                int screenWidth = guiGraphics.guiWidth();
-                int screenHeight = guiGraphics.guiHeight();
-                int cx = screenWidth / 2;
-                int cy = screenHeight / 2;
-
-                // Default: right of crosshair, slightly below
-                int x = cx + 15;
-                int y = cy + 15;
-
-                // If it clips the right edge, flip to left of crosshair
-                if (x + tooltipW > screenWidth - 4) {
-                    x = cx - tooltipW - 17;
-                }
-                // If it clips the bottom, pull up
-                if (y + tooltipH > screenHeight - 4) {
-                    y = screenHeight - tooltipH - 4;
-                }
-                if (x < 4) x = 4;
-                if (y < 4) y = 4;
-
-                guiGraphics.renderTooltip(mc.font, lines, x, y);
-            });
+        event.registerAbove(VanillaGuiLayers.HOTBAR,
+            net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("zen_amphibia", "frog_dna_overlay"),
+            (guiGraphics, partialTick) -> CrosshairTooltipHandler.renderIfNeeded(guiGraphics, Minecraft.getInstance()));
     }
 
     @SubscribeEvent
@@ -116,9 +63,13 @@ public class AmphibiaClientEvents {
             renderer.addLayer(new FrogColorLayer(renderer));
             renderer.addLayer(new MutationRenderLayer(renderer));
         }
+
+        TadpoleRenderer tadpoleRenderer = event.getRenderer(net.minecraft.world.entity.EntityType.TADPOLE);
+        if (tadpoleRenderer != null) {
+            tadpoleRenderer.addLayer(new TadpoleStressColorLayer(tadpoleRenderer));
+        }
     }
 
-    @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null || mc.player == null) return;
@@ -159,6 +110,31 @@ public class AmphibiaClientEvents {
                 VertexConsumer vertexconsumer = pBuffer.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(frog)));
                 this.getParentModel().renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, net.minecraft.client.renderer.entity.LivingEntityRenderer.getOverlayCoords(frog, 0.0F), color);
             }
+        }
+    }
+
+    @SuppressWarnings("NullableProblems")
+    public static class TadpoleStressColorLayer extends RenderLayer<Tadpole, TadpoleModel<Tadpole>> {
+        private static final int OVERCROWDED_TINT = 0xFF7D9B67;
+
+        public TadpoleStressColorLayer(RenderLayerParent<Tadpole, TadpoleModel<Tadpole>> renderer) {
+            super(renderer);
+        }
+
+        @Override
+        public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, Tadpole tadpole, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+            if (!tadpole.getData(AmphibiaAttachments.STUNTED_GROWTH)) {
+                return;
+            }
+
+            VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(tadpole)));
+            this.getParentModel().renderToBuffer(
+                poseStack,
+                vertexConsumer,
+                packedLight,
+                net.minecraft.client.renderer.entity.LivingEntityRenderer.getOverlayCoords(tadpole, 0.0F),
+                OVERCROWDED_TINT
+            );
         }
     }
 

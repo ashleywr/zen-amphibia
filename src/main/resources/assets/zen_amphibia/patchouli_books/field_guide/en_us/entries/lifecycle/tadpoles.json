@@ -1,0 +1,16 @@
+{
+  "name": "Tadpoles",
+  "icon": "minecraft:tadpole_bucket",
+  "category": "zen_amphibia:lifecycle",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Tadpoles are the bridge between $(l:zen_amphibia:genetics/frogspawn)frogspawn$(/l) and adult frogs. Their genome is already present, so a tadpole is a future member of the $(l:zen_amphibia:genetics/breeding_goals)breeding line$(/l)."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Good ponds matter. A cramped puddle may hatch tadpoles, but it will not raise them as well as a larger wetland. Watch for signs of $(l:zen_amphibia:lifecycle/overcrowding)overcrowded water$(/l)."
+    }
+  ]
+}

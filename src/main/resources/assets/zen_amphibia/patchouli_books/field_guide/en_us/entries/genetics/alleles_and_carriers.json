@@ -1,0 +1,20 @@
+{
+  "name": "Alleles & Carriers",
+  "icon": "minecraft:name_tag",
+  "category": "zen_amphibia:genetics",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Each frog trait has two parts called alleles. One allele comes from one parent, and one allele comes from the other parent. This is the heart of $(l:zen_amphibia:genetics/dna_basics)frog DNA$(/l)."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "This is why two normal-looking frogs can sometimes make a surprising $(l:zen_amphibia:lifecycle/tadpoles)tadpole$(/l). A parent may carry a useful allele even if that frog is not your best producer."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A carrier is a frog worth keeping because it hides a trait you may want later. Do not judge every frog by what it does right now; sometimes its children reveal the treasure. See $(l:zen_amphibia:genetics/breeding_goals)Breeding Goals$(/l)."
+    }
+  ]
+}

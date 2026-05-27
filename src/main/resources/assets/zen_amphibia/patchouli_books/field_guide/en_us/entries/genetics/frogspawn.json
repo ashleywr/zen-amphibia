@@ -1,0 +1,16 @@
+{
+  "name": "Frogspawn DNA",
+  "icon": "zen_amphibia:genetic_frogspawn",
+  "category": "zen_amphibia:genetics",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "When two genetic frogs breed, their offspring genome is stored in the frogspawn. That frogspawn hatches into $(l:zen_amphibia:lifecycle/tadpoles)tadpoles$(/l) carrying mixed parent $(l:zen_amphibia:genetics/dna_basics)DNA$(/l)."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Genetic frogspawn hatches smaller clutches than vanilla frogspawn. This keeps breeding meaningful and helps ponds avoid $(l:zen_amphibia:lifecycle/overcrowding)overcrowded water$(/l)."
+    }
+  ]
+}

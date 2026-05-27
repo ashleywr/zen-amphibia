@@ -15,7 +15,8 @@ public class AmphibiaEntityTypes {
     public static final DeferredHolder<EntityType<?>, EntityType<CricketEntity>> CRICKET =
         ENTITY_TYPES.register("cricket", () ->
             EntityType.Builder.of(CricketEntity::new, MobCategory.CREATURE)
-                .sized(0.3f, 0.3f)
+                .sized(0.35f, 0.2f)
+                .eyeHeight(0.1f)
                 .clientTrackingRange(8)
                 .build("zen_amphibia:cricket")
         );

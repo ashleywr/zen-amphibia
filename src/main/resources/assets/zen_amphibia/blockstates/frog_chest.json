@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "facing=north,type=single,waterlogged=false": { "model": "zen_amphibia:block/frog_chest" },
+    "facing=east,type=single,waterlogged=false": { "model": "zen_amphibia:block/frog_chest", "y": 90 },
+    "facing=south,type=single,waterlogged=false": { "model": "zen_amphibia:block/frog_chest", "y": 180 },
+    "facing=west,type=single,waterlogged=false": { "model": "zen_amphibia:block/frog_chest", "y": 270 },
+    "facing=north,type=single,waterlogged=true": { "model": "zen_amphibia:block/frog_chest" },
+    "facing=east,type=single,waterlogged=true": { "model": "zen_amphibia:block/frog_chest", "y": 90 },
+    "facing=south,type=single,waterlogged=true": { "model": "zen_amphibia:block/frog_chest", "y": 180 },
+    "facing=west,type=single,waterlogged=true": { "model": "zen_amphibia:block/frog_chest", "y": 270 }
+  }
+}

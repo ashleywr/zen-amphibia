@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I I",
+    "I I"
+  ],
+  "key": {
+    "I": {
+      "item": "zen_amphibia:frog_slime_ingot"
+    }
+  },
+  "result": {
+    "id": "zen_amphibia:frog_slime_boots",
+    "count": 1
+  }
+}

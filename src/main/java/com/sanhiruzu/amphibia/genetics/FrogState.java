@@ -14,10 +14,12 @@ public class FrogState {
     public final int age;
     public final boolean estivating;
     public final String eggLayingStatus;
+    public final String aiStatus;
+    public final float maturityProgress;
 
     private FrogState(Frog frog, FrogGenome genome, FrogGenome offspringGenome, boolean hasEgg,
                       boolean inLove, boolean inWater, float scale, int age, boolean estivating,
-                      String eggLayingStatus) {
+                      String eggLayingStatus, String aiStatus, float maturityProgress) {
         this.entity = frog;
         this.genome = genome;
         this.offspringGenome = offspringGenome;
@@ -28,14 +30,21 @@ public class FrogState {
         this.age = age;
         this.estivating = estivating;
         this.eggLayingStatus = eggLayingStatus;
+        this.aiStatus = aiStatus;
+        this.maturityProgress = maturityProgress;
     }
 
     public static FrogState fromFrog(Frog frog) {
-        FrogGenome genome = frog.getData(AmphibiaAttachments.FROG_GENOME);
-        FrogGenome offspringGenome = frog.getData(AmphibiaAttachments.OFFSPRING_GENOME);
-        boolean estivating = frog.getPersistentData().getBoolean("zen_amphibia:estivating");
+        AmphibiaFrog af = AmphibiaFrog.of(frog);
+        FrogGenome genome = af.getGenome();
+        FrogGenome offspringGenome = af.getOffspringGenome();
+        boolean estivating = af.isEstivating();
         String eggLayingStatus = FrogBreedingHelper.getEggLayingStatus(frog);
-        boolean hasEgg = offspringGenome != null && !offspringGenome.equals(FrogGenome.createDefault());
+        boolean hasEgg = af.hasOffspringGenome();
+
+        long birthTick = frog.getData(AmphibiaAttachments.BIRTH_GAME_TIME);
+        float maturityProgress = birthTick == 0L ? 1.0f
+            : Math.min(1.0f, (float)(frog.level().getGameTime() - birthTick) / AmphibiaFrog.MATURATION_TICKS);
 
         return new FrogState(
             frog,
@@ -44,10 +53,12 @@ public class FrogState {
             hasEgg,
             frog.isInLove(),
             frog.isInWater(),
-            frog.getData(AmphibiaAttachments.FROG_SCALE),
+            af.getScale(),
             frog.getAge(),
             estivating,
-            eggLayingStatus
+            eggLayingStatus,
+            frog.getData(AmphibiaAttachments.CURRENT_AI_STATUS),
+            maturityProgress
         );
     }
 

@@ -43,6 +43,33 @@ public class FrogGenetics {
 		return new FrogGenome(offspring.genes(), inheritedMutations);
 	}
 
+	public static FrogGenome breed(FrogGenome p1, FrogGenome p2, RandomSource random, float happinessBonus) {
+		FrogGenome base = breed(p1, p2, random);
+		if (happinessBonus > 0 && random.nextFloat() < happinessBonus * FrogHappinessConstants.BREEDING_HAPPINESS_CHANCE_FACTOR) {
+			Gene target = Gene.values()[random.nextInt(Gene.values().length)];
+			FrogGenome.Trait t = base.getGene(target);
+			boolean upgradeA = random.nextBoolean();
+			String upgraded = upgradeAllele(upgradeA ? t.geneA() : t.geneB());
+			FrogGenome.Trait newTrait = upgradeA
+				? new FrogGenome.Trait(upgraded, t.geneB())
+				: new FrogGenome.Trait(t.geneA(), upgraded);
+			Map<Gene, FrogGenome.Trait> newGenes = new HashMap<>(base.genes());
+			newGenes.put(target, newTrait);
+			return new FrogGenome(newGenes, base.mutations());
+		}
+		return base;
+	}
+
+	private static String upgradeAllele(String a) {
+		return switch (a) {
+			case "w" -> "A";
+			case "A" -> "B";
+			case "B" -> "C";
+			case "C" -> "D";
+			default -> a;
+		};
+	}
+
 	public FrogGradeCalculator.Grade calculateGeneGrade(Gene gene, FrogGenome genome) {
 		return FrogGradeCalculator.calculateGrade(genome.getGene(gene));
 	}

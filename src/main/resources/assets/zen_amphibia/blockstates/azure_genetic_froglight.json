@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "axis=x": { "model": "zen_amphibia:block/azure_genetic_froglight", "x": 90, "y": 90 },
+    "axis=y": { "model": "zen_amphibia:block/azure_genetic_froglight" },
+    "axis=z": { "model": "zen_amphibia:block/azure_genetic_froglight", "x": 90 }
+  }
+}

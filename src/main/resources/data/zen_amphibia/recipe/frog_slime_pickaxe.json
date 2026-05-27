@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "III",
+    " S ",
+    " S "
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "I": {
+      "item": "zen_amphibia:frog_slime_ingot"
+    }
+  },
+  "result": {
+    "id": "zen_amphibia:frog_slime_pickaxe",
+    "count": 1
+  }
+}

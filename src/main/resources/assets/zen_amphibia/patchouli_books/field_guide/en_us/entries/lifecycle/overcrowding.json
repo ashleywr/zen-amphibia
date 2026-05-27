@@ -1,0 +1,16 @@
+{
+  "name": "Overcrowded Water",
+  "icon": "minecraft:water_bucket",
+  "category": "zen_amphibia:lifecycle",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "If too many $(l:zen_amphibia:lifecycle/tadpoles)tadpoles$(/l) share a small patch of water, they become stunted. Stunted tadpoles take on a sickly green tint and produce extra bubbles."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Severe overcrowding is worse: unhealthy water may show witch-like haze and smoke above the surface. Spread tadpoles into a larger pond before the weakest unnamed tadpoles fail to thrive. Healthy ponds protect your $(l:zen_amphibia:genetics/breeding_goals)breeding goals$(/l)."
+    }
+  ]
+}

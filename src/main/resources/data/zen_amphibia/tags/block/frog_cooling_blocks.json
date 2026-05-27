@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:ice",
+    "minecraft:packed_ice",
+    "minecraft:blue_ice",
+    "minecraft:powder_snow",
+    "minecraft:soul_campfire",
+    "minecraft:soul_lantern",
+    "minecraft:soul_torch",
+    "minecraft:soul_wall_torch",
+
+    { "id": "biomesoplenty:origin_ice",      "required": false },
+    { "id": "biomesoplenty:crystalline_ice", "required": false },
+    { "id": "byg:powdery_snow",              "required": false },
+    { "id": "byg:permafrost",                "required": false },
+    { "id": "regions_unexplored:permafrost", "required": false },
+    { "id": "thermal:machine_ice_maker",     "required": false }
+  ]
+}

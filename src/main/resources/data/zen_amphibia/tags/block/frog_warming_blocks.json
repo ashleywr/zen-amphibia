@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:candles",
+    "minecraft:campfire",
+    "minecraft:torch",
+    "minecraft:wall_torch",
+    "minecraft:lantern",
+    "minecraft:magma_block",
+    "minecraft:lava",
+
+    "create:blaze_burner",
+
+    { "id": "supplementaries:oil_lantern",        "required": false },
+    { "id": "supplementaries:candle_holder",      "required": false },
+    { "id": "biomesoplenty:brimstone",            "required": false },
+    { "id": "ars_nouveau:fire_source",            "required": false },
+    { "id": "thermal:machine_heater",             "required": false }
+  ]
+}

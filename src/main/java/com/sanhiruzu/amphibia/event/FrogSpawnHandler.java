@@ -1,11 +1,13 @@
 package com.sanhiruzu.amphibia.event;
 
+import com.sanhiruzu.amphibia.genetics.AmphibiaFrog;
 import com.sanhiruzu.amphibia.entity.goal.GrazeKelpGoal;
 import com.sanhiruzu.amphibia.entity.goal.FrogBiteGoal;
 import com.sanhiruzu.amphibia.entity.goal.FrogTongueGoal;
 import com.sanhiruzu.amphibia.entity.goal.FrogHostileTargetGoal;
 import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.sanhiruzu.amphibia.genetics.Gene;
+import javax.annotation.Nullable;
 import com.sanhiruzu.amphibia.genetics.FrogGradeCalculator;
 import com.sanhiruzu.amphibia.genetics.FrogMutation;
 import com.sanhiruzu.amphibia.genetics.FrogCombatCapability;
@@ -14,17 +16,42 @@ import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.animal.frog.Tadpole;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.MobSpawnType;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 
 @EventBusSubscriber(modid = "zen_amphibia")
 public class FrogSpawnHandler {
+
+    public static final ThreadLocal<FrogGenome> PENDING_GENOME = new ThreadLocal<>();
+    public static final ThreadLocal<Long> PENDING_BIRTH_TICK = new ThreadLocal<>();
+
+    @SubscribeEvent
+    public static void onFrogFinalizeSpawn(FinalizeSpawnEvent event) {
+        if (!(event.getEntity() instanceof Frog frog)) return;
+        if (event.getSpawnType() != MobSpawnType.SPAWN_EGG) return;
+
+        frog.setData(AmphibiaAttachments.FROG_GENOME, FrogGenome.createRandom(event.getLevel().getRandom()));
+        frog.setData(AmphibiaAttachments.FROG_GENETICS_APPLIED, false);
+    }
 
     @SubscribeEvent
     public static void onFrogJoinLevel(EntityJoinLevelEvent event) {
         if (event.getEntity() instanceof Frog frog) {
             if (frog.level().isClientSide) return;
+
+            // Tadpole→frog conversion: genome and birth tick captured in TadpoleMixin
+            FrogGenome pendingGenome = PENDING_GENOME.get();
+            Long pendingBirth = PENDING_BIRTH_TICK.get();
+            if (pendingGenome != null) {
+                PENDING_GENOME.remove();
+                PENDING_BIRTH_TICK.remove();
+                frog.setData(AmphibiaAttachments.FROG_GENOME, pendingGenome);
+                frog.setData(AmphibiaAttachments.BIRTH_GAME_TIME, pendingBirth != null ? pendingBirth : 0L);
+                frog.setData(AmphibiaAttachments.FROG_GENETICS_APPLIED, false);
+            }
 
             // Check if genetics have already been applied (e.g., from NBT on load)
             boolean geneticsApplied = frog.getData(AmphibiaAttachments.FROG_GENETICS_APPLIED);

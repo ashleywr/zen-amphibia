@@ -52,6 +52,9 @@ public class GeneticEvents {
 
             if (isOptimalZone) {
                 FrogGenome genome = mom.getData(AmphibiaAttachments.OFFSPRING_GENOME);
+                if (genome == null || genome.equals(FrogGenome.createDefault())) {
+                    return;
+                }
 
                 CompoundTag genomeTag = (CompoundTag) FrogGenome.CODEC.encodeStart(NbtOps.INSTANCE, genome).getOrThrow();
 
@@ -90,6 +93,10 @@ public class GeneticEvents {
 
             // Fallback: normal genetic frogspawn
             FrogGenome genome = mom.getData(AmphibiaAttachments.OFFSPRING_GENOME);
+            if (genome == null || genome.equals(FrogGenome.createDefault())) {
+                return;
+            }
+
             serverLevel.setBlock(event.getPos(), AmphibiaBlocks.GENETIC_FROGSPAWN.get().defaultBlockState(), 3);
 
             if (serverLevel.getBlockEntity(event.getPos()) instanceof GeneticFrogspawnBlockEntity be) {

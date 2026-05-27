@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "zen_amphibia:frog_slime"
+    },
+    {
+      "item": "zen_amphibia:frog_slime"
+    },
+    {
+      "item": "zen_amphibia:frog_slime"
+    },
+    {
+      "item": "zen_amphibia:frog_slime"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    }
+  ],
+  "result": {
+    "id": "zen_amphibia:frog_slime_ingot",
+    "count": 1
+  }
+}

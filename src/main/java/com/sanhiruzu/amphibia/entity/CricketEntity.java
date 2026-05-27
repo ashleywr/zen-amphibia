@@ -1,6 +1,8 @@
 package com.sanhiruzu.amphibia.entity;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
@@ -19,7 +21,7 @@ public class CricketEntity extends Animal {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Animal.createLivingAttributes()
+        return Animal.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 4.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25D);
     }
@@ -39,6 +41,7 @@ public class CricketEntity extends Animal {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return false;
+        return stack.is(ItemTags.SMALL_FLOWERS)
+            || stack.has(DataComponents.FOOD);
     }
 }

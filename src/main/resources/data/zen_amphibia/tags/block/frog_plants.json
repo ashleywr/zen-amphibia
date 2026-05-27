@@ -1,0 +1,36 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:lily_pad",
+    "minecraft:seagrass",
+    "minecraft:tall_seagrass",
+    "minecraft:kelp",
+    "minecraft:kelp_plant",
+    "minecraft:mangrove_roots",
+    "minecraft:muddy_mangrove_roots",
+    "minecraft:big_dripleaf",
+    "minecraft:small_dripleaf",
+    "#minecraft:coral_blocks",
+    "#minecraft:corals",
+    "#minecraft:coral_plants",
+    "#minecraft:wall_corals",
+
+    { "id": "biomesoplenty:duckweed",    "required": false },
+    { "id": "biomesoplenty:water_silk",  "required": false },
+    { "id": "biomesoplenty:algae",       "required": false },
+    { "id": "biomesoplenty:reed",        "required": false },
+    { "id": "biomesoplenty:cattail",     "required": false },
+    { "id": "biomesoplenty:cattail_plant", "required": false },
+    { "id": "biomesoplenty:watergrass",  "required": false },
+
+    { "id": "byg:water_silk",            "required": false },
+    { "id": "byg:duckweed",              "required": false },
+    { "id": "byg:hydrangea_bush",        "required": false },
+    { "id": "byg:water_lily",            "required": false },
+    { "id": "byg:water_plants",          "required": false },
+
+    { "id": "regions_unexplored:lotus",           "required": false },
+    { "id": "regions_unexplored:water_grass",     "required": false },
+    { "id": "regions_unexplored:water_hyacinth",  "required": false }
+  ]
+}

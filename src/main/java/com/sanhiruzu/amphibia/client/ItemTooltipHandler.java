@@ -3,6 +3,7 @@ package com.sanhiruzu.amphibia.client;
 import com.sanhiruzu.amphibia.infrastructure.FrogDNADisplayHelper;
 import com.sanhiruzu.amphibia.register.AmphibiaDataComponents;
 import com.sanhiruzu.amphibia.genetics.FrogGenome;
+import com.sanhiruzu.amphibia.block.FrogChestBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -20,14 +21,20 @@ public class ItemTooltipHandler {
         ItemStack stack = event.getItemStack();
 
         // Handle Frogport items (from Create mod - we don't own this item class)
-        if (stack.is(com.simibubi.create.AllBlocks.PACKAGE_FROGPORT.get().asItem())) {
+        if (stack.is(com.simibubi.create.AllBlocks.PACKAGE_FROGPORT.get().asItem())
+                || stack.is(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_CHEST.get())) {
             FrogGenome genome = stack.get(AmphibiaDataComponents.FROG_DNA.get());
 
             if (genome != null) {
+                if (stack.is(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_CHEST.get())) {
+                    int rows = FrogChestBlockEntity.rowsFromGenome(genome);
+                    event.getToolTip().add(Component.translatable("tooltip.zen_amphibia.frog_chest.rows", rows)
+                            .withStyle(ChatFormatting.GREEN));
+                }
                 if (Screen.hasShiftDown()) {
-                    event.getToolTip().addAll(FrogDNADisplayHelper.getDebugDNATooltip(genome));
+                    event.getToolTip().addAll(FrogDNADisplayHelper.getComprehensiveDNATooltip(genome));
                 } else {
-                    event.getToolTip().add(Component.literal("Hold SHIFT for genetics").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                    event.getToolTip().add(Component.translatable("tooltip.zen_amphibia.hold_shift_for_genetics").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
                 }
             }
         }

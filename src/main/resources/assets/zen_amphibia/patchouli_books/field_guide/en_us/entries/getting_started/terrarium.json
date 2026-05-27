@@ -1,0 +1,38 @@
+{
+  "name": "Terrarium Habitats",
+  "icon": "minecraft:lily_pad",
+  "category": "zen_amphibia:getting_started",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Building a Terrarium",
+      "text": "A terrarium is a sealed Atelier room designed for frogs. Build one with glass walls, a mud or mangrove floor, and at least $(b)4 water blocks$() near the interior. Frogs inside will become noticeably happier over time."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "What Makes a Good Terrarium",
+      "text": "Happiness is scored from five things: $(b)zone quality$() (30%), $(b)water coverage$() (25%), $(b)climate match$() (25%), $(b)frog plants$() (15%), and $(b)room size$() (5%). Climate match compares the room's temperature and humidity against the frog's $(l:zen_amphibia:genetics/reading_genes)Heat Tolerance and Slime Viscosity$(/l) grades."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Frog Happiness",
+      "text": "A frog inside a terrarium builds up happiness, a value from 0.0 to 1.0. It updates every two seconds. If a frog leaves or water is removed, happiness decays slowly back toward zero. You can check it with $(c)/data get entity$()."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Why Happiness Matters",
+      "text": "$(b)Drops:$() Frogs with $(l:zen_amphibia:genetics/reading_genes)Slime Viscosity$(/l) Grade B or better drop $(l:zen_amphibia:resources/frog_slime)Frog Slime$(/l) on death when happiness is $(b)≥ 0.4$(). Higher grades drop more (B=1, A=2, S=3), and at happiness $(b)≥ 0.9$() they drop an extra one. Above $(b)0.6$(), a separate random roll adds yet another chance."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Why Happiness Matters",
+      "text": "$(b)Breeding:$() When two happy frogs breed, there is a small chance each locus upgrades one allele tier. Average parent happiness is multiplied by 15% to get the chance per locus. A pair at 1.0 happiness each has a 15% chance to improve a random gene in the offspring."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "A Simple Starter Terrarium",
+      "text": "Glass walls and ceiling. Dirt or mud floor. Place a 2×2 pool (or more). Add a few lily pads. Seal the room. That is enough to get happiness above 0.5. Add more water and plants to push it higher and unlock the full $(l:zen_amphibia:resources/frog_slime)slime drop$(/l) range."
+    }
+  ]
+}

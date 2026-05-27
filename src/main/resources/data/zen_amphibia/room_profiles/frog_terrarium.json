@@ -1,0 +1,27 @@
+{
+  "id": "zen_amphibia:frog_terrarium",
+  "display_name": "room_type.zen_amphibia.frog_terrarium",
+  "zone_definition": "zen_amphibia:frog_terrarium",
+  "anchors": [
+    "#zen_amphibia:frog_plants",
+    "#c:frog_plants"
+  ],
+  "required_features": [
+    {
+      "signal": "water_coverage",
+      "minimum": 4
+    },
+    {
+      "signal": "frog_plant",
+      "minimum": 1
+    }
+  ],
+  "quality_signals": [
+    "frog_plant",
+    "water_coverage",
+    "glass"
+  ],
+  "penalty_signals": [
+    "industrial_blocks"
+  ]
+}

@@ -82,13 +82,23 @@ public record FrogGenome(Map<Gene, Trait> genes, List<String> mutations) {
 		return new FrogGenome(genes, new ArrayList<>());
 	}
 
-	private static Trait randomTrait(java.util.Random rand) {
+	public static FrogGenome createRandom(RandomSource random) {
+		Map<Gene, Trait> genes = new HashMap<>();
+
+		for (Gene gene : Gene.values()) {
+			genes.put(gene, randomTrait(random));
+		}
+
+		return new FrogGenome(genes, new ArrayList<>());
+	}
+
+	private static Trait randomTrait(RandomSource rand) {
 		return new Trait(selectWeightedAllele(rand), selectWeightedAllele(rand));
 	}
 
-	private static String selectWeightedAllele(java.util.Random rand) {
+	private static String selectWeightedAllele(RandomSource rand) {
 		int roll = rand.nextInt(100);
-		if (roll < 60) return "N";      // Normal (60%)
+		if (roll < 60) return "w";      // Wild type (60%)
 		if (roll < 75) return "A";      // Mild variant (15%)
 		if (roll < 90) return "B";      // Mild variant (15%)
 		if (roll < 95) return "C";      // Rare (5%)
@@ -109,8 +119,13 @@ public record FrogGenome(Map<Gene, Trait> genes, List<String> mutations) {
 	}
 
 	public float getScale() {
-		long hashScale = Math.abs((long)getGene(Gene.SIZE).geneA().hashCode() * 31 + getGene(Gene.SIZE).geneB().hashCode());
-		return 0.5f + (int)((hashScale * 739) % 100) / 50.0f;
+		long h1 = Math.abs((long) getGene(Gene.SIZE).geneA().hashCode() * 31L + getGene(Gene.SIZE).geneB().hashCode());
+		long h2 = Math.abs(h1 * 1031L + 7L);
+		float s1 = (int) (h1 * 739L % 100L) / 99.0f;
+		float s2 = (int) (h2 * 739L % 100L) / 99.0f;
+		// Average of two samples → triangular distribution biased toward the midpoint,
+		// keeping most frogs near 1.1 and making extreme sizes rare.
+		return 0.75f + (s1 + s2) * 0.5f * 0.75f;  // range [0.75, 1.50]
 	}
 
 	public record Trait(String geneA, String geneB) {

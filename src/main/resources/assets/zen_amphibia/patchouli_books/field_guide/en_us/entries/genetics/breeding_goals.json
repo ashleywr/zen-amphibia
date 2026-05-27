@@ -1,0 +1,33 @@
+{
+  "name": "Breeding Goals",
+  "icon": "zen_amphibia:cricket",
+  "category": "zen_amphibia:genetics",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "How to Breed",
+      "text": "Feed a $(l:zen_amphibia:getting_started/crickets)cricket$(/l) to two tamed adult frogs. Each one will enter love mode and seek the other out. Once they meet, the genetics of the offspring are determined by both parents — see $(l:zen_amphibia:genetics/dna_basics)DNA Basics$(/l) for how inheritance works."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A breeding goal is what you want your frog line to become. For example: bigger frogs, better $(l:zen_amphibia:resources/frog_slime)slime$(/l), faster growth, tougher frogs, or safer heat-loving frogs."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Start small. Pick one trait, breed frogs that carry it, hatch their $(l:zen_amphibia:genetics/frogspawn)frogspawn$(/l), and inspect the $(l:zen_amphibia:lifecycle/tadpoles)tadpoles$(/l) or adults. Keep the best children and try again."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Great frog lines take generations. That is normal. If every baby was perfect, breeding would be over too quickly and the pond would be much less interesting."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(b)Happiness bonus:$() Two parents kept in a quality $(l:zen_amphibia:getting_started/terrarium)terrarium$(/l) have a chance to pass along a small upgrade when they breed. At full happiness, there is a 15% chance one random gene locus in the offspring gains an allele tier. A slow but steady improvement on top of normal inheritance."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Tip: keep notes or use names for important frogs. A plain-looking $(l:zen_amphibia:genetics/alleles_and_carriers)carrier$(/l) can be more valuable than a flashy frog with poor hidden alleles."
+    }
+  ]
+}

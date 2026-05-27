@@ -29,12 +29,22 @@ public class AmphibiaAttachments {
             "frog_scale", () -> AttachmentType.builder(() -> 1.0f).serialize(com.mojang.serialization.Codec.FLOAT).sync(net.minecraft.network.codec.ByteBufCodecs.FLOAT).build()
     );
 
+    public static final Supplier<AttachmentType<Float>> FROG_HAPPINESS = ATTACHMENTS.register(
+            "frog_happiness", () -> AttachmentType.builder(() -> 0.0f).serialize(com.mojang.serialization.Codec.FLOAT).sync(net.minecraft.network.codec.ByteBufCodecs.FLOAT).build()
+    );
+
     public static final Supplier<AttachmentType<Boolean>> STUNTED_GROWTH = ATTACHMENTS.register(
-            "stunted_growth", () -> AttachmentType.builder(() -> false).serialize(com.mojang.serialization.Codec.BOOL).build()
+            "stunted_growth", () -> AttachmentType.builder(() -> false)
+                .serialize(com.mojang.serialization.Codec.BOOL)
+                .sync(net.minecraft.network.codec.ByteBufCodecs.BOOL)
+                .build()
     );
 
     public static final Supplier<AttachmentType<Boolean>> ACCELERATED_GROWTH = ATTACHMENTS.register(
-            "accelerated_growth", () -> AttachmentType.builder(() -> false).serialize(com.mojang.serialization.Codec.BOOL).build()
+            "accelerated_growth", () -> AttachmentType.builder(() -> false)
+                .serialize(com.mojang.serialization.Codec.BOOL)
+                .sync(net.minecraft.network.codec.ByteBufCodecs.BOOL)
+                .build()
     );
 
     public static final Supplier<AttachmentType<Boolean>> FROG_DNA_OVERLAY_ENABLED = ATTACHMENTS.register(
@@ -42,6 +52,32 @@ public class AmphibiaAttachments {
                 .serialize(com.mojang.serialization.Codec.BOOL)
                 .sync(net.minecraft.network.codec.ByteBufCodecs.BOOL)
                 .copyOnDeath()
+                .build()
+    );
+
+    public static final Supplier<AttachmentType<String>> CURRENT_AI_STATUS = ATTACHMENTS.register(
+            "current_ai_status", () -> AttachmentType.builder(() -> "idle")
+                .serialize(com.mojang.serialization.Codec.STRING)
+                .sync(net.minecraft.network.codec.ByteBufCodecs.STRING_UTF8)
+                .build()
+    );
+
+    public static final Supplier<AttachmentType<Long>> BIRTH_GAME_TIME = ATTACHMENTS.register(
+            "birth_game_time", () -> AttachmentType.builder(() -> 0L)
+                .serialize(com.mojang.serialization.Codec.LONG)
+                .sync(net.minecraft.network.codec.ByteBufCodecs.VAR_LONG)
+                .build()
+    );
+
+    public static final Supplier<AttachmentType<Boolean>> ESTIVATING = ATTACHMENTS.register(
+            "estivating", () -> AttachmentType.builder(() -> false)
+                .serialize(com.mojang.serialization.Codec.BOOL)
+                .build()
+    );
+
+    public static final Supplier<AttachmentType<Long>> LAST_REVIVAL_TICK = ATTACHMENTS.register(
+            "last_revival_tick", () -> AttachmentType.builder(() -> 0L)
+                .serialize(com.mojang.serialization.Codec.LONG)
                 .build()
     );
 

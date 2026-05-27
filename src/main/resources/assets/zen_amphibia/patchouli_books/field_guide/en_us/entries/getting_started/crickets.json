@@ -1,0 +1,18 @@
+{
+  "name": "Crickets",
+  "icon": "zen_amphibia:cricket",
+  "category": "zen_amphibia:getting_started",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Crickets are the primary frog resource. Live crickets are recognized as prey. Cricket items are how you interact with tamed frogs: the first one tames them, and each one after that harvests $(l:zen_amphibia:resources/frog_slime)Frog Slime$(/l) and puts the frog in love mode for $(l:zen_amphibia:genetics/breeding_goals)breeding$(/l)."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "zen_amphibia:cricket",
+      "scale": 0.9,
+      "text": "One item, three uses: taming, slime farming, and breeding. Feed two tamed adult frogs and they will seek each other out. A steady cricket supply is the foundation of any serious frog project."
+    }
+  ]
+}

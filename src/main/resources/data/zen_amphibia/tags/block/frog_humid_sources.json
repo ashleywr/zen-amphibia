@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:spore_blossom",
+    "minecraft:wet_sponge",
+    "minecraft:moss_block",
+    "minecraft:moss_carpet",
+    "minecraft:cave_vines",
+    "minecraft:cave_vines_plant",
+
+    { "id": "biomesoplenty:peat",             "required": false },
+    { "id": "biomesoplenty:mud",              "required": false },
+    { "id": "byg:peat",                       "required": false },
+    { "id": "byg:lush_grass_block",           "required": false },
+    { "id": "regions_unexplored:peat",        "required": false },
+    { "id": "regions_unexplored:soggy_grass", "required": false }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "id": "zen_amphibia:frog_terrarium",
+  "display_name": "zone.zen_amphibia.frog_terrarium",
+  "sealed": false,
+  "base_temperature": 22.0,
+  "base_humidity": 85.0,
+  "requires_ceiling": false
+}

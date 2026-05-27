@@ -1,5 +1,6 @@
 package com.sanhiruzu.amphibia.entity.goal;
 
+import com.sanhiruzu.amphibia.genetics.AmphibiaFrog;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.frog.Frog;
@@ -16,10 +17,7 @@ public class FrogHostileTargetGoal extends NearestAttackableTargetGoal<Monster> 
 
         Frog frog = (Frog) this.mob;
 
-        // Don't target if estivating
-        if (frog.getPersistentData().getBoolean("zen_amphibia:estivating")) {
-            return false;
-        }
+        if (AmphibiaFrog.of(frog).isEstivating()) return false;
 
         // Don't target if in love (breeding takes priority)
         if (frog.isInLove()) {

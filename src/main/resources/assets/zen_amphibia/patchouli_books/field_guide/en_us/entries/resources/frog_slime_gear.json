@@ -1,0 +1,18 @@
+{
+  "name": "Frog Slime Gear",
+  "icon": "zen_amphibia:frog_slime_boots",
+  "category": "zen_amphibia:resources",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Frog Slime can be worked with Iron into Frog Slime Ingots. The ingots make tools, weapons, and armor. The gear is roughly iron-tier, but more springy and easier to enchant."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "zen_amphibia:frog_slime_ingot",
+      "recipe2": "zen_amphibia:frog_slime_boots",
+      "text": "Frog Slime Boots soften falls. If you land without sneaking, they bounce you upward like a small portable slime block."
+    }
+  ]
+}

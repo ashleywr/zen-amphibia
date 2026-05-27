@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "zen_amphibia:item/frog_chest",
+    "particle": "zen_amphibia:item/frog_chest"
+  }
+}

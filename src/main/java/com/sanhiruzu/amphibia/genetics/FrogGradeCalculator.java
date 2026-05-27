@@ -77,4 +77,28 @@ public class FrogGradeCalculator {
             case S -> "Legendary";
         };
     }
+
+    // Returns [min, max] preferred temperature on a 0.0–1.0 scale.
+    // Derived from HEAT_TOLERANCE: Grade D = cool-adapted, Grade S = heat-loving.
+    public static float[] getPreferredTemperatureRange(Grade grade) {
+        return switch (grade) {
+            case D -> new float[]{0.25f, 0.55f};
+            case C -> new float[]{0.35f, 0.65f};
+            case B -> new float[]{0.45f, 0.70f};
+            case A -> new float[]{0.55f, 0.80f};
+            case S -> new float[]{0.65f, 0.95f};
+        };
+    }
+
+    // Returns [min, max] preferred humidity on a 0.0–1.0 scale.
+    // Derived from SLIME_VISCOSITY: higher viscosity frogs need more moisture.
+    public static float[] getPreferredHumidityRange(Grade grade) {
+        return switch (grade) {
+            case D -> new float[]{0.15f, 0.50f};
+            case C -> new float[]{0.25f, 0.55f};
+            case B -> new float[]{0.35f, 0.65f};
+            case A -> new float[]{0.50f, 0.75f};
+            case S -> new float[]{0.65f, 0.95f};
+        };
+    }
 }

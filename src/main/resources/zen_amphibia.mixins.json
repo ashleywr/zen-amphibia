@@ -11,7 +11,8 @@
     "BucketItemMixin",
     "FluidDrainingBehaviourMixin",
     "FrogMixin",
-    "FrogportBlockEntityMixin"
+    "FrogportBlockEntityMixin",
+    "TadpoleMixin"
   ],
   "client": [
     "FrogportRendererMixin"

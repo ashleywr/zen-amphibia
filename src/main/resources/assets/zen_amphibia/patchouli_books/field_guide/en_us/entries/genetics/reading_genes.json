@@ -1,0 +1,16 @@
+{
+  "name": "Reading Genes",
+  "icon": "zen_amphibia:frog_bucket",
+  "category": "zen_amphibia:genetics",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Amphibia frogs carry genes for heat tolerance, slime viscosity, growth rate, health, damage, and size. Each trait has two $(l:zen_amphibia:genetics/alleles_and_carriers)alleles$(/l), so a frog can carry hidden value even when it does not look impressive yet."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Use the DNA overlay or Create goggles to inspect frogs and $(l:zen_amphibia:genetics/frogspawn)frogspawn$(/l). Breeding is most rewarding when you keep an eye on $(l:zen_amphibia:genetics/alleles_and_carriers)carriers$(/l), not only obvious winners."
+    }
+  ]
+}

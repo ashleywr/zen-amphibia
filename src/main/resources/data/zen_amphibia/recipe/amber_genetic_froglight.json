@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    { "item": "zen_amphibia:frog_slime" },
+    { "item": "minecraft:glowstone_dust" },
+    { "item": "minecraft:magma_cream" },
+    { "item": "minecraft:yellow_dye" }
+  ],
+  "result": {
+    "id": "zen_amphibia:amber_genetic_froglight",
+    "count": 1
+  }
+}

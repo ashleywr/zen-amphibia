@@ -1,0 +1,25 @@
+{
+  "name": "Frog Slime",
+  "icon": "zen_amphibia:frog_slime",
+  "category": "zen_amphibia:resources",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A tamed frog can produce Frog Slime when fed $(l:zen_amphibia:getting_started/crickets)crickets$(/l). Better slime viscosity and larger size $(l:zen_amphibia:genetics/reading_genes)genes$(/l) increase the amount produced."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(b)On death (grade gate):$() Frogs with $(b)Slime Viscosity B or better$() will drop Frog Slime when killed — but only if their happiness is $(b)≥ 0.4$(). Grade B drops 1, A drops 2, S drops 3. At happiness $(b)≥ 0.9$() they drop one more. Frogs with Grade D or C never drop slime this way."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(b)On death (happiness bonus):$() Any frog with happiness $(b)≥ 0.6$() also gets a random extra drop chance — 30% at 0.6, scaling to 100% at full happiness. This stacks on top of the grade drops, so a Grade S frog in a perfect terrarium can drop up to 5 Frog Slime. Build the $(l:zen_amphibia:getting_started/terrarium)terrarium$(/l) first."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "zen_amphibia:slime_ball_from_frog_slime",
+      "text": "Frog Slime is a frog-native material. It can replace some slimeball needs, power $(l:zen_amphibia:resources/genetic_froglights)genetic froglights$(/l), and be alloyed into $(l:zen_amphibia:resources/frog_slime_gear)green equipment$(/l)."
+    }
+  ]
+}

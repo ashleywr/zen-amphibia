@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "PFP",
+    "PPP"
+  ],
+  "key": {
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "F": {
+      "item": "zen_amphibia:frog_bucket"
+    }
+  },
+  "result": {
+    "id": "zen_amphibia:frog_chest",
+    "count": 1
+  }
+}

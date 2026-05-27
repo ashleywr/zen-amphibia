@@ -1,0 +1,20 @@
+{
+  "name": "DNA Basics",
+  "icon": "minecraft:paper",
+  "category": "zen_amphibia:genetics",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "DNA is the instruction list inside a living thing. In Amphibia, frog DNA decides useful traits like size, slime, growth, health, damage, and heat tolerance. Learn the pieces in $(l:zen_amphibia:genetics/alleles_and_carriers)Alleles & Carriers$(/l)."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "You do not need to memorize real biology. Think of a frog's DNA like hidden stats on gear. $(l:zen_amphibia:genetics/breeding_goals)Breeding$(/l) is how you try to move the best hidden stats into the next generation."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Some traits are easy to see, like color or size. Other traits are quiet until you $(l:zen_amphibia:genetics/reading_genes)inspect the frog$(/l), raise its $(l:zen_amphibia:lifecycle/tadpoles)tadpoles$(/l), or use it for $(l:zen_amphibia:resources/frog_slime)slime production$(/l)."
+    }
+  ]
+}

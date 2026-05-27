@@ -25,7 +25,7 @@ public class AmphibiaFluids {
 
     // Raw Genetic Fluid (Raw Breeding Output)
     public static final Supplier<FluidType> RAW_GENETIC_FLUID_TYPE = FLUID_TYPES.register("raw_genetic_fluid", () -> new FluidType(FluidType.Properties.create()
-            .descriptionId("fluid.amphibia.raw_genetic_fluid")
+            .descriptionId("fluid.zen_amphibia.raw_genetic_fluid")
             .density(1050)
             .viscosity(1500)
             .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
@@ -44,7 +44,7 @@ public class AmphibiaFluids {
 
     // Refined Genetic Fluid (Centrifuge Elite Output - The "Ink")
     public static final Supplier<FluidType> REFINED_GENETIC_FLUID_TYPE = FLUID_TYPES.register("refined_genetic_fluid", () -> new FluidType(FluidType.Properties.create()
-            .descriptionId("fluid.amphibia.refined_genetic_fluid")
+            .descriptionId("fluid.zen_amphibia.refined_genetic_fluid")
             .density(2000)
             .viscosity(4000)
             .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL_LAVA)
@@ -63,7 +63,7 @@ public class AmphibiaFluids {
 
     // Sequenced Genetic Fluid (Hatchery Output - Ready for Spout)
     public static final Supplier<FluidType> SEQUENCED_GENETIC_FLUID_TYPE = FLUID_TYPES.register("sequenced_genetic_fluid", () -> new FluidType(FluidType.Properties.create()
-            .descriptionId("fluid.amphibia.sequenced_genetic_fluid")
+            .descriptionId("fluid.zen_amphibia.sequenced_genetic_fluid")
             .density(1200)
             .viscosity(2000)
             .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)

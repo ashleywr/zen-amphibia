@@ -3,11 +3,13 @@ package com.sanhiruzu.amphibia;
 import com.sanhiruzu.amphibia.infrastructure.FrogClipboardHandler;
 import com.sanhiruzu.amphibia.item.FrogBucketItem;
 import com.sanhiruzu.amphibia.genetics.FrogGenome;
+import net.neoforged.api.distmarker.Dist;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.animal.Animal;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import org.slf4j.Logger;
@@ -24,11 +26,18 @@ public class Amphibia {
         com.sanhiruzu.amphibia.register.AmphibiaEntityTypes.register(modEventBus);
         com.sanhiruzu.amphibia.register.AmphibiaFluids.register(modEventBus);
         com.sanhiruzu.amphibia.register.AmphibiaBlocks.register(modEventBus);
+        com.sanhiruzu.amphibia.register.AmphibiaArmorMaterials.register(modEventBus);
         com.sanhiruzu.amphibia.register.AmphibiaItems.register(modEventBus);
         com.sanhiruzu.amphibia.register.AmphibiaBlockEntities.register(modEventBus);
+        com.sanhiruzu.amphibia.register.AmphibiaMenuTypes.register(modEventBus);
+        com.sanhiruzu.amphibia.register.AmphibiaRecipeSerializers.register(modEventBus);
         com.sanhiruzu.amphibia.register.AmphibiaAttachments.register(modEventBus);
         com.sanhiruzu.amphibia.register.AmphibiaDataComponents.register(modEventBus);
         modEventBus.register(com.sanhiruzu.amphibia.infrastructure.display.AmphibiaDisplaySources.class);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            com.sanhiruzu.amphibia.client.AmphibiaClientSetup.register(modEventBus);
+            com.sanhiruzu.amphibia.client.AmphibiaClientEvents.register(modEventBus);
+        }
         modEventBus.addListener(FMLCommonSetupEvent.class,
             event -> com.sanhiruzu.amphibia.infrastructure.display.AmphibiaDisplaySources.registerAll());
         modEventBus.addListener(this::addCreative);
@@ -36,10 +45,12 @@ public class Amphibia {
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(this::onRightClickBlock);
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(this::onEntityInteract);
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(this::onItemCrafted);
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(this::onPlayerLoggedIn);
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(this::onBlockPlaced);
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(this::onReloadListeners);
         modEventBus.addListener(this::onRegisterSpawnPlacements);
         com.sanhiruzu.amphibia.event.CommandEvents.register();
+        com.sanhiruzu.amphibia.event.FrogSlimeEquipmentHandler.register();
     }
 
     private void onItemCrafted(net.neoforged.neoforge.event.entity.player.PlayerEvent.ItemCraftedEvent event) {
@@ -65,6 +76,35 @@ public class Amphibia {
                 }
             }
         }
+
+        if (crafted.is(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_CHEST.get())) {
+            net.minecraft.world.Container inv = event.getInventory();
+            for (int i = 0; i < inv.getContainerSize(); i++) {
+                net.minecraft.world.item.ItemStack slotStack = inv.getItem(i);
+                if (slotStack.is(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_BUCKET.get())) {
+                    FrogGenome genome = slotStack.get(com.sanhiruzu.amphibia.register.AmphibiaDataComponents.FROG_DNA.get());
+                    if (genome != null) {
+                        crafted.set(com.sanhiruzu.amphibia.register.AmphibiaDataComponents.FROG_DNA.get(), genome);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    private void onPlayerLoggedIn(net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent event) {
+        if (!AmphibiaConfig.GIVE_PATCHOULI_GUIDE_ON_FIRST_JOIN.get()) return;
+        if (!(event.getEntity() instanceof net.minecraft.server.level.ServerPlayer player)) return;
+        if (!net.neoforged.fml.ModList.get().isLoaded("patchouli")) return;
+
+        String grantedKey = "zen_amphibia:received_field_guide";
+        if (player.getPersistentData().getBoolean(grantedKey)) return;
+
+        player.getPersistentData().putBoolean(grantedKey, true);
+        player.server.getCommands().performPrefixedCommand(
+            player.createCommandSourceStack().withPermission(4).withSuppressedOutput(),
+            "give " + player.getGameProfile().getName() + " patchouli:guide_book[patchouli:book=\"zen_amphibia:field_guide\"]"
+        );
     }
 
     private void onRightClickBlock(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock event) {
@@ -152,12 +192,39 @@ public class Amphibia {
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.DORMANT_FROGSPAWN);
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.GENETIC_FROGSPAWN);
         }
+        if (event.getTabKey() == net.minecraft.world.item.CreativeModeTabs.FUNCTIONAL_BLOCKS) {
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_CHEST);
+        }
+        if (event.getTabKey() == net.minecraft.world.item.CreativeModeTabs.BUILDING_BLOCKS) {
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.VERDANT_GENETIC_FROGLIGHT);
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.AZURE_GENETIC_FROGLIGHT);
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.ROSE_GENETIC_FROGLIGHT);
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.AMBER_GENETIC_FROGLIGHT);
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.VIOLET_GENETIC_FROGLIGHT);
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.PEARL_GENETIC_FROGLIGHT);
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.UMBRAL_GENETIC_FROGLIGHT);
+        }
         if (event.getTabKey() == net.minecraft.world.item.CreativeModeTabs.INGREDIENTS) {
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.CRICKET);
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_SLIME);
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_SLIME_INGOT);
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.BOTTLED_FROGSPAWN);
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaFluids.RAW_GENETIC_FLUID_BUCKET.get());
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaFluids.REFINED_GENETIC_FLUID_BUCKET.get());
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaFluids.SEQUENCED_GENETIC_FLUID_BUCKET.get());
+        }
+        if (event.getTabKey() == net.minecraft.world.item.CreativeModeTabs.COMBAT) {
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_SLIME_SWORD);
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_SLIME_HELMET);
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_SLIME_CHESTPLATE);
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_SLIME_LEGGINGS);
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_SLIME_BOOTS);
+        }
+        if (event.getTabKey() == net.minecraft.world.item.CreativeModeTabs.TOOLS_AND_UTILITIES) {
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_SLIME_SHOVEL);
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_SLIME_PICKAXE);
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_SLIME_AXE);
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_SLIME_HOE);
         }
     }
 
@@ -198,5 +265,17 @@ public class Amphibia {
         LOGGER.info("Amphibia (Frog Breeding) initialized!");
         com.sanhiruzu.amphibia.compat.patchouli.PatchouliCompat.checkPatchouliLoaded();
         com.sanhiruzu.amphibia.api.AmphibiaPluginRegistry.loadAll();
+        if (net.neoforged.fml.ModList.get().isLoaded("zen_atelier")) {
+            com.sanhiruzu.atelier.data.Signals.register("frog_plant",
+                s -> s.is(AmphibiaTags.Blocks.FROG_PLANTS)
+                    || s.is(net.minecraft.tags.BlockTags.FLOWERS)
+                    || s.is(net.minecraft.tags.BlockTags.SAPLINGS));
+            com.sanhiruzu.atelier.data.Signals.register("warming_block",
+                s -> s.is(AmphibiaTags.Blocks.FROG_WARMING_BLOCKS));
+            com.sanhiruzu.atelier.data.Signals.register("cooling_block",
+                s -> s.is(AmphibiaTags.Blocks.FROG_COOLING_BLOCKS));
+            com.sanhiruzu.atelier.data.Signals.register("humid_source",
+                s -> s.is(AmphibiaTags.Blocks.FROG_HUMID_SOURCES));
+        }
     }
 }

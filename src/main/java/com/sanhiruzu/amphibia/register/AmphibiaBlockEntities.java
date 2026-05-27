@@ -1,6 +1,7 @@
 package com.sanhiruzu.amphibia.register;
 
 import com.sanhiruzu.amphibia.block.DormantFrogspawnBlockEntity;
+import com.sanhiruzu.amphibia.block.FrogChestBlockEntity;
 import com.sanhiruzu.amphibia.block.GeneticFrogspawnBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -16,6 +17,9 @@ public class AmphibiaBlockEntities {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GeneticFrogspawnBlockEntity>> GENETIC_FROGSPAWN = BLOCK_ENTITIES.register("genetic_frogspawn",
             () -> BlockEntityType.Builder.of(GeneticFrogspawnBlockEntity::new, AmphibiaBlocks.GENETIC_FROGSPAWN.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FrogChestBlockEntity>> FROG_CHEST = BLOCK_ENTITIES.register("frog_chest",
+            () -> BlockEntityType.Builder.of(FrogChestBlockEntity::new, AmphibiaBlocks.FROG_CHEST.get()).build(null));
 
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);

@@ -1,0 +1,18 @@
+{
+  "name": "Welcome to Amphibia",
+  "icon": "zen_amphibia:cricket",
+  "category": "zen_amphibia:getting_started",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Amphibia is about raising useful frog lines. A frog is not just a pet; it can be breeding stock, $(l:zen_amphibia:resources/frog_slime)slime producer$(/l), color source, and eventually a Create logistics partner."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:frog",
+      "scale": 0.8,
+      "text": "The basic loop is simple: feed frogs, breed frogs, inspect offspring, keep the useful lines, and improve the habitat. Start with $(l:zen_amphibia:genetics/dna_basics)DNA Basics$(/l)."
+    }
+  ]
+}

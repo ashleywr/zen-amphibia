@@ -1,0 +1,16 @@
+{
+  "name": "Mutations",
+  "icon": "minecraft:ender_pearl",
+  "category": "zen_amphibia:genetics",
+  "sortnum": 5,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Some frogs carry mutations. Mutations are rarer than ordinary $(l:zen_amphibia:genetics/reading_genes)genes$(/l) and can unlock behavior, rendering, or future resource effects."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Known mutations include Ender and Creeper. Ender frogs can develop strange teleporting instincts, while Creeper frogs are marked for future volatile traits. Mutations can become part of long-term $(l:zen_amphibia:genetics/breeding_goals)breeding goals$(/l)."
+    }
+  ]
+}

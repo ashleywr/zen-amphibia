@@ -5,9 +5,18 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 public class AmphibiaConfig {
     public static final ModConfigSpec SPEC;
     public static final ModConfigSpec.ConfigValue<String> OPTIMAL_BREEDING_ZONE_TYPE;
+    public static final ModConfigSpec.BooleanValue GIVE_PATCHOULI_GUIDE_ON_FIRST_JOIN;
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
+
+        builder.push("Guide Book");
+
+        GIVE_PATCHOULI_GUIDE_ON_FIRST_JOIN = builder
+            .comment("If true, players receive the Amphibia Field Guide on first login when Patchouli is installed.")
+            .define("give_patchouli_guide_on_first_join", true);
+
+        builder.pop();
 
         builder.push("Genetics");
 
