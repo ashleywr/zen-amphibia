@@ -1,6 +1,8 @@
 package com.sanhiruzu.amphibia.genetics;
 
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
+import com.sanhiruzu.atelier.api.ZoneAPI;
+import com.sanhiruzu.atelier.space.zone.ZoneData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
@@ -9,6 +11,7 @@ import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
@@ -54,6 +57,7 @@ public class TerrariumHappinessHandler {
 
         frog.setData(AmphibiaAttachments.FROG_HAPPINESS, finalHappiness);
         applyJumpSuppression(frog, finalHappiness);
+        syncOvercrowdingToAtelier(frog, level);
     }
 
     private static float computeHappiness(Frog frog, Level level) {
@@ -239,6 +243,18 @@ public class TerrariumHappinessHandler {
         if (frogsInZone <= capacity) return 1.0f;
         float excess = (float)(frogsInZone - capacity) / capacity;
         return Math.max(1.0f - FrogHappinessConstants.OVERCROWDING_PENALTY_MAX, 1.0f - excess);
+    }
+
+    private static void syncOvercrowdingToAtelier(Frog frog, Level level) {
+        if (!ModList.get().isLoaded("zen_atelier")) return;
+        if (!(level instanceof ServerLevel)) return;
+        ZoneData zone = ZoneAPI.getZoneAt(level, frog.blockPosition());
+        if (zone == null) return;
+        int volume = zone.getVolume();
+        int frogsInZone = countFrogsInZone(level, zone);
+        float penalty = computeCrowdingPenalty(frogsInZone, volume);
+        String label = penalty < 1.0f ? "Overcrowded" : null;
+        ZoneAPI.setZoneQualityModifier(level, zone.getRegionId(), penalty, label);
     }
 
     // Suppress long jump behavior for happy frogs by maintaining a minimum cooldown.
