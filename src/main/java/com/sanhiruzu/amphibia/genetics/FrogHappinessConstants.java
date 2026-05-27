@@ -27,4 +27,12 @@ public final class FrogHappinessConstants {
     public static final float JUMP_SUPPRESS_THRESHOLD = 0.4f;
     // Max LONG_JUMP_COOLDOWN_TICKS applied at happiness 1.0 (scales linearly from threshold)
     public static final int HAPPY_JUMP_COOLDOWN_MAX = 600;
+
+    // Volume per frog before overcrowding penalty begins (e.g. 120-block terrarium holds 8 frogs)
+    public static final int OVERCROWDING_FROG_CAPACITY_PER_VOLUME = 15;
+    // Maximum happiness multiplier penalty from overcrowding (0.5 = up to 50% reduction)
+    public static final float OVERCROWDING_PENALTY_MAX = 0.5f;
+
+    // Minimum happiness required for a frog to enter love mode via cricket feeding
+    public static final float BREEDING_HAPPINESS_THRESHOLD = 0.5f;
 }

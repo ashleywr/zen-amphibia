@@ -2,6 +2,7 @@ package com.sanhiruzu.amphibia.event;
 
 import com.sanhiruzu.amphibia.genetics.AmphibiaFrog;
 import com.sanhiruzu.amphibia.genetics.FrogGradeCalculator;
+import com.sanhiruzu.amphibia.genetics.FrogHappinessConstants;
 import com.sanhiruzu.amphibia.genetics.Gene;
 import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
@@ -136,7 +137,16 @@ public class FrogTamingHandler {
                     true
                 );
             } else {
-                frog.setInLove(player);
+                float happiness = frog.getData(AmphibiaAttachments.FROG_HAPPINESS);
+                if (happiness < FrogHappinessConstants.BREEDING_HAPPINESS_THRESHOLD) {
+                    player.displayClientMessage(
+                        Component.literal("This frog needs a more comfortable home to breed.")
+                            .withStyle(ChatFormatting.YELLOW),
+                        true
+                    );
+                } else {
+                    frog.setInLove(player);
+                }
             }
         }
 

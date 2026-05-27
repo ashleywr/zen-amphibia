@@ -7,6 +7,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
@@ -72,11 +73,15 @@ public class TerrariumHappinessHandler {
             float sizeScore = computeSizeScore(volume);
             float climateScore = computeClimateScore(frog, signals, waterRatio);
 
-            return (zoneQuality * FrogHappinessConstants.ZONE_QUALITY_WEIGHT)
+            float rawHappiness = (zoneQuality * FrogHappinessConstants.ZONE_QUALITY_WEIGHT)
                     + (waterRatio  * FrogHappinessConstants.WATER_RATIO_WEIGHT)
                     + (plantScore  * FrogHappinessConstants.PLANT_SCORE_WEIGHT)
                     + (sizeScore   * FrogHappinessConstants.SIZE_SCORE_WEIGHT)
                     + (climateScore * FrogHappinessConstants.CLIMATE_SCORE_WEIGHT);
+
+            int frogsInZone = countFrogsInZone(level, zoneData);
+            float crowdingPenalty = computeCrowdingPenalty(frogsInZone, volume);
+            return rawHappiness * crowdingPenalty;
         } catch (Exception e) {
             return 0;
         }
@@ -186,6 +191,54 @@ public class TerrariumHappinessHandler {
         if (value >= range[0] && value <= range[1]) return 1.0f;
         float dist = Math.min(Math.abs(value - range[0]), Math.abs(value - range[1]));
         return Math.max(0f, 1f - dist * 4f);
+    }
+
+    // --- Overcrowding helpers ---
+
+    private static boolean hasSpatialExtent(Object zone) {
+        try {
+            return (Boolean) zone.getClass().getMethod("hasSpatialExtent").invoke(zone);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private static int getZoneInt(Object zone, String methodName) {
+        try {
+            Number result = (Number) zone.getClass().getMethod(methodName).invoke(zone);
+            return result != null ? result.intValue() : 0;
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    private static boolean containsPos(Object zone, BlockPos pos) {
+        try {
+            return (Boolean) zone.getClass().getMethod("contains", BlockPos.class).invoke(zone, pos);
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
+    private static int countFrogsInZone(Level level, Object zone) {
+        if (!hasSpatialExtent(zone)) return 1;
+        int minX = getZoneInt(zone, "getMinX");
+        int minY = getZoneInt(zone, "getMinY");
+        int minZ = getZoneInt(zone, "getMinZ");
+        int maxX = getZoneInt(zone, "getMaxX");
+        int maxY = getZoneInt(zone, "getMaxY");
+        int maxZ = getZoneInt(zone, "getMaxZ");
+        AABB aabb = new AABB(minX, minY, minZ, maxX + 1, maxY + 1, maxZ + 1);
+        return level.getEntities(EntityType.FROG, aabb,
+            f -> f.isAlive() && containsPos(zone, f.blockPosition())
+        ).size();
+    }
+
+    private static float computeCrowdingPenalty(int frogsInZone, int volume) {
+        int capacity = Math.max(1, volume / FrogHappinessConstants.OVERCROWDING_FROG_CAPACITY_PER_VOLUME);
+        if (frogsInZone <= capacity) return 1.0f;
+        float excess = (float)(frogsInZone - capacity) / capacity;
+        return Math.max(1.0f - FrogHappinessConstants.OVERCROWDING_PENALTY_MAX, 1.0f - excess);
     }
 
     // Suppress long jump behavior for happy frogs by maintaining a minimum cooldown.
