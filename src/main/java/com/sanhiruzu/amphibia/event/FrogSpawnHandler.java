@@ -33,7 +33,8 @@ public class FrogSpawnHandler {
     @SubscribeEvent
     public static void onFrogFinalizeSpawn(FinalizeSpawnEvent event) {
         if (!(event.getEntity() instanceof Frog frog)) return;
-        if (event.getSpawnType() != MobSpawnType.SPAWN_EGG) return;
+        if (event.getSpawnType() == MobSpawnType.BUCKET) return;
+        if (PENDING_GENOME.get() != null) return;
 
         frog.setData(AmphibiaAttachments.FROG_GENOME, FrogGenome.createRandom(event.getLevel().getRandom()));
         frog.setData(AmphibiaAttachments.FROG_GENETICS_APPLIED, false);
@@ -55,12 +56,8 @@ public class FrogSpawnHandler {
                 frog.setData(AmphibiaAttachments.FROG_GENETICS_APPLIED, false);
             }
 
-            // Get or create genome
+            // Get genome; naturally finalized frogs are randomized before joining.
             FrogGenome genome = frog.getData(AmphibiaAttachments.FROG_GENOME);
-            if (genome == null) {
-                genome = FrogGenome.createDefault();
-                frog.setData(AmphibiaAttachments.FROG_GENOME, genome);
-            }
 
             // Check if genetics have already been applied (e.g., from NBT on load)
             boolean geneticsApplied = frog.getData(AmphibiaAttachments.FROG_GENETICS_APPLIED);

@@ -54,6 +54,9 @@ Core loop:
   - `TONGUE_LENGTH` defines displayed worker reach.
   - `TEMPERAMENT` stabilizes dispatch residue chances.
   - `SLIME_YIELD` can produce Frog Slime residue only when a package is dispatched.
+- Survival world entry points:
+  - wild/spawned frogs receive randomized Amphibia genomes
+  - crickets spawn naturally in temperate, wet, and sparse-vegetation overworld biomes
 
 ## Near-Term Features
 

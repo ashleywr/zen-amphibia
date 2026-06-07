@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#zen_amphibia:has_crickets",
+  "spawners": {
+    "type": "zen_amphibia:cricket",
+    "weight": 18,
+    "minCount": 2,
+    "maxCount": 5
+  }
+}
