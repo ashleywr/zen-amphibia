@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
-    { "item": "zen_amphibia:frog_slime" },
+    { "item": "zen_amphibia:luminous_frog_secretion" },
     { "item": "minecraft:glowstone_dust" },
     { "item": "minecraft:magma_cream" },
     { "item": "minecraft:white_dye" }
