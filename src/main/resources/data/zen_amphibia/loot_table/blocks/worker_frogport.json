@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "zen_amphibia:worker_frogport"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "zen_amphibia:blocks/worker_frogport"
+}

@@ -3,6 +3,7 @@ package com.sanhiruzu.amphibia.register;
 import com.sanhiruzu.amphibia.block.DormantFrogspawnBlock;
 import com.sanhiruzu.amphibia.block.FrogChestBlock;
 import com.sanhiruzu.amphibia.block.GeneticFrogspawnBlock;
+import com.sanhiruzu.amphibia.block.WorkerFrogportBlock;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
@@ -40,6 +41,13 @@ public class AmphibiaBlocks {
 
     public static final DeferredHolder<Block, FrogChestBlock> FROG_CHEST = BLOCKS.register("frog_chest",
             () -> new FrogChestBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_GREEN)
+                    .strength(2.5F)
+                    .sound(SoundType.WOOD)
+            ));
+
+    public static final DeferredHolder<Block, WorkerFrogportBlock> WORKER_FROGPORT = BLOCKS.register("worker_frogport",
+            () -> new WorkerFrogportBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_GREEN)
                     .strength(2.5F)
                     .sound(SoundType.WOOD)

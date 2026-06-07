@@ -20,8 +20,7 @@ public class ItemTooltipHandler {
     public static void onItemTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
 
-        // Handle Frogport items (from Create mod - we don't own this item class)
-        if (stack.is(com.simibubi.create.AllBlocks.PACKAGE_FROGPORT.get().asItem())
+        if (stack.is(com.sanhiruzu.amphibia.register.AmphibiaItems.WORKER_FROGPORT.get())
                 || stack.is(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_CHEST.get())) {
             FrogGenome genome = stack.get(AmphibiaDataComponents.FROG_DNA.get());
 

@@ -11,6 +11,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ public class Amphibia {
         com.sanhiruzu.amphibia.register.AmphibiaAttachments.register(modEventBus);
         com.sanhiruzu.amphibia.register.AmphibiaDataComponents.register(modEventBus);
         modEventBus.register(com.sanhiruzu.amphibia.infrastructure.display.AmphibiaDisplaySources.class);
+        modEventBus.addListener(this::onBlockEntityTypeAddBlocks);
         if (FMLEnvironment.dist == Dist.CLIENT) {
             com.sanhiruzu.amphibia.client.AmphibiaClientSetup.register(modEventBus);
             com.sanhiruzu.amphibia.client.AmphibiaClientEvents.register(modEventBus);
@@ -55,7 +57,7 @@ public class Amphibia {
 
     private void onItemCrafted(net.neoforged.neoforge.event.entity.player.PlayerEvent.ItemCraftedEvent event) {
         net.minecraft.world.item.ItemStack crafted = event.getCrafting();
-        if (crafted.is(com.simibubi.create.AllBlocks.PACKAGE_FROGPORT.get().asItem())) {
+        if (crafted.is(com.sanhiruzu.amphibia.register.AmphibiaItems.WORKER_FROGPORT.get())) {
             net.minecraft.world.Container inv = event.getInventory();
             for (int i = 0; i < inv.getContainerSize(); i++) {
                 net.minecraft.world.item.ItemStack slotStack = inv.getItem(i);
@@ -194,6 +196,7 @@ public class Amphibia {
         }
         if (event.getTabKey() == net.minecraft.world.item.CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_CHEST);
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.WORKER_FROGPORT);
         }
         if (event.getTabKey() == net.minecraft.world.item.CreativeModeTabs.BUILDING_BLOCKS) {
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.VERDANT_GENETIC_FROGLIGHT);
@@ -231,7 +234,7 @@ public class Amphibia {
 
     private void onBlockPlaced(net.neoforged.neoforge.event.level.BlockEvent.EntityPlaceEvent event) {
         if (!(event.getLevel() instanceof net.minecraft.server.level.ServerLevel)) return;
-        if (!event.getPlacedBlock().is(com.simibubi.create.AllBlocks.PACKAGE_FROGPORT.get())) return;
+        if (!event.getPlacedBlock().is(com.sanhiruzu.amphibia.register.AmphibiaBlocks.WORKER_FROGPORT.get())) return;
 
         net.minecraft.world.item.ItemStack stack = event.getEntity() instanceof net.minecraft.world.entity.player.Player player
             ? player.getMainHandItem() : null;
@@ -250,6 +253,11 @@ public class Amphibia {
 
     private void onReloadListeners(net.neoforged.neoforge.event.AddReloadListenerEvent event) {
         event.addListener(new com.sanhiruzu.amphibia.config.EstivationConfigManager());
+    }
+
+    private void onBlockEntityTypeAddBlocks(BlockEntityTypeAddBlocksEvent event) {
+        event.modify(com.simibubi.create.AllBlockEntityTypes.PACKAGE_FROGPORT.get(),
+            com.sanhiruzu.amphibia.register.AmphibiaBlocks.WORKER_FROGPORT.get());
     }
 
     private void onRegisterSpawnPlacements(RegisterSpawnPlacementsEvent event) {

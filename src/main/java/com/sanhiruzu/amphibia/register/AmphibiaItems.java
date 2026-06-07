@@ -4,6 +4,7 @@ import com.sanhiruzu.amphibia.entity.CricketEntity;
 import com.sanhiruzu.amphibia.item.AmphibiaTiers;
 import com.sanhiruzu.amphibia.item.FrogBucketItem;
 import com.sanhiruzu.amphibia.item.BottledFrogspawnItem;
+import com.sanhiruzu.amphibia.item.FrogportBlockItem;
 import com.sanhiruzu.amphibia.item.FrogspawnBlockItem;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.AxeItem;
@@ -35,6 +36,9 @@ public class AmphibiaItems {
 
     public static final DeferredItem<BlockItem> FROG_CHEST = ITEMS.register("frog_chest",
             () -> new BlockItem(AmphibiaBlocks.FROG_CHEST.get(), new Item.Properties().stacksTo(1)));
+
+    public static final DeferredItem<FrogportBlockItem> WORKER_FROGPORT = ITEMS.register("worker_frogport",
+            () -> new FrogportBlockItem(AmphibiaBlocks.WORKER_FROGPORT.get(), new Item.Properties()));
 
     public static final DeferredItem<Item> CRICKET = ITEMS.register("cricket",
             () -> new Item(new Item.Properties().stacksTo(64)));
