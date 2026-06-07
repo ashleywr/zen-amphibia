@@ -3,19 +3,27 @@
 ## What Exists (Already Implemented)
 
 The frog-to-frogport conversion pipeline is complete:
-- Crafting `create:package_frogport` with a frog bucket consumes the frog and stores its `FrogGenome` on the block entity
+- Crafting Create's package frogport recipe with a frog bucket now creates `zen_amphibia:worker_frogport` and stores its `FrogGenome` on the block entity
 - `FrogportBlockEntityMixin` persists the genome via NBT, color-tints the renderer, and shows DNA in the goggle tooltip
 - `FrogportGeneEvaluator.java` maps gene grades to behavior values (framework ready)
-- A `@Inject(method = "tick")` hook is wired into Create's `FrogportBlockEntity`
+- The worker hooks are tied to actual package dispatch and Create package-port targeting
 
-What the tick injection currently does: outputs slime balls/frog_slime items below the frogport on a 40-tick timer based on `SLIME_YIELD` grade. **This is acknowledged as gameplay-incoherent** - it is a random slime farm, not a packaging mechanic.
+What the first worker implementation does:
+- `QUICKNESS` increases package handoff animation speed
+- `TONGUE_LENGTH` extends Create package-port placement reach
+- `TEMPERAMENT` improves dispatch reliability
+- `SLIME_YIELD` produces Frog Slime residue only when a package is dispatched
+- Worker item and goggle tooltips show concrete work rate, reach, reliability, and residue chance
 
 ## The Design Problem
 
-`SLIME_YIELD` outputting slime on a fixed timer has no connection to the packaging workflow. It needs to either:
-- React to actual packaging events
-- Feed into the packaging process as an input
-- Do something else entirely
+The first worker implementation is package-linked, but still shallow. It needs stronger job identity and a more interesting reason to specialize worker lines.
+
+Remaining design questions:
+- Should slime residue become a package coating, a machine input, or a processing material?
+- Should high-reach workers unlock broader inventory/package targeting beyond placement range?
+- Should reliability affect failed dispatches, package handling quality, or only bonus output consistency?
+- How should worker lines differ from future supervisor lines?
 
 ## Design Options (Pending Decision)
 
@@ -43,9 +51,10 @@ Slime drops only when the packager processes organic items (food, plants, etc.).
 
 | Gene | Behavior |
 |---|---|
-| SLIME_YIELD | Temporary slime bonus output; final packaging use still TBD |
-| QUICKNESS | Output interval multiplier - D=20t, C=17t, B=14t, A=10t, S=7t |
-| TONGUE_LENGTH | Candidate reach/logistics extension trait |
+| SLIME_YIELD | Frog Slime residue chance on package dispatch |
+| QUICKNESS | Package handoff animation speed |
+| TONGUE_LENGTH | Package-port placement reach bonus |
+| TEMPERAMENT | Dispatch reliability |
 | CUNNING | Candidate routing/smart instruction trait |
 | AWARENESS | Candidate supervisor/control-room trait |
 | SIZE | Physical phenotype; may affect storage/output scale later |

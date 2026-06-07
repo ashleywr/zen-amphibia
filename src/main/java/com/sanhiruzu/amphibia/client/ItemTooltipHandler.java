@@ -3,6 +3,7 @@ package com.sanhiruzu.amphibia.client;
 import com.sanhiruzu.amphibia.infrastructure.FrogDNADisplayHelper;
 import com.sanhiruzu.amphibia.register.AmphibiaDataComponents;
 import com.sanhiruzu.amphibia.genetics.FrogGenome;
+import com.sanhiruzu.amphibia.genetics.FrogportGeneEvaluator;
 import com.sanhiruzu.amphibia.block.FrogChestBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -25,6 +26,9 @@ public class ItemTooltipHandler {
             FrogGenome genome = stack.get(AmphibiaDataComponents.FROG_DNA.get());
 
             if (genome != null) {
+                if (stack.is(com.sanhiruzu.amphibia.register.AmphibiaItems.WORKER_FROGPORT.get())) {
+                    FrogportGeneEvaluator.addWorkerSummaryTooltip(event.getToolTip(), genome, true);
+                }
                 if (stack.is(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_CHEST.get())) {
                     int rows = FrogChestBlockEntity.rowsFromGenome(genome);
                     event.getToolTip().add(Component.translatable("tooltip.zen_amphibia.frog_chest.rows", rows)

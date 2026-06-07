@@ -14,11 +14,13 @@
     "FrogMixin",
     "FrogportBlockEntityMixin",
     "PackagerBlockMixin",
+    "PackagePortPlacementPacketMixin",
     "TadpoleMixin"
   ],
   "client": [
     "client.ChainConveyorInteractionHandlerMixin",
     "client.InputEventsMixin",
+    "client.PackagePortTargetRangeMixin",
     "client.PackagePortTargetSelectionHandlerMixin",
     "FrogportRendererMixin"
   ],
