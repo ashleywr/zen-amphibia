@@ -49,6 +49,11 @@ Core loop:
 - Patchouli guide sync test for genes and mutations.
 - Config-controlled first-login Patchouli guide grant.
 - Patchouli guide recovery recipe: Book + Frog Slime.
+- Worker Frogport genetics:
+  - `QUICKNESS` speeds package handoff animation.
+  - `TONGUE_LENGTH` defines displayed worker reach.
+  - `TEMPERAMENT` stabilizes dispatch residue chances.
+  - `SLIME_YIELD` can produce Frog Slime residue only when a package is dispatched.
 
 ## Near-Term Features
 
@@ -152,13 +157,10 @@ Ideas:
 
 The original Create-facing goal.
 
-Possible genetic effects:
+Next step:
 
-- `SIZE` affects carried package capacity or weight tolerance.
-- `GROWTH_RATE` affects route cooldown.
-- `HEALTH` affects reliability in dangerous routes.
-- `SLIME_VISCOSITY` improves package grip or reduces failed deliveries.
-- Mutations unlock special routing behavior.
+- Replace the first Worker Frogport pass with deeper routing and package-handling hooks once the worker spec is written.
+- Keep Supervisor Perch separate from worker behavior.
 
 ## Longer-Term Features
 

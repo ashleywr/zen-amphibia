@@ -37,7 +37,6 @@ This file tracks active design and implementation follow-up.
 
 ## Code Follow-Up
 
-- Replace timer-based frogport slime drops with a job-coherent worker frogport behavior.
 - Use the extracted Create reference sources when choosing the exact frogport hook.
 - Decide whether the existing `FrogportGeneEvaluator` should be repurposed or replaced after the aptitude redesign.
 
