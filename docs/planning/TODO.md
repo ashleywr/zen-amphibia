@@ -37,7 +37,10 @@ This file tracks active design and implementation follow-up.
 
 ## Code Follow-Up
 
-- Use the extracted Create reference sources when choosing the exact frogport hook.
+- Finish the Create integration exit pass:
+  - runtime smoke test worker frogport crafting, placement, targeting, dispatch, DNA persistence, and reach bonus
+  - fix only blocking compatibility issues found by the smoke test
+  - add focused checks for recipe output, duplicate recipe absence, DNA item support, and worker tooltip summary
 - Decide whether the existing `FrogportGeneEvaluator` should be repurposed or replaced after the aptitude redesign.
 
 ## Documentation Follow-Up
@@ -47,8 +50,6 @@ This file tracks active design and implementation follow-up.
 
 ## Missing Specs To Write
 
-- `Worker Frogport Spec`
-  Replace the current slime-drop placeholder with a job-coherent Create worker design.
 - `Profession Hat UX Spec`
   Define how hats are crafted, assigned, stored, swapped, and displayed on frogs or stations.
 - `Wetland Release Spec`

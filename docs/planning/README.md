@@ -20,6 +20,7 @@ Use this folder to reduce context rebuilding between sessions:
 - [Frogport Supervisor Spec](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/gameplay/FROGPORT_SUPERVISOR_SPEC.md)
 - [Frog Retirement Spec](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/gameplay/FROG_RETIREMENT_SPEC.md)
 - [Frogport Design Notes](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/gameplay/FROGPORT_DESIGN.md)
+- [Create Integration Finish Plan](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/gameplay/CREATE_INTEGRATION_FINISH_PLAN.md)
 - [Terrarium Integration Plan](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/integrations/TERRARIUM_INTEGRATION_PLAN.md)
 
 ## How To Use This Folder
