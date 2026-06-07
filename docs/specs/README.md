@@ -5,6 +5,7 @@ This folder contains larger design and implementation specs.
 ## Gameplay Specs
 
 - [Create Integration Finish Plan](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/gameplay/CREATE_INTEGRATION_FINISH_PLAN.md)
+- [Frog Output Doctrine](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/gameplay/FROG_OUTPUT_DOCTRINE.md)
 - [Gene Migration Spec](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/gameplay/GENE_MIGRATION_SPEC.md)
 - [Frog Profession Spec](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/gameplay/FROG_PROFESSION_SPEC.md)
 - [Frog Retirement Spec](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/gameplay/FROG_RETIREMENT_SPEC.md)

@@ -61,3 +61,9 @@ Update this when a design choice is clear enough that future sessions should tre
   - `Create Goggles`
   - `MineColonies Top Hat`
 - Integrations should remain understandable from visuals alone.
+
+### Frog outputs are husbandry byproducts, not throughput-first production
+
+- A frog line should still feel meaningful even if its direct item output were removed.
+- Output systems should reinforce care, habitat, life stage, and line quality.
+- Create and alchemy compatibility should process or consume frog outputs downstream rather than defining the base frog loop.

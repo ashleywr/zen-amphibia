@@ -15,6 +15,7 @@ Use this folder to reduce context rebuilding between sessions:
 - [Amphibia Roadmap](/C:/WorkDir/Minecraft%20Mods/Amphibia/AMPHIBIA_ROADMAP.md)
 - [Mod Lifecycle](/C:/WorkDir/Minecraft%20Mods/Amphibia/MOD_LIFECYCLE.md)
 - [Spec Index](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/README.md)
+- [Frog Output Doctrine](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/gameplay/FROG_OUTPUT_DOCTRINE.md)
 - [Gene Migration Spec](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/gameplay/GENE_MIGRATION_SPEC.md)
 - [Frog Profession Spec](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/gameplay/FROG_PROFESSION_SPEC.md)
 - [Vanilla Professions Spec](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/gameplay/VANILLA_PROFESSIONS_SPEC.md)
@@ -55,6 +56,13 @@ The current population-management model is:
 - release excess frogs into wetland gene pools
 - archive exceptional frogs
 - make direct culling legal but mechanically weak and locally distressing
+
+The current frog-output model is:
+
+- frogs stay husbandry-first and ecology-first
+- outputs are byproducts of care
+- Create and alchemy compatibility consume outputs downstream
+- avoid drifting into throughput-first livestock production
 
 ## Suggested Session Start Order
 
