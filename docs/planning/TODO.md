@@ -49,7 +49,9 @@ This file tracks active design and implementation follow-up.
 
 - Once profession direction stabilizes, add a short summary section to the roadmap.
 - Keep this planning hub updated whenever a new spec is added or a major direction changes.
-- Write the first `Frog Slime Harvest Spec` using [Frog Output Doctrine](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/gameplay/FROG_OUTPUT_DOCTRINE.md) as the design constraint.
+- ~~Write the first `Frog Slime Harvest Spec`~~ — done. See [FROG_SLIME_HARVEST_SPEC.md](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/gameplay/FROG_SLIME_HARVEST_SPEC.md).
+- Reconcile `SLIME_VISCOSITY` (FrogportGeneEvaluator) → `SLIME_YIELD` (FrogDropHandler) into a single gene name before implementing harvest.
+- Decide whether the first harvest implementation uses direct right-click only, or also adds a habitat-side collection item.
 
 ## Missing Specs To Write
 
