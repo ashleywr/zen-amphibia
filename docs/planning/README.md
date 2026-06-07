@@ -13,6 +13,7 @@ Use this folder to reduce context rebuilding between sessions:
 ## Current Core Specs
 
 - [Amphibia Roadmap](/C:/WorkDir/Minecraft%20Mods/Amphibia/AMPHIBIA_ROADMAP.md)
+- [Mod Lifecycle](/C:/WorkDir/Minecraft%20Mods/Amphibia/MOD_LIFECYCLE.md)
 - [Spec Index](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/README.md)
 - [Gene Migration Spec](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/gameplay/GENE_MIGRATION_SPEC.md)
 - [Frog Profession Spec](/C:/WorkDir/Minecraft%20Mods/Amphibia/docs/specs/gameplay/FROG_PROFESSION_SPEC.md)

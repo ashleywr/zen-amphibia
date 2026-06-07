@@ -37,6 +37,8 @@ This file tracks active design and implementation follow-up.
 
 ## Code Follow-Up
 
+- Use [MOD_LIFECYCLE.md](/C:/WorkDir/Minecraft%20Mods/Amphibia/MOD_LIFECYCLE.md) to track implemented, prototype, hardened, planned, and backlog status.
+- Run the Survival Frog Husbandry smoke test and move passing systems toward hardened status.
 - Finish the Create integration exit pass:
   - runtime smoke test worker frogport crafting, placement, targeting, dispatch, DNA persistence, and reach bonus
   - fix only blocking compatibility issues found by the smoke test
