@@ -16,10 +16,11 @@ public class FrogState {
     public final String eggLayingStatus;
     public final String aiStatus;
     public final float maturityProgress;
+    public final boolean slimeReady;
 
     private FrogState(Frog frog, FrogGenome genome, FrogGenome offspringGenome, boolean hasEgg,
                       boolean inLove, boolean inWater, float scale, int age, boolean estivating,
-                      String eggLayingStatus, String aiStatus, float maturityProgress) {
+                      String eggLayingStatus, String aiStatus, float maturityProgress, boolean slimeReady) {
         this.entity = frog;
         this.genome = genome;
         this.offspringGenome = offspringGenome;
@@ -32,6 +33,7 @@ public class FrogState {
         this.eggLayingStatus = eggLayingStatus;
         this.aiStatus = aiStatus;
         this.maturityProgress = maturityProgress;
+        this.slimeReady = slimeReady;
     }
 
     public static FrogState fromFrog(Frog frog) {
@@ -58,7 +60,8 @@ public class FrogState {
             estivating,
             eggLayingStatus,
             frog.getData(AmphibiaAttachments.CURRENT_AI_STATUS),
-            maturityProgress
+            maturityProgress,
+            frog.getData(AmphibiaAttachments.SLIME_HARVEST_READY)
         );
     }
 

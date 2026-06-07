@@ -9,6 +9,7 @@ import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.sanhiruzu.amphibia.infrastructure.FrogDNADisplayHelper;
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import com.sanhiruzu.amphibia.register.AmphibiaDataComponents;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.FrogModel;
 import net.minecraft.client.model.TadpoleModel;
@@ -92,6 +93,13 @@ public class AmphibiaClientEvents {
                         (mc.level.random.nextDouble() - 0.5) * 0.2,
                         (mc.level.random.nextDouble() - 0.5) * 0.2);
                 }
+            }
+
+            if (frog.getData(AmphibiaAttachments.SLIME_HARVEST_READY) && gameTime % 15 == 0) {
+                double x = frog.getX() + (mc.level.random.nextDouble() - 0.5) * 0.8;
+                double y = frog.getY() + 0.3 + mc.level.random.nextDouble() * 0.5;
+                double z = frog.getZ() + (mc.level.random.nextDouble() - 0.5) * 0.8;
+                mc.level.addParticle(ParticleTypes.DRIPPING_WATER, x, y, z, 0, 0, 0);
             }
         }
     }

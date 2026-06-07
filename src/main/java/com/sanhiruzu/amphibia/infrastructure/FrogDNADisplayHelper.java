@@ -103,6 +103,10 @@ public class FrogDNADisplayHelper {
             .append(Component.literal(String.format("%.2f", state.scale)).withStyle(ChatFormatting.YELLOW)));
         lines.add(Component.literal("Status: ").withStyle(ChatFormatting.GRAY)
             .append(modStatus(state)));
+        lines.add(Component.literal("Slime: ").withStyle(ChatFormatting.GRAY)
+            .append(state.slimeReady
+                ? Component.literal("Ready").withStyle(ChatFormatting.GREEN)
+                : Component.literal("Not ready").withStyle(ChatFormatting.DARK_GRAY)));
         lines.add(Component.literal("AI: ").withStyle(ChatFormatting.GRAY)
             .append(Component.literal(state.aiStatus).withStyle(ChatFormatting.DARK_GRAY)));
 

@@ -81,6 +81,19 @@ public class AmphibiaAttachments {
                 .build()
     );
 
+    public static final Supplier<AttachmentType<Boolean>> SLIME_HARVEST_READY = ATTACHMENTS.register(
+            "slime_harvest_ready", () -> AttachmentType.builder(() -> false)
+                .serialize(com.mojang.serialization.Codec.BOOL)
+                .sync(net.minecraft.network.codec.ByteBufCodecs.BOOL)
+                .build()
+    );
+
+    public static final Supplier<AttachmentType<Float>> SLIME_READINESS_PROGRESS = ATTACHMENTS.register(
+            "slime_readiness_progress", () -> AttachmentType.builder(() -> 0.0f)
+                .serialize(com.mojang.serialization.Codec.FLOAT)
+                .build()
+    );
+
     public static void register(IEventBus eventBus) {
         ATTACHMENTS.register(eventBus);
     }
