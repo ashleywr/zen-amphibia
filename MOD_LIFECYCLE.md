@@ -57,6 +57,7 @@ Create support can be present, but this slice should not depend on Create.
 | Frog genome storage | Implemented | Frogs, tadpoles, frogspawn, buckets, and worker frogports carry DNA. Needs broader persistence smoke testing across save/load paths. |
 | Wild frog genetics | Implemented | Natural/spawned frogs receive randomized genomes. Bucket and tadpole conversion paths preserve existing DNA. |
 | Frog bucket capture | Implemented | Empty bucket captures adult frogs and stores genetics. Guidebook entry exists. |
+| Frog handling delight touches | Prototype | Frog buckets preserve custom names, show small personality/prospect lines, and play release feedback. Needs in-game feel check. |
 | Breeding inheritance | Implemented | Parent DNA mixes into genetic frogspawn and tadpoles. Needs survival loop smoke test with several generations. |
 | Breeding motivation UX | Prototype | Frog buckets show top breeding targets. Guide explains why breeding matters. Needs in-game tooltip review. |
 | Crickets | Implemented | Entity, spawn egg, frog food tag, and natural biome spawns exist. Needs runtime spawn-density check. |

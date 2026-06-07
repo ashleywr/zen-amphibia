@@ -72,6 +72,28 @@ public class FrogDNADisplayHelper {
         return lines;
     }
 
+    public static List<Component> getBucketPersonalityTooltip(FrogGenome genome) {
+        List<Component> lines = new ArrayList<>();
+        if (genome == null) return lines;
+
+        addLineIf(lines, gradeAtLeast(genome, Gene.QUICKNESS, FrogGradeCalculator.Grade.A), "Restless in the bucket.");
+        addLineIf(lines, gradeAtLeast(genome, Gene.TEMPERAMENT, FrogGradeCalculator.Grade.A), "Calm in the bucket.");
+        addLineIf(lines, gradeAtLeast(genome, Gene.SIZE, FrogGradeCalculator.Grade.A), "This bucket feels heavy.");
+        addLineIf(lines, gradeAtLeast(genome, Gene.SLIME_YIELD, FrogGradeCalculator.Grade.A), "The inside is suspiciously glossy.");
+        addLineIf(lines, gradeAtLeast(genome, Gene.COLORATION, FrogGradeCalculator.Grade.A), "Its colors catch the light.");
+
+        long standoutCount = currentBreedingTargets().stream()
+            .filter(gene -> gradeAtLeast(genome, gene, FrogGradeCalculator.Grade.B))
+            .count();
+        if (hasGrade(genome, FrogGradeCalculator.Grade.S)) {
+            addLineIf(lines, true, "Exceptional breeding stock.");
+        } else if (standoutCount >= 3) {
+            addLineIf(lines, true, "Promising line founder.");
+        }
+
+        return lines.stream().limit(3).toList();
+    }
+
     public static List<Component> getFrogDebugTooltip(FrogState state) {
         List<Component> lines = new ArrayList<>();
         lines.add(Component.literal("=== FROG INFO ===").withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -239,6 +261,21 @@ public class FrogDNADisplayHelper {
             case AFFINITY -> "handling jobs";
             case ATTUNEMENT -> "rare jobs";
         };
+    }
+
+    private static void addLineIf(List<Component> lines, boolean condition, String text) {
+        if (condition) {
+            lines.add(Component.literal(text).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+        }
+    }
+
+    private static boolean gradeAtLeast(FrogGenome genome, Gene gene, FrogGradeCalculator.Grade minimum) {
+        return FrogGradeCalculator.calculateGrade(genome.getGene(gene)).ordinal() >= minimum.ordinal();
+    }
+
+    private static boolean hasGrade(FrogGenome genome, FrogGradeCalculator.Grade grade) {
+        return currentBreedingTargets().stream()
+            .anyMatch(gene -> FrogGradeCalculator.calculateGrade(genome.getGene(gene)) == grade);
     }
 
     private static List<Gene> currentBreedingTargets() {
