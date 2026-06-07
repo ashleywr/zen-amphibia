@@ -1,0 +1,17 @@
+{
+  "name": "Frog Buckets",
+  "icon": "zen_amphibia:frog_bucket",
+  "category": "zen_amphibia:getting_started",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Adult frogs can be carried home in a bucket. Right-click a wild adult frog with an empty bucket to pick it up as a Frog Bucket. The frog's Amphibia genetics stay on the bucket."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "zen_amphibia:frog_bucket_from_frog_chest",
+      "text": "Use the Frog Bucket again to place the same frog in your pond or terrarium. Empty Frog Chests can also be unpacked back into Frog Buckets."
+    }
+  ]
+}

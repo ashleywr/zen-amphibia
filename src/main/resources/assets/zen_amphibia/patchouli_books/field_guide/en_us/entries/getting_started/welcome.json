@@ -12,7 +12,7 @@
       "type": "patchouli:entity",
       "entity": "minecraft:frog",
       "scale": 0.8,
-      "text": "The basic loop is simple: feed frogs, breed frogs, inspect offspring, keep the useful lines, and improve the habitat. Start with $(l:zen_amphibia:genetics/dna_basics)DNA Basics$(/l)."
+      "text": "The basic loop is simple: bring frogs home with $(l:zen_amphibia:getting_started/frog_buckets)Frog Buckets$(/l), feed frogs, breed frogs, inspect offspring, keep useful lines, and improve the habitat. Start with $(l:zen_amphibia:genetics/dna_basics)DNA Basics$(/l)."
     }
   ]
 }

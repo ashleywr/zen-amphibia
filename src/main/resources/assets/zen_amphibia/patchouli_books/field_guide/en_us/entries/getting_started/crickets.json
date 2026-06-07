@@ -2,7 +2,7 @@
   "name": "Crickets",
   "icon": "zen_amphibia:cricket",
   "category": "zen_amphibia:getting_started",
-  "sortnum": 1,
+  "sortnum": 2,
   "pages": [
     {
       "type": "patchouli:text",
