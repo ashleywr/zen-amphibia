@@ -15,6 +15,15 @@
     },
     {
       "type": "patchouli:text",
+      "title": "Why Breed?",
+      "text": "Wild frogs are a starting point, not the finish line. A random frog may have one useful trait, but breeding is how you make that trait reliable. Frog Buckets show standout breeding targets so you can decide which frogs to keep."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Better lines pay off in survival: Slime Yield and Size improve $(l:zen_amphibia:resources/frog_slime)Frog Slime$(/l), Coloration helps choose genetic froglight palettes, Power and Hardiness improve combat frogs, and Quickness, Tongue Length, and Temperament make stronger worker frogports when Create is installed."
+    },
+    {
+      "type": "patchouli:text",
       "text": "Start small. Pick one trait, breed frogs that carry it, hatch their $(l:zen_amphibia:genetics/frogspawn)frogspawn$(/l), and inspect the $(l:zen_amphibia:lifecycle/tadpoles)tadpoles$(/l) or adults. Keep the best children and try again."
     },
     {

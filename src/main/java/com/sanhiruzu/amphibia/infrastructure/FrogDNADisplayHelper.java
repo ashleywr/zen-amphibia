@@ -41,6 +41,37 @@ public class FrogDNADisplayHelper {
         return lines;
     }
 
+    public static List<Component> getBreedingSummaryTooltip(FrogGenome genome) {
+        List<Component> lines = new ArrayList<>();
+        if (genome == null) return lines;
+
+        List<Gene> rankedGenes = new ArrayList<>(currentBreedingTargets());
+        rankedGenes.sort(Comparator
+            .comparing((Gene gene) -> FrogGradeCalculator.calculateGrade(genome.getGene(gene)).ordinal())
+            .reversed()
+            .thenComparing(gene -> gene.displayName));
+
+        lines.add(Component.literal("Breeding targets").withStyle(ChatFormatting.GOLD));
+        rankedGenes.stream()
+            .filter(gene -> FrogGradeCalculator.calculateGrade(genome.getGene(gene)).ordinal() >= FrogGradeCalculator.Grade.B.ordinal())
+            .limit(3)
+            .forEach(gene -> {
+                FrogGradeCalculator.Grade grade = FrogGradeCalculator.calculateGrade(genome.getGene(gene));
+                MutableComponent line = Component.literal("  ").withStyle(ChatFormatting.GRAY)
+                    .append(Component.literal(gene.displayName + " " + grade.label)
+                        .withStyle(Style.EMPTY.withColor(TextColor.fromRgb(grade.color))))
+                    .append(Component.literal(" - " + breedingUse(gene)).withStyle(ChatFormatting.DARK_GRAY));
+                lines.add(line);
+            });
+
+        if (lines.size() == 1) {
+            lines.add(Component.literal("  No standout traits yet").withStyle(ChatFormatting.DARK_GRAY));
+            lines.add(Component.literal("  Breed for B, A, or S grades").withStyle(ChatFormatting.GRAY));
+        }
+
+        return lines;
+    }
+
     public static List<Component> getFrogDebugTooltip(FrogState state) {
         List<Component> lines = new ArrayList<>();
         lines.add(Component.literal("=== FROG INFO ===").withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -189,5 +220,39 @@ public class FrogDNADisplayHelper {
         if (r < 100 && g > 150 && b > 150) return "Cyan";
         if (r < 100 && g < 100 && b < 100) return "Dark";
         return "Neutral";
+    }
+
+    private static String breedingUse(Gene gene) {
+        return switch (gene) {
+            case SLIME_YIELD -> "more Frog Slime";
+            case SIZE -> "larger slime yields";
+            case COLORATION -> "froglight colors";
+            case QUICKNESS -> "faster workers";
+            case TONGUE_LENGTH -> "longer reach";
+            case TEMPERAMENT -> "reliable workers";
+            case POWER -> "combat damage";
+            case HARDINESS -> "more health";
+            case HEAT_TOLERANCE -> "hot habitats";
+            case HUMIDITY_TOLERANCE -> "wet habitats";
+            case CUNNING -> "smart jobs";
+            case AWARENESS -> "supervisor jobs";
+            case AFFINITY -> "handling jobs";
+            case ATTUNEMENT -> "rare jobs";
+        };
+    }
+
+    private static List<Gene> currentBreedingTargets() {
+        return List.of(
+            Gene.SLIME_YIELD,
+            Gene.SIZE,
+            Gene.COLORATION,
+            Gene.QUICKNESS,
+            Gene.TONGUE_LENGTH,
+            Gene.TEMPERAMENT,
+            Gene.POWER,
+            Gene.HARDINESS,
+            Gene.HEAT_TOLERANCE,
+            Gene.HUMIDITY_TOLERANCE
+        );
     }
 }

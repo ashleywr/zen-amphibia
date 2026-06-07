@@ -57,6 +57,7 @@ public class FrogBucketItem extends BucketItem {
         FrogGenome genome = stack.get(AmphibiaDataComponents.FROG_DNA.get());
 
         if (genome != null) {
+            tooltip.addAll(FrogDNADisplayHelper.getBreedingSummaryTooltip(genome));
             if (net.minecraft.client.gui.screens.Screen.hasShiftDown()) {
                 tooltip.addAll(FrogDNADisplayHelper.getComprehensiveDNATooltip(genome));
             } else {
