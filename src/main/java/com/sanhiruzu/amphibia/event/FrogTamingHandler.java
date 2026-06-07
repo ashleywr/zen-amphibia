@@ -68,9 +68,9 @@ public class FrogTamingHandler {
             return;
         }
 
-        // Check if frog can be tamed (low DAMAGE grade = docile)
+        // Check if frog can be tamed (low POWER grade = docile)
         FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(
-            frog.getData(AmphibiaAttachments.FROG_GENOME).getGene(Gene.DAMAGE)
+            frog.getData(AmphibiaAttachments.FROG_GENOME).getGene(Gene.POWER)
         );
 
         if (damageGrade.ordinal() > FrogGradeCalculator.Grade.C.ordinal()) {
@@ -161,7 +161,7 @@ public class FrogTamingHandler {
     private static int calculateSlimeAmount(FrogGenome genome) {
         if (genome == null) return 1;
 
-        FrogGradeCalculator.Grade slimeGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.SLIME_VISCOSITY));
+        FrogGradeCalculator.Grade slimeGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.SLIME_YIELD));
         FrogGradeCalculator.Grade sizeGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.SIZE));
 
         int amount = 1;

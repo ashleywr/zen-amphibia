@@ -20,7 +20,7 @@ public class CreeperFrogHandler {
 		FrogGenome genome = validateCreeperFrog(frog);
 		if (genome == null) return;
 
-		FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.DAMAGE));
+		FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.POWER));
 		float healthPercent = frog.getHealth() / frog.getMaxHealth();
 
 		// Low tiers (D/C): explode when taking damage (handled in hurt event)
@@ -40,7 +40,7 @@ public class CreeperFrogHandler {
 		FrogGenome genome = validateCreeperFrog(frog);
 		if (genome == null) return;
 
-		FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.DAMAGE));
+		FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.POWER));
 
 		// Low tiers (D/C): explode randomly when taking damage
 		if (damageGrade == FrogGradeCalculator.Grade.D || damageGrade == FrogGradeCalculator.Grade.C) {
@@ -60,7 +60,7 @@ public class CreeperFrogHandler {
 		FrogGenome genome = frog.getData(AmphibiaAttachments.FROG_GENOME);
 		if (genome == null) return;
 
-		FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.DAMAGE));
+		FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.POWER));
 
 		// High tiers (B/A/S): player can trigger explosion with sneak + interact
 		if (damageGrade == FrogGradeCalculator.Grade.B || damageGrade == FrogGradeCalculator.Grade.A || damageGrade == FrogGradeCalculator.Grade.S) {

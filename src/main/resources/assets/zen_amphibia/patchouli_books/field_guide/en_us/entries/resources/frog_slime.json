@@ -6,11 +6,11 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "A tamed frog can produce Frog Slime when fed $(l:zen_amphibia:getting_started/crickets)crickets$(/l). Better slime viscosity and larger size $(l:zen_amphibia:genetics/reading_genes)genes$(/l) increase the amount produced."
+      "text": "A tamed frog can produce Frog Slime when fed $(l:zen_amphibia:getting_started/crickets)crickets$(/l). Better Slime Yield and larger Size $(l:zen_amphibia:genetics/reading_genes)genes$(/l) increase the amount produced."
     },
     {
       "type": "patchouli:text",
-      "text": "$(b)On death (grade gate):$() Frogs with $(b)Slime Viscosity B or better$() will drop Frog Slime when killed — but only if their happiness is $(b)≥ 0.4$(). Grade B drops 1, A drops 2, S drops 3. At happiness $(b)≥ 0.9$() they drop one more. Frogs with Grade D or C never drop slime this way."
+      "text": "$(b)On death (grade gate):$() Frogs with $(b)Slime Yield B or better$() will drop Frog Slime when killed — but only if their happiness is $(b)≥ 0.4$(). Grade B drops 1, A drops 2, S drops 3. At happiness $(b)≥ 0.9$() they drop one more. Frogs with Grade D or C never drop slime this way."
     },
     {
       "type": "patchouli:text",

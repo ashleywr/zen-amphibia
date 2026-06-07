@@ -5,7 +5,7 @@ public class FrogCombatCapability {
     public static FrogAttackType getAttackType(FrogGenome genome) {
         if (genome == null) return FrogAttackType.NONE;
 
-        FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.DAMAGE));
+        FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.POWER));
 
         return switch(damageGrade) {
             case D, C -> FrogAttackType.NONE;
@@ -21,19 +21,19 @@ public class FrogCombatCapability {
 
     public static boolean canPoison(FrogGenome genome) {
         if (genome == null) return false;
-        FrogGradeCalculator.Grade viscosityGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.SLIME_VISCOSITY));
+        FrogGradeCalculator.Grade viscosityGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.SLIME_YIELD));
         return viscosityGrade.ordinal() >= FrogGradeCalculator.Grade.B.ordinal();
     }
 
     public static double getHealthBonus(FrogGenome genome) {
         if (genome == null) return 0.0;
-        FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.HEALTH));
+        FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.HARDINESS));
         return FrogGradeCalculator.getHealthBonus(healthGrade);
     }
 
     public static double getDamageBonus(FrogGenome genome) {
         if (genome == null) return 0.0;
-        FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.DAMAGE));
+        FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.POWER));
         return FrogGradeCalculator.getDamageBonus(damageGrade);
     }
 }

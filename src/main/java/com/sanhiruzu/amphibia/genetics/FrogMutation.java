@@ -1,5 +1,7 @@
 package com.sanhiruzu.amphibia.genetics;
 
+import com.sanhiruzu.amphibia.entity.goal.EnderFrogTeleportGoal;
+import com.sanhiruzu.amphibia.profession.WardenRoleHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.animal.frog.Frog;
 
@@ -42,9 +44,8 @@ public record FrogMutation(String id, Component displayName, int color) {
         frog.getPersistentData().putBoolean("zen_amphibia:ender_mutation", true);
 
         // Add Ender teleport AI goal if on server
-        if (!frog.level().isClientSide) {
-            com.sanhiruzu.amphibia.entity.goal.EnderFrogTeleportGoal goal =
-                new com.sanhiruzu.amphibia.entity.goal.EnderFrogTeleportGoal(frog, 32.0);
+        if (!frog.level().isClientSide && !WardenRoleHelper.hasGoal(frog.goalSelector, EnderFrogTeleportGoal.class)) {
+            EnderFrogTeleportGoal goal = new EnderFrogTeleportGoal(frog, 32.0);
             frog.goalSelector.addGoal(2, goal);
         }
     }

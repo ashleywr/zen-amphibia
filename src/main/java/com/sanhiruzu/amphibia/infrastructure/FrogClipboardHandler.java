@@ -1,6 +1,8 @@
 package com.sanhiruzu.amphibia.infrastructure;
 
 import com.sanhiruzu.amphibia.genetics.FrogGenome;
+import com.sanhiruzu.amphibia.genetics.FrogGradeCalculator;
+import com.sanhiruzu.amphibia.genetics.FrogMutation;
 import com.sanhiruzu.amphibia.genetics.Gene;
 import com.simibubi.create.content.equipment.clipboard.ClipboardContent;
 import com.simibubi.create.content.equipment.clipboard.ClipboardEntry;
@@ -20,14 +22,27 @@ public class FrogClipboardHandler {
         List<ClipboardEntry> tasks = new ArrayList<>();
         tasks.add(new ClipboardEntry(true, Component.literal(title).withStyle(ChatFormatting.GREEN)));
 
-        var heatTrait = genome.getGene(Gene.HEAT_TOLERANCE);
-        tasks.add(new ClipboardEntry(true, Component.literal(" - Heat Tolerance: " + heatTrait.geneA() + "/" + heatTrait.geneB())));
+        if (!genome.mutations().isEmpty()) {
+            tasks.add(new ClipboardEntry(true, Component.literal(" - Mutations:")));
+            for (String mutationId : genome.mutations()) {
+                FrogMutation mutation = FrogMutation.getById(mutationId);
+                String name = mutation != null ? mutation.displayName().getString() : mutationId;
+                tasks.add(new ClipboardEntry(true, Component.literal("   * " + name)));
+            }
+        }
 
-        var viscosityTrait = genome.getGene(Gene.SLIME_VISCOSITY);
-        tasks.add(new ClipboardEntry(true, Component.literal(" - Viscosity: " + viscosityTrait.geneA() + "/" + viscosityTrait.geneB())));
-
-        var growthTrait = genome.getGene(Gene.GROWTH_RATE);
-        tasks.add(new ClipboardEntry(true, Component.literal(" - Growth Rate: " + growthTrait.geneA() + "/" + growthTrait.geneB())));
+        Gene.Layer currentLayer = null;
+        for (Gene gene : Gene.values()) {
+            if (gene.layer != currentLayer) {
+                currentLayer = gene.layer;
+                tasks.add(new ClipboardEntry(true, Component.literal(" - " + currentLayer.displayName + ":")));
+            }
+            var trait = genome.getGene(gene);
+            FrogGradeCalculator.Grade grade = FrogGradeCalculator.calculateGrade(trait);
+            tasks.add(new ClipboardEntry(true, Component.literal(
+                "   * " + gene.displayName + ": " + trait.geneA() + "/" + trait.geneB() + " [" + grade.label + "]"
+            )));
+        }
 
         ClipboardContent content = new ClipboardContent(
             ClipboardOverrides.ClipboardType.WRITTEN, List.of(tasks), false);

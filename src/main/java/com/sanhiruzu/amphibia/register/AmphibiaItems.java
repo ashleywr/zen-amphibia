@@ -45,6 +45,9 @@ public class AmphibiaItems {
     public static final DeferredItem<Item> FROG_SLIME_INGOT = ITEMS.register("frog_slime_ingot",
             () -> new Item(new Item.Properties().stacksTo(64)));
 
+    public static final DeferredItem<Item> WARDEN_BAND = ITEMS.register("warden_band",
+            () -> new Item(new Item.Properties().stacksTo(1)));
+
     public static final DeferredItem<SwordItem> FROG_SLIME_SWORD = ITEMS.register("frog_slime_sword",
             () -> new SwordItem(AmphibiaTiers.FROG_SLIME,
                     new Item.Properties().attributes(SwordItem.createAttributes(AmphibiaTiers.FROG_SLIME, 3, -2.4F))));

@@ -214,6 +214,7 @@ public class Amphibia {
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaFluids.SEQUENCED_GENETIC_FLUID_BUCKET.get());
         }
         if (event.getTabKey() == net.minecraft.world.item.CreativeModeTabs.COMBAT) {
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.WARDEN_BAND);
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_SLIME_SWORD);
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_SLIME_HELMET);
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_SLIME_CHESTPLATE);

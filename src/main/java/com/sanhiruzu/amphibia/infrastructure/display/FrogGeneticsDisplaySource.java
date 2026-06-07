@@ -43,19 +43,39 @@ public class FrogGeneticsDisplaySource extends SingleLineDisplaySource {
         FrogGenome genome = stack.get(AmphibiaDataComponents.FROG_DNA);
         if (genome == null) return Component.literal("No Genome Data");
 
-        var heatTrait = genome.getGene(Gene.HEAT_TOLERANCE);
-        var viscosityTrait = genome.getGene(Gene.SLIME_VISCOSITY);
-        var growthTrait = genome.getGene(Gene.GROWTH_RATE);
+        StringBuilder line = new StringBuilder();
+        for (Gene gene : Gene.values()) {
+            var trait = genome.getGene(gene);
+            if (!line.isEmpty()) {
+                line.append(' ');
+            }
+            line.append(shortName(gene)).append(':').append(trait.geneA()).append(trait.geneB());
+        }
 
-        return Component.literal(String.format("HT:%s%s SV:%s%s GR:%s%s",
-                heatTrait.geneA(), heatTrait.geneB(),
-                viscosityTrait.geneA(), viscosityTrait.geneB(),
-                growthTrait.geneA(), growthTrait.geneB()
-        ));
+        return Component.literal(line.toString());
     }
 
     @Override
     protected boolean allowsLabeling(DisplayLinkContext context) {
         return true;
+    }
+
+    private static String shortName(Gene gene) {
+        return switch (gene) {
+            case POWER -> "Pow";
+            case HARDINESS -> "Har";
+            case QUICKNESS -> "Qui";
+            case CUNNING -> "Cun";
+            case AWARENESS -> "Awa";
+            case TEMPERAMENT -> "Tem";
+            case AFFINITY -> "Aff";
+            case ATTUNEMENT -> "Att";
+            case SIZE -> "Siz";
+            case COLORATION -> "Col";
+            case TONGUE_LENGTH -> "Ton";
+            case SLIME_YIELD -> "Sli";
+            case HEAT_TOLERANCE -> "Hea";
+            case HUMIDITY_TOLERANCE -> "Hum";
+        };
     }
 }

@@ -171,7 +171,7 @@ public class TerrariumHappinessHandler {
         float terrariumHumidity = computeHumidity(signals, waterRatio);
 
         FrogGradeCalculator.Grade heatGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.HEAT_TOLERANCE));
-        FrogGradeCalculator.Grade humidGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.SLIME_VISCOSITY));
+        FrogGradeCalculator.Grade humidGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.HUMIDITY_TOLERANCE));
 
         float tempMatch = rangeMatch(terrariumTemp, FrogGradeCalculator.getPreferredTemperatureRange(heatGrade));
         float humidMatch = rangeMatch(terrariumHumidity, FrogGradeCalculator.getPreferredHumidityRange(humidGrade));

@@ -38,7 +38,7 @@ public record FrogGenome(Map<Gene, Trait> genes, List<String> mutations) {
 					},
 					geneMap -> {
 						Map<String, Trait> stringMap = new HashMap<>();
-						geneMap.forEach((gene, trait) -> stringMap.put(gene.displayName, trait));
+						geneMap.forEach((gene, trait) -> stringMap.put(gene.id, trait));
 						return stringMap;
 					}
 				)
@@ -107,9 +107,9 @@ public record FrogGenome(Map<Gene, Trait> genes, List<String> mutations) {
 
 
 	public int getColor() {
-		int hashRed = Math.abs(getGene(Gene.HEAT_TOLERANCE).hashCode());
-		int hashGreen = Math.abs(getGene(Gene.SLIME_VISCOSITY).hashCode());
-		int hashBlue = Math.abs(getGene(Gene.GROWTH_RATE).hashCode());
+		int hashRed = Math.abs(getGene(Gene.COLORATION).hashCode());
+		int hashGreen = Math.abs(getGene(Gene.HEAT_TOLERANCE).hashCode());
+		int hashBlue = Math.abs(getGene(Gene.HUMIDITY_TOLERANCE).hashCode());
 
 		int r = 100 + (hashRed % 155);
 		int g = 100 + (hashGreen % 155);

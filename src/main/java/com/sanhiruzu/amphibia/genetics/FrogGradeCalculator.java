@@ -91,7 +91,7 @@ public class FrogGradeCalculator {
     }
 
     // Returns [min, max] preferred humidity on a 0.0–1.0 scale.
-    // Derived from SLIME_VISCOSITY: higher viscosity frogs need more moisture.
+    // Derived from HUMIDITY_TOLERANCE: higher grades prefer wetter habitats.
     public static float[] getPreferredHumidityRange(Grade grade) {
         return switch (grade) {
             case D -> new float[]{0.15f, 0.50f};

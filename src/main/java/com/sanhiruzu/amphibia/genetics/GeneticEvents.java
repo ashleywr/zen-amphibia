@@ -179,8 +179,8 @@ public class GeneticEvents {
 
     private static FrogGenome applySlimeMutation(FrogGenome genome, int count) {
         var mutations = new java.util.ArrayList<>(genome.mutations());
-        if (!mutations.contains("slime_viscosity") && count > 0) {
-            mutations.add("slime_viscosity");
+        if (!mutations.contains("slime_yield") && count > 0) {
+            mutations.add("slime_yield");
         }
         return new FrogGenome(genome.genes(), mutations);
     }

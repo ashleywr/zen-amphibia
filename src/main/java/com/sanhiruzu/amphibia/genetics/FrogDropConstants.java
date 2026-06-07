@@ -14,7 +14,7 @@ public final class FrogDropConstants {
     // (1.0 - BASE) / (1.0 - THRESHOLD) = 0.7 / 0.4
     public static final float ENHANCED_DROP_SCALE = 1.75f;
 
-    // Guaranteed drop counts by Slime Viscosity grade (Grade B+)
+    // Guaranteed drop counts by Slime Yield grade (Grade B+)
     public static final int GRADE_B_DROP_COUNT = 1;
     public static final int GRADE_A_DROP_COUNT = 2;
     public static final int GRADE_S_DROP_COUNT = 3;

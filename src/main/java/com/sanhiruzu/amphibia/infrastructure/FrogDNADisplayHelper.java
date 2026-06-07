@@ -1,47 +1,39 @@
 package com.sanhiruzu.amphibia.infrastructure;
 
 import com.sanhiruzu.amphibia.genetics.FrogGenome;
-import com.sanhiruzu.amphibia.genetics.Gene;
 import com.sanhiruzu.amphibia.genetics.FrogGradeCalculator;
 import com.sanhiruzu.amphibia.genetics.FrogMutation;
+import com.sanhiruzu.amphibia.genetics.FrogState;
+import com.sanhiruzu.amphibia.genetics.Gene;
+import com.sanhiruzu.amphibia.profession.WardenRoleHelper;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.world.entity.animal.frog.Frog;
 
 public class FrogDNADisplayHelper {
 
-    /** Compact 2-gene overlay summary, optionally preceded by a header line. */
     public static List<Component> getDNATooltip(FrogGenome genome, boolean includeHeader) {
         List<Component> lines = new ArrayList<>();
-
         if (includeHeader) {
             lines.add(Component.translatable("gui.goggles.zen_amphibia.frog_genetics").withStyle(ChatFormatting.GREEN));
         }
 
-        var heatTrait = genome.getGene(Gene.HEAT_TOLERANCE);
-        lines.add(Component.literal("  ").append(Component.translatable("gui.goggles.zen_amphibia.heat_tolerance"))
-            .append(Component.literal(": " + heatTrait.geneA() + "/" + heatTrait.geneB()).withStyle(Gene.HEAT_TOLERANCE.color)));
+        if (genome == null) {
+            lines.add(Component.literal("  No genome data").withStyle(ChatFormatting.RED));
+            return lines;
+        }
 
-        var viscosityTrait = genome.getGene(Gene.SLIME_VISCOSITY);
-        lines.add(Component.literal("  ").append(Component.translatable("gui.goggles.zen_amphibia.slime_viscosity"))
-            .append(Component.literal(": " + viscosityTrait.geneA() + "/" + viscosityTrait.geneB()).withStyle(Gene.SLIME_VISCOSITY.color)));
-
-        var growthTrait = genome.getGene(Gene.GROWTH_RATE);
-        lines.add(Component.literal("  ").append(Component.literal("Growth: "))
-            .append(Component.literal(growthTrait.geneA() + "/" + growthTrait.geneB()).withStyle(Gene.GROWTH_RATE.color)));
-
-        var sizeTrait = genome.getGene(Gene.SIZE);
-        lines.add(Component.literal("  ").append(Component.literal("Size: "))
-            .append(Component.literal(sizeTrait.geneA() + "/" + sizeTrait.geneB()).withStyle(Gene.SIZE.color)));
-
+        addGeneLines(lines, genome, true, false);
         return lines;
     }
 
-    /** Full mutations + genetics breakdown, used for item shift-tooltips. */
     public static List<Component> getComprehensiveDNATooltip(FrogGenome genome) {
         List<Component> lines = new ArrayList<>();
         addMutationsSection(lines, genome);
@@ -49,7 +41,26 @@ public class FrogDNADisplayHelper {
         return lines;
     }
 
-    /** Genome tint color for item/entity rendering. */
+    public static List<Component> getFrogDebugTooltip(FrogState state) {
+        List<Component> lines = new ArrayList<>();
+        lines.add(Component.literal("=== FROG INFO ===").withStyle(ChatFormatting.LIGHT_PURPLE));
+        lines.add(Component.literal("Age: ").withStyle(ChatFormatting.GRAY)
+            .append(Component.literal(state.age + " ticks").withStyle(ChatFormatting.YELLOW)));
+        lines.add(Component.literal("Scale: ").withStyle(ChatFormatting.GRAY)
+            .append(Component.literal(String.format("%.2f", state.scale)).withStyle(ChatFormatting.YELLOW)));
+        lines.add(Component.literal("Status: ").withStyle(ChatFormatting.GRAY)
+            .append(modStatus(state)));
+        lines.add(Component.literal("AI: ").withStyle(ChatFormatting.GRAY)
+            .append(Component.literal(state.aiStatus).withStyle(ChatFormatting.DARK_GRAY)));
+
+        addProfessionSection(lines, state.entity);
+        addPersistentDataSection(lines, state.entity);
+        addMutationsSection(lines, state.genome);
+        addGeneticsSection(lines, state.genome);
+
+        return lines;
+    }
+
     public static int getGenomeColor(FrogGenome genome) {
         return genome.getColor();
     }
@@ -64,6 +75,8 @@ public class FrogDNADisplayHelper {
                 lines.add(Component.literal("  ").append(
                     Component.literal(mutation.displayName().getString())
                         .withStyle(Style.EMPTY.withColor(TextColor.fromRgb(mutation.color())))));
+            } else {
+                lines.add(Component.literal("  " + mutationId).withStyle(ChatFormatting.DARK_GRAY));
             }
         }
     }
@@ -77,44 +90,94 @@ public class FrogDNADisplayHelper {
             return;
         }
 
-        FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.HEALTH));
-        FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.DAMAGE));
-
-        var heatTrait = genome.getGene(Gene.HEAT_TOLERANCE);
-        lines.add(Component.literal("Heat Tolerance: ").withStyle(ChatFormatting.GRAY)
-            .append(Component.literal(heatTrait.geneA() + " / " + heatTrait.geneB()).withStyle(Gene.HEAT_TOLERANCE.color)));
-
-        var viscosityTrait = genome.getGene(Gene.SLIME_VISCOSITY);
-        lines.add(Component.literal("Viscosity: ").withStyle(ChatFormatting.GRAY)
-            .append(Component.literal(viscosityTrait.geneA() + " / " + viscosityTrait.geneB()).withStyle(Gene.SLIME_VISCOSITY.color)));
-
-        var growthTrait = genome.getGene(Gene.GROWTH_RATE);
-        lines.add(Component.literal("Growth Rate: ").withStyle(ChatFormatting.GRAY)
-            .append(Component.literal(growthTrait.geneA() + " / " + growthTrait.geneB()).withStyle(Gene.GROWTH_RATE.color)));
-
-        var sizeTrait = genome.getGene(Gene.SIZE);
-        lines.add(Component.literal("Size: ").withStyle(ChatFormatting.GRAY)
-            .append(Component.literal(sizeTrait.geneA() + " / " + sizeTrait.geneB()).withStyle(Gene.SIZE.color)));
-
-        lines.add(Component.empty());
-        var healthTrait = genome.getGene(Gene.HEALTH);
-        lines.add(Component.literal("Health: ").withStyle(ChatFormatting.GRAY)
-            .append(Component.literal(healthTrait.geneA() + " / " + healthTrait.geneB()).withStyle(ChatFormatting.WHITE))
-            .append(Component.literal(" [" + healthGrade.label + "]")
-                .withStyle(Style.EMPTY.withColor(TextColor.fromRgb(healthGrade.color)))));
-
-        var damageTrait = genome.getGene(Gene.DAMAGE);
-        lines.add(Component.literal("Damage: ").withStyle(ChatFormatting.GRAY)
-            .append(Component.literal(damageTrait.geneA() + " / " + damageTrait.geneB()).withStyle(ChatFormatting.WHITE))
-            .append(Component.literal(" [" + damageGrade.label + "]")
-                .withStyle(Style.EMPTY.withColor(TextColor.fromRgb(damageGrade.color)))));
+        addGeneLines(lines, genome, false, true);
 
         int colorHash = getGenomeColor(genome);
         int r = (colorHash >> 16) & 0xFF;
         int g = (colorHash >> 8) & 0xFF;
         int b = colorHash & 0xFF;
-        lines.add(Component.literal("Color: ").withStyle(ChatFormatting.GRAY)
+        lines.add(Component.literal("Coloration: ").withStyle(ChatFormatting.GRAY)
             .append(Component.literal(colorName(r, g, b) + " (RGB:" + r + "," + g + "," + b + ")").withStyle(ChatFormatting.WHITE)));
+        lines.add(Component.literal("Derived Scale: ").withStyle(ChatFormatting.GRAY)
+            .append(Component.literal(String.format("%.2f", genome.getScale())).withStyle(ChatFormatting.WHITE)));
+    }
+
+    private static void addGeneLines(List<Component> lines, FrogGenome genome, boolean compact, boolean includeGrade) {
+        Gene.Layer currentLayer = null;
+        for (Gene gene : Gene.values()) {
+            if (gene.layer != currentLayer) {
+                currentLayer = gene.layer;
+                lines.add(Component.literal((compact ? "  " : "") + currentLayer.displayName + ":").withStyle(currentLayer.color));
+            }
+
+            var trait = genome.getGene(gene);
+            MutableComponent line = Component.literal(compact ? "    " : "  ").withStyle(ChatFormatting.GRAY)
+                .append(Component.literal(gene.displayName + ": ").withStyle(ChatFormatting.GRAY));
+            line = line.append(Component.literal(trait.geneA() + " / " + trait.geneB()).withStyle(gene.color));
+
+            if (includeGrade) {
+                FrogGradeCalculator.Grade grade = FrogGradeCalculator.calculateGrade(trait);
+                line = line.append(Component.literal(" [" + grade.label + "]")
+                    .withStyle(Style.EMPTY.withColor(TextColor.fromRgb(grade.color))));
+            }
+
+            lines.add(line);
+        }
+    }
+
+    private static void addProfessionSection(List<Component> lines, Frog frog) {
+        lines.add(Component.empty());
+        lines.add(Component.literal("=== ROLES ===").withStyle(ChatFormatting.GOLD));
+
+        if (WardenRoleHelper.isWarden(frog)) {
+            lines.add(Component.literal("Warden: ").withStyle(ChatFormatting.GRAY)
+                .append(Component.literal("active").withStyle(ChatFormatting.AQUA)));
+            WardenRoleHelper.getAnchor(frog).ifPresent(anchor ->
+                lines.add(Component.literal("Anchor: ").withStyle(ChatFormatting.GRAY)
+                    .append(Component.literal(anchor.getX() + ", " + anchor.getY() + ", " + anchor.getZ())
+                        .withStyle(ChatFormatting.YELLOW))));
+        } else {
+            lines.add(Component.literal("Warden: ").withStyle(ChatFormatting.GRAY)
+                .append(Component.literal("inactive").withStyle(ChatFormatting.DARK_GRAY)));
+        }
+    }
+
+    private static void addPersistentDataSection(List<Component> lines, Frog frog) {
+        List<String> keys = frog.getPersistentData().getAllKeys().stream()
+            .filter(key -> key.startsWith("zen_amphibia:"))
+            .sorted(Comparator.naturalOrder())
+            .toList();
+
+        if (keys.isEmpty()) return;
+
+        lines.add(Component.empty());
+        lines.add(Component.literal("=== DEBUG DATA ===").withStyle(ChatFormatting.BLUE));
+        for (String key : keys) {
+            Tag tag = frog.getPersistentData().get(key);
+            String shortKey = key.substring("zen_amphibia:".length());
+            lines.add(Component.literal(shortKey + ": ").withStyle(ChatFormatting.GRAY)
+                .append(Component.literal(tag == null ? "<null>" : tag.toString()).withStyle(ChatFormatting.WHITE)));
+        }
+    }
+
+    private static Component modStatus(FrogState state) {
+        if (state.maturityProgress < 1.0f) {
+            int pct = (int)(state.maturityProgress * 100);
+            return Component.literal("Maturing " + pct + "%").withStyle(ChatFormatting.YELLOW);
+        }
+        if (state.estivating) {
+            return Component.literal("Estivating").withStyle(ChatFormatting.AQUA);
+        }
+        if (state.hasEgg && state.inWater) {
+            return Component.literal("Laying eggs").withStyle(ChatFormatting.GREEN);
+        }
+        if (state.hasEgg) {
+            return Component.literal("Finding water to lay eggs").withStyle(ChatFormatting.YELLOW);
+        }
+        if (state.inLove) {
+            return Component.literal("In love").withStyle(ChatFormatting.LIGHT_PURPLE);
+        }
+        return Component.literal("Idle").withStyle(ChatFormatting.WHITE);
     }
 
     private static String colorName(int r, int g, int b) {

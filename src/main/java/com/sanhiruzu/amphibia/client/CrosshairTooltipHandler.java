@@ -93,35 +93,7 @@ public class CrosshairTooltipHandler {
 
     private static List<Component> forFrog(Frog frog) {
         FrogState state = FrogState.fromFrog(frog);
-        List<Component> lines = new ArrayList<>();
-        lines.add(Component.literal("=== FROG INFO ===").withStyle(ChatFormatting.LIGHT_PURPLE));
-        lines.add(Component.literal("Age: ").withStyle(ChatFormatting.GRAY)
-            .append(Component.literal(state.age + " ticks").withStyle(ChatFormatting.YELLOW)));
-        lines.add(Component.literal("Size: ").withStyle(ChatFormatting.GRAY)
-            .append(Component.literal(String.format("%.2f", state.scale)).withStyle(ChatFormatting.YELLOW)));
-        lines.addAll(FrogDNADisplayHelper.getComprehensiveDNATooltip(state.genome));
-        lines.add(Component.empty());
-        lines.add(Component.literal("Status: ").withStyle(ChatFormatting.GRAY)
-            .append(modStatus(state)));
-        lines.add(Component.literal("AI: ").withStyle(ChatFormatting.GRAY)
-            .append(Component.literal(state.aiStatus).withStyle(ChatFormatting.DARK_GRAY)));
-        return lines;
-    }
-
-    private static Component modStatus(FrogState state) {
-        if (state.maturityProgress < 1.0f) {
-            int pct = (int)(state.maturityProgress * 100);
-            return Component.literal("Maturing " + pct + "%").withStyle(ChatFormatting.YELLOW);
-        }
-        if (state.estivating)
-            return Component.literal("Estivating").withStyle(ChatFormatting.AQUA);
-        if (state.hasEgg && state.inWater)
-            return Component.literal("Laying eggs").withStyle(ChatFormatting.GREEN);
-        if (state.hasEgg)
-            return Component.literal("Finding water to lay eggs").withStyle(ChatFormatting.YELLOW);
-        if (state.inLove)
-            return Component.literal("In love").withStyle(ChatFormatting.LIGHT_PURPLE);
-        return Component.literal("Idle").withStyle(ChatFormatting.WHITE);
+        return FrogDNADisplayHelper.getFrogDebugTooltip(state);
     }
 
     private static List<Component> forTadpole(Tadpole tadpole) {

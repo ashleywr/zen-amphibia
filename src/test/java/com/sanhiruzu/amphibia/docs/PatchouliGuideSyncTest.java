@@ -21,7 +21,7 @@ class PatchouliGuideSyncTest {
         String guideText = readGuideText();
         String geneSource = Files.readString(PROJECT_ROOT.resolve("src/main/java/com/sanhiruzu/amphibia/genetics/Gene.java"));
 
-        var matcher = Pattern.compile("\\b[A-Z_]+\\(\\d+,\\s*\"([^\"]+)\"").matcher(geneSource);
+        var matcher = Pattern.compile("\\b[A-Z_]+\\(\\d+,\\s*\"[^\"]+\",\\s*\"([^\"]+)\"").matcher(geneSource);
         int checked = 0;
         while (matcher.find()) {
             checked++;

@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Amphibia frogs carry genes for heat tolerance, slime viscosity, growth rate, health, damage, and size. Each trait has two $(l:zen_amphibia:genetics/alleles_and_carriers)alleles$(/l), so a frog can carry hidden value even when it does not look impressive yet."
+      "text": "Amphibia frogs carry genes in layers. Aptitudes are Power, Hardiness, Quickness, Cunning, Awareness, Temperament, Affinity, and Attunement. Phenotypes are Size, Coloration, Tongue Length, and Slime Yield. Ecology traits are Heat Tolerance and Humidity Tolerance. Each trait has two $(l:zen_amphibia:genetics/alleles_and_carriers)alleles$(/l), so a frog can carry hidden value even when it does not look impressive yet."
     },
     {
       "type": "patchouli:text",

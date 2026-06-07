@@ -12,7 +12,7 @@
     {
       "type": "patchouli:text",
       "title": "What Makes a Good Terrarium",
-      "text": "Happiness is scored from five things: $(b)zone quality$() (30%), $(b)water coverage$() (25%), $(b)climate match$() (25%), $(b)frog plants$() (15%), and $(b)room size$() (5%). Climate match compares the room's temperature and humidity against the frog's $(l:zen_amphibia:genetics/reading_genes)Heat Tolerance and Slime Viscosity$(/l) grades."
+      "text": "Happiness is scored from five things: $(b)zone quality$() (30%), $(b)water coverage$() (25%), $(b)climate match$() (25%), $(b)frog plants$() (15%), and $(b)room size$() (5%). Climate match compares the room's temperature and humidity against the frog's $(l:zen_amphibia:genetics/reading_genes)Heat Tolerance and Humidity Tolerance$(/l) grades."
     },
     {
       "type": "patchouli:text",
@@ -22,12 +22,22 @@
     {
       "type": "patchouli:text",
       "title": "Why Happiness Matters",
-      "text": "$(b)Drops:$() Frogs with $(l:zen_amphibia:genetics/reading_genes)Slime Viscosity$(/l) Grade B or better drop $(l:zen_amphibia:resources/frog_slime)Frog Slime$(/l) on death when happiness is $(b)≥ 0.4$(). Higher grades drop more (B=1, A=2, S=3), and at happiness $(b)≥ 0.9$() they drop an extra one. Above $(b)0.6$(), a separate random roll adds yet another chance."
+      "text": "$(b)Drops:$() Frogs with $(l:zen_amphibia:genetics/reading_genes)Slime Yield$(/l) Grade B or better drop $(l:zen_amphibia:resources/frog_slime)Frog Slime$(/l) on death when happiness is $(b)≥ 0.4$(). Higher grades drop more (B=1, A=2, S=3), and at happiness $(b)≥ 0.9$() they drop an extra one. Above $(b)0.6$(), a separate random roll adds yet another chance."
     },
     {
       "type": "patchouli:text",
       "title": "Why Happiness Matters",
       "text": "$(b)Breeding:$() When two happy frogs breed, there is a small chance each locus upgrades one allele tier. Average parent happiness is multiplied by 15% to get the chance per locus. A pair at 1.0 happiness each has a 15% chance to improve a random gene in the offspring."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Overcrowding",
+      "text": "Too many frogs in one zone penalize happiness — roughly $(b)1 frog per 15 blocks$() of volume is comfortable. Beyond that, every extra frog scales the penalty up to a $(b)50% reduction$(). If you use Atelier, the room's HUD will show $(b)Overcrowded$() and its quality score will drop. Spread large lines across multiple terrariums."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Breeding Threshold",
+      "text": "Frogs below $(b)0.5$() happiness will not enter love mode. Offering a cricket to an unhappy frog shows a message and does nothing. Build a proper terrarium first — even a basic sealed room with a small pool will push happiness past 0.5. The breeding gene bonus only applies once they are already in love."
     },
     {
       "type": "patchouli:text",

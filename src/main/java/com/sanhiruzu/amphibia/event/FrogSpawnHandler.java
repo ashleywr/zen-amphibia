@@ -5,6 +5,7 @@ import com.sanhiruzu.amphibia.entity.goal.GrazeKelpGoal;
 import com.sanhiruzu.amphibia.entity.goal.FrogBiteGoal;
 import com.sanhiruzu.amphibia.entity.goal.FrogTongueGoal;
 import com.sanhiruzu.amphibia.entity.goal.FrogHostileTargetGoal;
+import com.sanhiruzu.amphibia.profession.WardenRoleHelper;
 import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.sanhiruzu.amphibia.genetics.Gene;
 import javax.annotation.Nullable;
@@ -15,6 +16,7 @@ import com.sanhiruzu.amphibia.genetics.FrogAttackType;
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.animal.frog.Tadpole;
+import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.MobSpawnType;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -53,10 +55,6 @@ public class FrogSpawnHandler {
                 frog.setData(AmphibiaAttachments.FROG_GENETICS_APPLIED, false);
             }
 
-            // Check if genetics have already been applied (e.g., from NBT on load)
-            boolean geneticsApplied = frog.getData(AmphibiaAttachments.FROG_GENETICS_APPLIED);
-            if (geneticsApplied) return;
-
             // Get or create genome
             FrogGenome genome = frog.getData(AmphibiaAttachments.FROG_GENOME);
             if (genome == null) {
@@ -64,9 +62,15 @@ public class FrogSpawnHandler {
                 frog.setData(AmphibiaAttachments.FROG_GENOME, genome);
             }
 
-            // Apply genetics immediately, before first render
-            applyGeneticsToFrog(frog, genome);
-            frog.setData(AmphibiaAttachments.FROG_GENETICS_APPLIED, true);
+            // Check if genetics have already been applied (e.g., from NBT on load)
+            boolean geneticsApplied = frog.getData(AmphibiaAttachments.FROG_GENETICS_APPLIED);
+            if (geneticsApplied) {
+                restoreFrogBehavior(frog, genome);
+            } else {
+                // Apply genetics immediately, before first render
+                applyGeneticsToFrog(frog, genome);
+                frog.setData(AmphibiaAttachments.FROG_GENETICS_APPLIED, true);
+            }
         } else if (event.getEntity() instanceof Tadpole tadpole) {
             if (tadpole.level().isClientSide) return;
 
@@ -88,9 +92,9 @@ public class FrogSpawnHandler {
         float scale = genome.getScale();
         frog.setData(AmphibiaAttachments.FROG_SCALE, scale);
 
-        // Apply health and damage bonuses based on genome
-        FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.HEALTH));
-        FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.DAMAGE));
+        // Apply combat stats based on aptitude genes.
+        FrogGradeCalculator.Grade healthGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.HARDINESS));
+        FrogGradeCalculator.Grade damageGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.POWER));
 
         double healthBonus = FrogGradeCalculator.getHealthBonus(healthGrade);
         double damageBonus = FrogGradeCalculator.getDamageBonus(damageGrade);
@@ -119,16 +123,41 @@ public class FrogSpawnHandler {
         }
 
         // Apply combat goals based on genetics
+        ensureCombatGoals(frog, genome, damageBonus);
+        WardenRoleHelper.applyAnchorRestriction(frog);
+    }
+
+    private static void restoreFrogBehavior(Frog frog, FrogGenome genome) {
+        for (String mutationId : genome.mutations()) {
+            FrogMutation mutation = FrogMutation.getById(mutationId);
+            if (mutation != null) {
+                mutation.applyToFrog(frog);
+            }
+        }
+
+        double damageBonus = FrogCombatCapability.getDamageBonus(genome);
+        ensureCombatGoals(frog, genome, damageBonus);
+        WardenRoleHelper.applyAnchorRestriction(frog);
+    }
+
+    private static void ensureCombatGoals(Frog frog, FrogGenome genome, double damageBonus) {
         FrogAttackType attackType = FrogCombatCapability.getAttackType(genome);
         if (attackType != FrogAttackType.NONE) {
-            // Add targeting goal
-            frog.targetSelector.addGoal(2, new FrogHostileTargetGoal(frog));
+            if (!WardenRoleHelper.hasGoal(frog.targetSelector, FrogHostileTargetGoal.class)) {
+                frog.targetSelector.addGoal(2, new FrogHostileTargetGoal(frog));
+            }
+
+            if (!WardenRoleHelper.hasGoal(frog.goalSelector, MoveTowardsRestrictionGoal.class)) {
+                frog.goalSelector.addGoal(2, new MoveTowardsRestrictionGoal(frog, 1.0));
+            }
 
             // Add attack goals based on type
-            if (attackType == FrogAttackType.BITE || attackType == FrogAttackType.BOTH) {
+            if ((attackType == FrogAttackType.BITE || attackType == FrogAttackType.BOTH)
+                && !WardenRoleHelper.hasGoal(frog.goalSelector, FrogBiteGoal.class)) {
                 frog.goalSelector.addGoal(3, new FrogBiteGoal(frog, damageBonus));
             }
-            if (attackType == FrogAttackType.TONGUE || attackType == FrogAttackType.BOTH) {
+            if ((attackType == FrogAttackType.TONGUE || attackType == FrogAttackType.BOTH)
+                && !WardenRoleHelper.hasGoal(frog.goalSelector, FrogTongueGoal.class)) {
                 frog.goalSelector.addGoal(4, new FrogTongueGoal(frog, damageBonus));
             }
         }

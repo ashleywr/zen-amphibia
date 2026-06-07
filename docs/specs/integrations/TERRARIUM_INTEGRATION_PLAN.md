@@ -100,14 +100,6 @@ Decays by 0.05/interval when outside terrarium (min 0.0).
 - [ ] Breeding bonus: Two high-happiness frogs breed, offspring genome has allele upgrades
 - [ ] Enhanced drops: High-happiness frog drops FROG_SLIME on kill
 
-## Files Reference
-
-**Full plan:** `C:\Users\ashle\.claude\plans\generic-puzzling-bunny.md`
-
-**Key locations:**
-- Atelier: `C:\WorkDir\Minecraft Mods\Atelier`
-- Amphibia: `C:\WorkDir\Minecraft Mods\Amphibia`
-
 ## Notes
 
 - `RoomTypeQualityProfile.TERRARIUM` uses theme weight 0.50 (vs 0.15–0.30 for other types) to emphasize water/plant signals

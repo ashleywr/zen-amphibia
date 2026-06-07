@@ -13,6 +13,16 @@
       "recipe": "zen_amphibia:verdant_genetic_froglight",
       "recipe2": "zen_amphibia:azure_genetic_froglight",
       "title": "Froglight Colors"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "The Wild Route",
+      "text": "A genetic frog that eats a small magma cube drops a $(b)genetic froglight$() whose color matches its genome — not a vanilla froglight. The color is shaped by three genes: $(b)Coloration$() (red channel), $(b)Heat Tolerance$() (green channel), and $(b)Humidity Tolerance$() (blue channel). Breeding frogs for specific combinations is how you target a particular light color."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Color Palette",
+      "text": "The dominant gene channel determines the froglight color. $(b)Verdant:$() green dominant. $(b)Azure:$() blue dominant (cool). $(b)Violet:$() blue dominant with red influence. $(b)Rose:$() red dominant (cool). $(b)Amber:$() red dominant with green warmth. $(b)Pearl:$() all channels balanced and bright. $(b)Umbral:$() all channels balanced and dim."
     }
   ]
 }

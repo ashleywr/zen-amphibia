@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LSL",
+    "SFS",
+    " L "
+  ],
+  "key": {
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "S": {
+      "item": "minecraft:string"
+    },
+    "F": {
+      "item": "zen_amphibia:frog_slime"
+    }
+  },
+  "result": {
+    "id": "zen_amphibia:warden_band",
+    "count": 1
+  }
+}
