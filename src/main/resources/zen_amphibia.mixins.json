@@ -9,12 +9,17 @@
   },
   "mixins": [
     "BucketItemMixin",
+    "ChainConveyorBlockMixin",
     "FluidDrainingBehaviourMixin",
     "FrogMixin",
     "FrogportBlockEntityMixin",
+    "PackagerBlockMixin",
     "TadpoleMixin"
   ],
   "client": [
+    "client.ChainConveyorInteractionHandlerMixin",
+    "client.InputEventsMixin",
+    "client.PackagePortTargetSelectionHandlerMixin",
     "FrogportRendererMixin"
   ],
   "server": []
