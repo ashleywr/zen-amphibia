@@ -210,6 +210,7 @@ public class Amphibia {
         if (event.getTabKey() == net.minecraft.world.item.CreativeModeTabs.INGREDIENTS) {
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.CRICKET);
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_SLIME);
+            event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.LUMINOUS_FROG_SECRETION);
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.FROG_SLIME_INGOT);
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaItems.BOTTLED_FROGSPAWN);
             event.accept(com.sanhiruzu.amphibia.register.AmphibiaFluids.RAW_GENETIC_FLUID_BUCKET.get());

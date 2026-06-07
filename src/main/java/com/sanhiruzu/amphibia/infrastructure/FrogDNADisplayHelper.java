@@ -1,5 +1,6 @@
 package com.sanhiruzu.amphibia.infrastructure;
 
+import com.sanhiruzu.amphibia.event.FrogSlimeHarvestHandler;
 import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.sanhiruzu.amphibia.genetics.FrogGradeCalculator;
 import com.sanhiruzu.amphibia.genetics.FrogMutation;
@@ -107,6 +108,13 @@ public class FrogDNADisplayHelper {
             .append(state.slimeReady
                 ? Component.literal("Ready").withStyle(ChatFormatting.GREEN)
                 : Component.literal("Not ready").withStyle(ChatFormatting.DARK_GRAY)));
+        if (state.genome != null) {
+            Gene dominant = FrogSlimeHarvestHandler.getDominantGene(state.genome);
+            String secretionLabel = secretionTypeLabel(dominant);
+            lines.add(Component.literal("Secretion: ").withStyle(ChatFormatting.GRAY)
+                .append(Component.literal(secretionLabel).withStyle(
+                    dominant == Gene.COLORATION ? ChatFormatting.YELLOW : ChatFormatting.WHITE)));
+        }
         lines.add(Component.literal("AI: ").withStyle(ChatFormatting.GRAY)
             .append(Component.literal(state.aiStatus).withStyle(ChatFormatting.DARK_GRAY)));
 
@@ -264,6 +272,15 @@ public class FrogDNADisplayHelper {
             case AWARENESS -> "supervisor jobs";
             case AFFINITY -> "handling jobs";
             case ATTUNEMENT -> "rare jobs";
+        };
+    }
+
+    private static String secretionTypeLabel(Gene dominant) {
+        if (dominant == null) return "Basic";
+        return switch (dominant) {
+            case COLORATION -> "Luminous";
+            // future types: POWER/HEAT_TOLERANCE → Caustic, HARDINESS/AFFINITY → Preservative, ATTUNEMENT/CUNNING → Mutagenic
+            default -> "Basic";
         };
     }
 

@@ -6,6 +6,7 @@ import com.sanhiruzu.amphibia.genetics.FrogSlimeHarvestConstants;
 import com.sanhiruzu.amphibia.genetics.Gene;
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import com.sanhiruzu.amphibia.register.AmphibiaItems;
+import net.minecraft.world.item.Item;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -61,8 +62,9 @@ public class FrogSlimeHarvestHandler {
         FrogGenome genome = frog.getData(AmphibiaAttachments.FROG_GENOME);
         float happiness = frog.getData(AmphibiaAttachments.FROG_HAPPINESS);
         int count = calculateYield(frog, genome, happiness);
+        Item secretionItem = resolveSecretionItem(genome);
 
-        ItemStack slime = new ItemStack(AmphibiaItems.FROG_SLIME.get(), count);
+        ItemStack slime = new ItemStack(secretionItem, count);
         if (!player.getInventory().add(slime)) {
             player.drop(slime, false);
         }
@@ -84,6 +86,30 @@ public class FrogSlimeHarvestHandler {
         int nearby = frog.level().getEntitiesOfClass(Frog.class,
             frog.getBoundingBox().inflate(FrogSlimeHarvestConstants.OVERCROWD_RADIUS)).size();
         return nearby > FrogSlimeHarvestConstants.OVERCROWD_MAX;
+    }
+
+    // Returns the gene that best characterises this frog's profile (Grade A or S, highest wins).
+    // First-encountered gene wins ties. Returns null if no gene reaches Grade A.
+    public static Gene getDominantGene(FrogGenome genome) {
+        Gene dominant = null;
+        int best = FrogGradeCalculator.Grade.B.ordinal(); // must strictly exceed B to qualify
+        for (Gene gene : Gene.values()) {
+            if (gene == Gene.SLIME_YIELD) continue;
+            int ord = FrogGradeCalculator.calculateGrade(genome.getGene(gene)).ordinal();
+            if (ord > best) {
+                best = ord;
+                dominant = gene;
+            }
+        }
+        return dominant;
+    }
+
+    private static Item resolveSecretionItem(FrogGenome genome) {
+        Gene dominant = getDominantGene(genome);
+        if (dominant == Gene.COLORATION) {
+            return AmphibiaItems.LUMINOUS_FROG_SECRETION.get();
+        }
+        return AmphibiaItems.FROG_SLIME.get();
     }
 
     private static int calculateYield(Frog frog, FrogGenome genome, float happiness) {
