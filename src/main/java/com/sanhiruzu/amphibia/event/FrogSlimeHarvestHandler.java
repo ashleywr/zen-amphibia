@@ -1,18 +1,22 @@
 package com.sanhiruzu.amphibia.event;
 
+import com.sanhiruzu.amphibia.genetics.FrogDropHandler;
 import com.sanhiruzu.amphibia.genetics.FrogGradeCalculator;
 import com.sanhiruzu.amphibia.genetics.FrogGenome;
 import com.sanhiruzu.amphibia.genetics.FrogSlimeHarvestConstants;
 import com.sanhiruzu.amphibia.genetics.Gene;
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
+import com.sanhiruzu.amphibia.register.AmphibiaDataComponents;
 import com.sanhiruzu.amphibia.register.AmphibiaItems;
-import net.minecraft.world.item.Item;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -62,11 +66,11 @@ public class FrogSlimeHarvestHandler {
         FrogGenome genome = frog.getData(AmphibiaAttachments.FROG_GENOME);
         float happiness = frog.getData(AmphibiaAttachments.FROG_HAPPINESS);
         int count = calculateYield(frog, genome, happiness);
-        Item secretionItem = resolveSecretionItem(genome);
+        ItemStack result = resolveSecretionStack(genome);
+        result.setCount(count);
 
-        ItemStack slime = new ItemStack(secretionItem, count);
-        if (!player.getInventory().add(slime)) {
-            player.drop(slime, false);
+        if (!player.getInventory().add(result)) {
+            player.drop(result, false);
         }
 
         frog.setData(AmphibiaAttachments.SLIME_HARVEST_READY, false);
@@ -74,7 +78,7 @@ public class FrogSlimeHarvestHandler {
 
         frog.playSound(SoundEvents.SLIME_SQUISH_SMALL, 0.7f, 1.1f + frog.getRandom().nextFloat() * 0.2f);
         player.displayClientMessage(
-            Component.literal("Collected " + count + " frog slime.").withStyle(ChatFormatting.GREEN),
+            Component.literal("Collected " + count + " " + result.getHoverName().getString() + ".").withStyle(ChatFormatting.GREEN),
             true
         );
 
@@ -104,12 +108,26 @@ public class FrogSlimeHarvestHandler {
         return dominant;
     }
 
-    private static Item resolveSecretionItem(FrogGenome genome) {
+    // Builds the base secretion ItemStack (without count) for a given genome.
+    // COLORATION dominant + SLIME_YIELD A/S → pigmented (with FROGLIGHT_TYPE component)
+    // COLORATION dominant + SLIME_YIELD B     → white luminous secretion
+    // anything else                           → basic frog slime
+    public static ItemStack resolveSecretionStack(FrogGenome genome) {
         Gene dominant = getDominantGene(genome);
-        if (dominant == Gene.COLORATION) {
-            return AmphibiaItems.LUMINOUS_FROG_SECRETION.get();
+        if (dominant != Gene.COLORATION) {
+            return new ItemStack(AmphibiaItems.FROG_SLIME.get());
         }
-        return AmphibiaItems.FROG_SLIME.get();
+
+        FrogGradeCalculator.Grade yieldGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.SLIME_YIELD));
+        if (yieldGrade.ordinal() >= FrogGradeCalculator.Grade.A.ordinal()) {
+            Item froglightItem = FrogDropHandler.froglightForGenome(genome);
+            ResourceLocation froglightId = BuiltInRegistries.ITEM.getKey(froglightItem);
+            ItemStack pigmented = new ItemStack(AmphibiaItems.PIGMENTED_FROG_SECRETION.get());
+            pigmented.set(AmphibiaDataComponents.FROGLIGHT_TYPE.get(), froglightId);
+            return pigmented;
+        }
+
+        return new ItemStack(AmphibiaItems.LUMINOUS_FROG_SECRETION.get());
     }
 
     private static int calculateYield(Frog frog, FrogGenome genome, float happiness) {

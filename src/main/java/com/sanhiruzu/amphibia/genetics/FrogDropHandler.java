@@ -46,7 +46,7 @@ public class FrogDropHandler {
         ));
     }
 
-    private static Item froglightForGenome(FrogGenome genome) {
+    public static Item froglightForGenome(FrogGenome genome) {
         int color = genome.getColor();
         int r = (color >> 16) & 0xFF;
         int g = (color >> 8) & 0xFF;

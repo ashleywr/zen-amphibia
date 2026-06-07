@@ -49,6 +49,9 @@ public class AmphibiaItems {
     public static final DeferredItem<Item> LUMINOUS_FROG_SECRETION = ITEMS.register("luminous_frog_secretion",
             () -> new Item(new Item.Properties().stacksTo(64)));
 
+    public static final DeferredItem<Item> PIGMENTED_FROG_SECRETION = ITEMS.register("pigmented_frog_secretion",
+            () -> new Item(new Item.Properties().stacksTo(64)));
+
     public static final DeferredItem<Item> FROG_SLIME_INGOT = ITEMS.register("frog_slime_ingot",
             () -> new Item(new Item.Properties().stacksTo(64)));
 

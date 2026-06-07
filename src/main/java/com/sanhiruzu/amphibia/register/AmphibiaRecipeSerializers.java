@@ -1,6 +1,7 @@
 package com.sanhiruzu.amphibia.register;
 
 import com.sanhiruzu.amphibia.recipe.FrogChestToBucketRecipe;
+import com.sanhiruzu.amphibia.recipe.PigmentedSecretionCraftingRecipe;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
@@ -14,6 +15,9 @@ public class AmphibiaRecipeSerializers {
 
     public static final DeferredHolder<RecipeSerializer<?>, SimpleCraftingRecipeSerializer<FrogChestToBucketRecipe>> FROG_CHEST_TO_BUCKET =
             RECIPE_SERIALIZERS.register("frog_chest_to_bucket", () -> new SimpleCraftingRecipeSerializer<>(FrogChestToBucketRecipe::new));
+
+    public static final DeferredHolder<RecipeSerializer<?>, SimpleCraftingRecipeSerializer<PigmentedSecretionCraftingRecipe>> PIGMENTED_SECRETION_CRAFTING =
+            RECIPE_SERIALIZERS.register("pigmented_secretion_crafting", () -> new SimpleCraftingRecipeSerializer<>(PigmentedSecretionCraftingRecipe::new));
 
     public static void register(IEventBus eventBus) {
         RECIPE_SERIALIZERS.register(eventBus);

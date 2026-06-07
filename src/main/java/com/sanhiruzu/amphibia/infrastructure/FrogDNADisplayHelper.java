@@ -110,7 +110,7 @@ public class FrogDNADisplayHelper {
                 : Component.literal("Not ready").withStyle(ChatFormatting.DARK_GRAY)));
         if (state.genome != null) {
             Gene dominant = FrogSlimeHarvestHandler.getDominantGene(state.genome);
-            String secretionLabel = secretionTypeLabel(dominant);
+            String secretionLabel = secretionTypeLabel(state.genome, dominant);
             lines.add(Component.literal("Secretion: ").withStyle(ChatFormatting.GRAY)
                 .append(Component.literal(secretionLabel).withStyle(
                     dominant == Gene.COLORATION ? ChatFormatting.YELLOW : ChatFormatting.WHITE)));
@@ -275,11 +275,14 @@ public class FrogDNADisplayHelper {
         };
     }
 
-    private static String secretionTypeLabel(Gene dominant) {
+    private static String secretionTypeLabel(FrogGenome genome, Gene dominant) {
         if (dominant == null) return "Basic";
         return switch (dominant) {
-            case COLORATION -> "Luminous";
-            // future types: POWER/HEAT_TOLERANCE → Caustic, HARDINESS/AFFINITY → Preservative, ATTUNEMENT/CUNNING → Mutagenic
+            case COLORATION -> {
+                FrogGradeCalculator.Grade yieldGrade = FrogGradeCalculator.calculateGrade(genome.getGene(Gene.SLIME_YIELD));
+                yield yieldGrade.ordinal() >= FrogGradeCalculator.Grade.A.ordinal() ? "Luminous (Pigmented)" : "Luminous (White)";
+            }
+            // future: POWER/HEAT_TOLERANCE → Caustic, HARDINESS/AFFINITY → Preservative, ATTUNEMENT/CUNNING → Mutagenic
             default -> "Basic";
         };
     }
