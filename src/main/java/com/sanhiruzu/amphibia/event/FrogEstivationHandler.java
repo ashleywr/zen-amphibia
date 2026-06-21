@@ -1,13 +1,11 @@
 package com.sanhiruzu.amphibia.event;
 
-import com.sanhiruzu.amphibia.AmphibiaConfig;
 import com.sanhiruzu.amphibia.config.EstivationConfig;
 import com.sanhiruzu.amphibia.config.EstivationConfigManager;
 import com.sanhiruzu.amphibia.genetics.AmphibiaFrog;
 import com.sanhiruzu.amphibia.genetics.FrogGenome;
-import com.sanhiruzu.atelier.api.ZoneAPI;
-import com.sanhiruzu.atelier.space.zone.OutdoorZoneData;
-import com.sanhiruzu.atelier.space.zone.ZoneData;
+import com.sanhiruzu.amphibia.habitat.FrogHabitatEvaluator;
+import com.sanhiruzu.amphibia.habitat.FrogHabitatReading;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.server.level.ServerLevel;
@@ -15,7 +13,6 @@ import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import org.joml.Vector3f;
@@ -28,7 +25,6 @@ public class FrogEstivationHandler {
         if (!(event.getEntity() instanceof Frog frog)) return;
         Level level = frog.level();
         if (level == null || level.isClientSide) return;
-        if (!ModList.get().isLoaded("zen_atelier")) return;
 
         AmphibiaFrog af = AmphibiaFrog.of(frog);
         long gameTime = level.getGameTime();
@@ -41,16 +37,12 @@ public class FrogEstivationHandler {
         if (gameTime % 40 != 0) return;
 
         BlockPos pos = frog.blockPosition();
-        ZoneData zone = ZoneAPI.getZoneAt(level, pos);
-
-        float[] tempHum = readTempHumidity(level, pos, zone);
+        FrogHabitatReading habitat = FrogHabitatEvaluator.evaluate(level, pos, frog);
+        float[] tempHum = readTempHumidity(level, pos, habitat);
         float temp = tempHum[0];
         float hum = tempHum[1];
 
-        String optimalType = AmphibiaConfig.OPTIMAL_BREEDING_ZONE_TYPE.get();
-        boolean isOptimalZone = zone != null && ZoneAPI.isZoneType(zone, optimalType);
-
-        if (isOptimalZone) {
+        if (habitat.isOptimalBreedingHabitat()) {
             tryInduceLoveFromTannins(frog, level, pos);
         } else {
             EstivationConfig config = EstivationConfigManager.getConfig();
@@ -82,24 +74,22 @@ public class FrogEstivationHandler {
         if (gameTime % 40 != 0) return false;
 
         BlockPos pos = frog.blockPosition();
-        ZoneData zone = ZoneAPI.getZoneAt(level, pos);
-        float[] tempHum = readTempHumidity(level, pos, zone);
+        FrogHabitatReading habitat = FrogHabitatEvaluator.evaluate(level, pos, frog);
+        float[] tempHum = readTempHumidity(level, pos, habitat);
 
         EstivationConfig config = EstivationConfigManager.getConfig();
         return !config.shouldEstivate(tempHum[0], tempHum[1]);
     }
 
-    private static float[] readTempHumidity(Level level, BlockPos pos, ZoneData zone) {
-        float temp;
-        float hum;
-        if (zone instanceof OutdoorZoneData outdoor) {
-            temp = outdoor.getTemperature(level) * 20.0f;
-            hum = outdoor.hasPrecipitation(level) ? 80.0f : 20.0f;
-        } else {
-            var biome = level.getBiome(pos);
-            temp = biome.value().getBaseTemperature() * 20.0f;
-            hum = biome.value().hasPrecipitation() ? 80.0f : 20.0f;
-        }
+    private static float[] readTempHumidity(Level level, BlockPos pos, FrogHabitatReading habitat) {
+        var biome = level.getBiome(pos);
+        float biomeTemp = biome.value().getBaseTemperature() * 20.0f;
+        float biomeHum = biome.value().hasPrecipitation() ? 80.0f : 20.0f;
+
+        float habitatCooling = (1.0f - habitat.climateScore()) * 6.0f;
+        float waterHumidity = habitat.waterScore() * 40.0f;
+        float temp = Math.max(0.0f, biomeTemp - habitatCooling);
+        float hum = Math.min(100.0f, biomeHum + waterHumidity);
         return new float[]{temp, hum};
     }
 

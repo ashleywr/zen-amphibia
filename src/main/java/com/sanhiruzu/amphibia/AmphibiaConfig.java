@@ -4,7 +4,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class AmphibiaConfig {
     public static final ModConfigSpec SPEC;
-    public static final ModConfigSpec.ConfigValue<String> OPTIMAL_BREEDING_ZONE_TYPE;
+    public static final ModConfigSpec.DoubleValue OPTIMAL_BREEDING_HABITAT_THRESHOLD;
     public static final ModConfigSpec.BooleanValue GIVE_PATCHOULI_GUIDE_ON_FIRST_JOIN;
 
     static {
@@ -20,9 +20,9 @@ public class AmphibiaConfig {
 
         builder.push("Genetics");
 
-        OPTIMAL_BREEDING_ZONE_TYPE = builder
-            .comment("The Atelier zone type ID (or partial match) required for frogs to breed and produce raw genetic fluid. Matches against RoomData.getZoneTypeId(). Example: 'terrarium' matches zen_atelier:terrarium, etc.")
-            .define("optimal_breeding_zone_type", "terrarium");
+        OPTIMAL_BREEDING_HABITAT_THRESHOLD = builder
+            .comment("Minimum frog habitat suitability required for frogs to produce raw genetic fluid instead of normal genetic frogspawn.")
+            .defineInRange("optimal_breeding_habitat_threshold", 0.5D, 0.0D, 1.0D);
 
         builder.pop();
 

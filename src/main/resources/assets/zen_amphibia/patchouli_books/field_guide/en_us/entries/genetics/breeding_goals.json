@@ -32,7 +32,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(b)Happiness bonus:$() Two parents kept in a quality $(l:zen_amphibia:getting_started/terrarium)terrarium$(/l) have a chance to pass along a small upgrade when they breed. At full happiness, there is a 15% chance one random gene locus in the offspring gains an allele tier. A slow but steady improvement on top of normal inheritance."
+      "text": "$(b)Happiness bonus:$() Two parents kept in a good $(l:zen_amphibia:getting_started/terrarium)habitat$(/l) have a chance to pass along a small upgrade when they breed. At full happiness, there is a 15% chance one random gene locus in the offspring gains an allele tier. A slow but steady improvement on top of normal inheritance."
     },
     {
       "type": "patchouli:text",

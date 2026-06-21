@@ -1,8 +1,6 @@
 package com.sanhiruzu.amphibia.genetics;
 
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
-import com.sanhiruzu.atelier.api.ZoneAPI;
-import com.sanhiruzu.atelier.space.zone.ZoneData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -12,7 +10,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
@@ -42,62 +39,31 @@ public class TadpoleGrowthHandler {
             return;
         }
 
-        if (!ModList.get().isLoaded("zen_atelier")) {
-            applyOpenWaterGrowthModifier(tadpole, level, pos);
-            return;
-        }
-
-        ZoneData zone = ZoneAPI.getZoneAt(level, pos);
-
-        if (zone != null && zone.hasSpatialExtent()) {
-            applyZoneGrowthModifier(tadpole, zone, level);
-        } else {
-            applyOpenWaterGrowthModifier(tadpole, level, pos);
-        }
+        applyLocalWaterGrowthModifier(tadpole, level, pos);
     }
 
-    private static void applyZoneGrowthModifier(Tadpole tadpole, ZoneData zone, Level level) {
-        TadpoleZoneEcology.WaterVolumeResult volumeResult = TadpoleZoneEcology.calculateWaterVolume(tadpole.blockPosition(), level);
-        int waterVolume = volumeResult.blockCount;
-
-        int tadpoleCount = countTadpolesInZone(level, zone);
-        if (tadpoleCount == 0) tadpoleCount = 1;
-
-        double biomassRatio = (double) waterVolume / tadpoleCount;
-
-        if (biomassRatio < 10) {
-            applyStuntedGrowth(tadpole);
-        } else if (biomassRatio > 50) {
-            applyAcceleratedGrowth(tadpole);
-        }
-    }
-
-    private static void applyOpenWaterGrowthModifier(Tadpole tadpole, Level level, BlockPos pos) {
+    private static void applyLocalWaterGrowthModifier(Tadpole tadpole, Level level, BlockPos pos) {
         TadpoleZoneEcology.WaterVolumeResult volumeResult = TadpoleZoneEcology.calculateWaterVolume(pos, level);
         if (volumeResult.isOpenWater) {
             if (level.random.nextDouble() < 0.0083) {
                 tadpole.discard();
             }
+            return;
         }
-    }
 
-    private static int countTadpolesInZone(Level level, ZoneData zone) {
-        if (!zone.hasSpatialExtent()) return 1;
+        int nearbyTadpoles = level.getEntities(
+            EntityType.TADPOLE,
+            new AABB(pos).inflate(DENSITY_RADIUS, DENSITY_VERTICAL_RADIUS, DENSITY_RADIUS),
+            nearby -> nearby.isAlive() && nearby.isInWater()
+        ).size();
+        if (nearbyTadpoles == 0) nearbyTadpoles = 1;
 
-        net.minecraft.world.phys.AABB aabb = new net.minecraft.world.phys.AABB(
-            zone.getMinX(), zone.getMinY(), zone.getMinZ(),
-            zone.getMaxX() + 1, zone.getMaxY() + 1, zone.getMaxZ() + 1
-        );
-
-        int count = 0;
-        for (Tadpole t : level.getEntities(
-            net.minecraft.world.entity.EntityType.TADPOLE,
-            aabb,
-            t -> zone.contains(t.blockPosition())
-        )) {
-            count++;
+        double biomassRatio = (double) volumeResult.blockCount / nearbyTadpoles;
+        if (biomassRatio < 10) {
+            applyStuntedGrowth(tadpole);
+        } else if (biomassRatio > 50) {
+            applyAcceleratedGrowth(tadpole);
         }
-        return count;
     }
 
     private static boolean applyLocalDensityPressure(Tadpole tadpole, ServerLevel level, BlockPos pos) {

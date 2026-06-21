@@ -3,13 +3,11 @@ package com.sanhiruzu.amphibia.genetics;
 import com.sanhiruzu.amphibia.register.AmphibiaAttachments;
 import com.sanhiruzu.amphibia.register.AmphibiaBlocks;
 import com.sanhiruzu.amphibia.register.AmphibiaFluids;
-import com.sanhiruzu.atelier.api.ZoneAPI;
-import com.sanhiruzu.atelier.space.zone.ZoneData;
+import com.sanhiruzu.amphibia.habitat.FrogHabitatEvaluator;
+import com.sanhiruzu.amphibia.habitat.FrogHabitatReading;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.frog.Frog;
@@ -17,7 +15,6 @@ import net.minecraft.world.entity.animal.frog.Tadpole;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
@@ -77,44 +74,14 @@ public class FrogEggLayingHandler {
         BlockPos spawnPos = findWaterBlockNear(level, frogPos);
         if (spawnPos == null) return;
 
-        boolean isOptimalZone = false;
-        ZoneData zone = null;
-
-        if (ModList.get().isLoaded("zen_atelier")) {
-            zone = ZoneAPI.getZoneAt(level, spawnPos);
-            if (zone != null) {
-                String optimalType = com.sanhiruzu.amphibia.AmphibiaConfig.OPTIMAL_BREEDING_ZONE_TYPE.get();
-                isOptimalZone = ZoneAPI.isZoneType(zone, optimalType);
-            }
-        }
+        FrogHabitatReading habitat = FrogHabitatEvaluator.evaluate(level, spawnPos, frog);
+        boolean isOptimalHabitat = habitat.isOptimalBreedingHabitat();
 
         CompoundTag genomeTag = (CompoundTag) FrogGenome.CODEC.encodeStart(NbtOps.INSTANCE, offspringGenome).getOrThrow();
 
-        if (isOptimalZone) {
+        if (isOptimalHabitat) {
             level.setBlock(spawnPos, AmphibiaFluids.RAW_GENETIC_FLUID_BLOCK.get().defaultBlockState(), 3);
             WildGeneticsRegistry.get(level).put(spawnPos, genomeTag);
-
-            if (zone != null) {
-                CompoundTag ledgerTag = ZoneAPI.ZoneDataStore.get(
-                    zone.getRegionId(), "amphibia_genetics_ledger", CompoundTag.class);
-                if (ledgerTag == null) ledgerTag = new CompoundTag();
-
-                ListTag discovered = ledgerTag.getList("DiscoveredGenomes", Tag.TAG_COMPOUND);
-
-                boolean exists = false;
-                for (int i = 0; i < discovered.size(); i++) {
-                    if (discovered.getCompound(i).equals(genomeTag)) {
-                        exists = true;
-                        break;
-                    }
-                }
-
-                if (!exists) {
-                    discovered.add(genomeTag.copy());
-                    ledgerTag.put("DiscoveredGenomes", discovered);
-                    ZoneAPI.ZoneDataStore.set(zone.getRegionId(), "amphibia_genetics_ledger", ledgerTag);
-                }
-            }
         } else {
             level.setBlock(spawnPos, AmphibiaBlocks.GENETIC_FROGSPAWN.get().defaultBlockState(), 3);
 

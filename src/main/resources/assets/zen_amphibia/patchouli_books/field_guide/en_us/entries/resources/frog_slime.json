@@ -14,7 +14,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(b)On death (happiness bonus):$() Any frog with happiness $(b)≥ 0.6$() also gets a random extra drop chance — 30% at 0.6, scaling to 100% at full happiness. This stacks on top of the grade drops, so a Grade S frog in a perfect terrarium can drop up to 5 Frog Slime. Build the $(l:zen_amphibia:getting_started/terrarium)terrarium$(/l) first."
+      "text": "$(b)On death (happiness bonus):$() Any frog with happiness $(b)≥ 0.6$() also gets a random extra drop chance — 30% at 0.6, scaling to 100% at full happiness. This stacks on top of the grade drops, so a Grade S frog in a good habitat can drop up to 5 Frog Slime. Build the $(l:zen_amphibia:getting_started/terrarium)terrarium$(/l) first."
     },
     {
       "type": "patchouli:crafting",

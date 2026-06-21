@@ -72,7 +72,7 @@ class PatchouliGuideSyncTest {
     void happinessConstantsAreMirroredInGuide() throws IOException {
         String raw = readRawGuideText();
 
-        assertMentionedAsPct(raw, FrogHappinessConstants.ZONE_QUALITY_WEIGHT,   "ZONE_QUALITY_WEIGHT");
+        assertMentionedAsPct(raw, FrogHappinessConstants.HABITAT_COVER_WEIGHT, "HABITAT_COVER_WEIGHT");
         assertMentionedAsPct(raw, FrogHappinessConstants.WATER_RATIO_WEIGHT,    "WATER_RATIO_WEIGHT");
         assertMentionedAsPct(raw, FrogHappinessConstants.PLANT_SCORE_WEIGHT,    "PLANT_SCORE_WEIGHT");
         assertMentionedAsPct(raw, FrogHappinessConstants.SIZE_SCORE_WEIGHT,     "SIZE_SCORE_WEIGHT");

@@ -7,12 +7,12 @@
     {
       "type": "patchouli:text",
       "title": "Building a Terrarium",
-      "text": "A terrarium is a sealed Atelier room designed for frogs. Build one with glass walls, a mud or mangrove floor, and at least $(b)4 water blocks$() near the interior. Frogs inside will become noticeably happier over time."
+      "text": "A terrarium is a frog-friendly habitat. Build one with glass walls, a mud or mangrove floor, and at least $(b)4 water blocks$() near the interior. Frogs read the local conditions around them and become noticeably happier over time."
     },
     {
       "type": "patchouli:text",
       "title": "What Makes a Good Terrarium",
-      "text": "Happiness is scored from five things: $(b)zone quality$() (30%), $(b)water coverage$() (25%), $(b)climate match$() (25%), $(b)frog plants$() (15%), and $(b)room size$() (5%). Climate match compares the room's temperature and humidity against the frog's $(l:zen_amphibia:genetics/reading_genes)Heat Tolerance and Humidity Tolerance$(/l) grades."
+      "text": "Happiness is scored from five things: $(b)cover and enclosure$() (30%), $(b)water coverage$() (25%), $(b)climate match$() (25%), $(b)frog plants$() (15%), and $(b)habitat size$() (5%). Climate match compares local warmth and humidity against the frog's $(l:zen_amphibia:genetics/reading_genes)Heat Tolerance and Humidity Tolerance$(/l) grades."
     },
     {
       "type": "patchouli:text",
@@ -32,7 +32,7 @@
     {
       "type": "patchouli:text",
       "title": "Overcrowding",
-      "text": "Too many frogs in one zone penalize happiness — roughly $(b)1 frog per 15 blocks$() of volume is comfortable. Beyond that, every extra frog scales the penalty up to a $(b)50% reduction$(). If you use Atelier, the room's HUD will show $(b)Overcrowded$() and its quality score will drop. Spread large lines across multiple terrariums."
+      "text": "Too many frogs in one small habitat penalize happiness — roughly $(b)1 frog per 15 blocks$() of space is comfortable. Beyond that, every extra frog scales the penalty up to a $(b)50% reduction$(). Spread large lines across multiple pools or terrarium-style habitats."
     },
     {
       "type": "patchouli:text",

@@ -9,11 +9,15 @@ public final class FrogHappinessConstants {
     public static final float HAPPINESS_DECAY_PER_INTERVAL = 0.05f;
 
     // Happiness formula weights (must sum to 1.0)
-    public static final float ZONE_QUALITY_WEIGHT    = 0.30f;
+    public static final float HABITAT_COVER_WEIGHT   = 0.30f;
     public static final float WATER_RATIO_WEIGHT     = 0.25f;
     public static final float CLIMATE_SCORE_WEIGHT   = 0.25f;
     public static final float PLANT_SCORE_WEIGHT     = 0.15f;
     public static final float SIZE_SCORE_WEIGHT      = 0.05f;
+
+    /** @deprecated Use HABITAT_COVER_WEIGHT. */
+    @Deprecated(forRemoval = false)
+    public static final float ZONE_QUALITY_WEIGHT = HABITAT_COVER_WEIGHT;
 
     // Number of frog-friendly plants for a full plant score
     public static final int   PLANT_FULL_SCORE_COUNT         = 8;
