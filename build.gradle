@@ -247,3 +247,6 @@ idea {
     }
 }
 
+ext.synesthesiaLocalModKey = 'zen_amphibia'
+apply from: 'C:/WorkDir/synesthesia/tools/synesthesia-sync.gradle'
+
